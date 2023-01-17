@@ -46,15 +46,19 @@
         android:id="@+id/spinner_reg_school"
         android:layout_width="407dp"
         android:layout_height="33dp"
+        android:layout_marginTop="122dp"
+        android:layout_marginBottom="122dp"
         android:background="@color/design_default_color_secondary"
+        app:layout_constraintBottom_toTopOf="@+id/txt_reg_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="238dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <EditText
         android:id="@+id/txt_reg_acc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
         android:ems="10"
         android:hint="@string/login_in_put_acc"
         android:inputType="textPersonName"
@@ -62,25 +66,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="344dp" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_reg_depart" />
 
     <EditText
         android:id="@+id/txt_reg_mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
         android:ems="10"
         android:hint="@string/reg_email"
         android:inputType="textPersonName"
         android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/radio_reg_pos_std"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="491dp" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/txt_reg_pwd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:ems="10"
         android:hint="@string/reg_input_pwd"
         android:inputType="textPersonName"
@@ -88,12 +94,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="439dp" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_reg_name" />
 
     <EditText
         android:id="@+id/txt_reg_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
         android:ems="10"
         android:hint="@string/reg_name"
         android:inputType="textPersonName"
@@ -101,12 +108,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="393dp" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_reg_acc" />
 
     <EditText
         android:id="@+id/txt_reg_depart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="296dp"
         android:ems="10"
         android:hint="@string/reg_in_put_department"
         android:inputType="textPersonName"
@@ -114,27 +122,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="296dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RadioButton
         android:id="@+id/radio_reg_pos_teac"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="120dp"
+        android:layout_marginTop="145dp"
+        android:layout_marginBottom="145dp"
         android:text="@string/reg_btn_tch"
         android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="538dp" />
+        app:layout_constraintHorizontal_bias="0.671"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txt_reg_name"
+        app:layout_constraintVertical_bias="1.0" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="365dp"
-        tools:layout_editor_absoluteY="559dp" />
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="46dp"
+        android:layout_marginBottom="27dp"
+        app:layout_constraintBottom_toBottomOf="@+id/radio_reg_pos_teac"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_reg_mail" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_createAcc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
@@ -151,8 +168,8 @@
         android:layout_marginStart="92dp"
         android:text="@string/reg_btn_std"
         android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/radio_reg_pos_teac"
         app:layout_constraintEnd_toStartOf="@+id/radio_reg_pos_teac"
         app:layout_constraintHorizontal_bias="0.521"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="538dp" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
