@@ -10,4 +10,11 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+
+    <string name="login_acc">帳號</string>
+    <string name="login_pwd">密碼</string>
+    <string name="login_in_put_acc">請輸入學號/教師編碼</string>
+    <string name="login_login">登入</string>
+    <string name="login_create_acc">建立帳號</string>
+    <string name="login_member_login">會員登入</string>
 </resources>
