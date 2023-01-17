@@ -12,8 +12,11 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                 , android.R.layout.simple_spinner_item, University);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerLoginSchool.setAdapter(adapter);
-
+        // 有問題Toast.makeText(this, String.valueOf(binding.spinnerLoginSchool.getSelectedItemId()), Toast.LENGTH_SHORT).show();
 
         binding.btnLoginCreat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                     JSONObject data = new JSONObject();
                     data.put("acc",binding.txtLoginAcc.getText().toString());
                     data.put("pwd",binding.txtLoginPwd.getText().toString());
+                   // data.put("univ",binding.spinnerLoginSchool.getSelectedItemId());
                     packet.put("data",data);
 
                 } catch (JSONException e) {
