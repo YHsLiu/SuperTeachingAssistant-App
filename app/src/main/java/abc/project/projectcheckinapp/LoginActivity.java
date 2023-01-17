@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
         ArrayList<String> University =ua.getArrayToSpinner(getResources().openRawResource(R.raw.university));
         ArrayAdapter adapter = new ArrayAdapter(LoginActivity.this
                 , android.R.layout.simple_spinner_item, University);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerLoginSchool.setAdapter(adapter);
 
 
