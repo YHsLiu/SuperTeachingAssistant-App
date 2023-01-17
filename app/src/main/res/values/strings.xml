@@ -17,4 +17,16 @@
     <string name="login_login">登入</string>
     <string name="login_create_acc">建立帳號</string>
     <string name="login_member_login">會員登入</string>
+
+    <string name="reg_reg">註冊</string>
+    <string name="reg_subtitle">Sign up and start learning</string>
+    <string name="reg_in_put_department">輸入科系</string>
+    <string name="reg_name">姓名</string>
+    <string name="reg_input_pwd">輸入密碼</string>
+    <string name="reg_email">Email address</string>
+    <string name="reg_create_acc">註冊帳號</string>
+    <string name="reg_btn_std">我是學生</string>
+    <string name="reg_btn_tch">我是老師</string>
+
+
 </resources>
