@@ -17,6 +17,8 @@
     <string name="login_login">登入</string>
     <string name="login_create_acc">建立帳號</string>
     <string name="login_member_login">會員登入</string>
+    <string name="login_subtitle">Log in and start learning</string>
+    <string name="login_remember">記住我</string>
 
     <string name="reg_reg">註冊</string>
     <string name="reg_subtitle">Sign up and start learning</string>
