@@ -3,6 +3,7 @@ package abc.project.projectcheckinapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,16 +12,19 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.databinding.ActivityLoginBinding;
+import abc.project.projectcheckinapp.rawData.UniversityArray;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -64,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         }
-    }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +76,15 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         executor = Executors.newSingleThreadExecutor();
         preferences = this.getPreferences(MODE_PRIVATE);
+
+        // spinner 設定
+        UniversityArray ua = new UniversityArray();
+        ArrayList<String> University =ua.getArrayToSpinner(getResources().openRawResource(R.raw.university));
+        ArrayAdapter adapter = new ArrayAdapter(LoginActivity.this
+                , android.R.layout.simple_spinner_item, University);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item));
+        binding.spinnerLoginSchool.setAdapter(adapter);
+
 
         binding.btnLoginCreat.setOnClickListener(new View.OnClickListener() {
             @Override
