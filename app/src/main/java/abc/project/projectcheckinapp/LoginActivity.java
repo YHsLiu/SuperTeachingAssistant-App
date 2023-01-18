@@ -43,7 +43,6 @@ public class LoginActivity extends AppCompatActivity {
     Intent intent;
     SharedPreferences.Editor contextEditor;
     Spinner spinner = binding.spinnerLoginSchool;
-    SpinnerListener listener;
 
     Handler loginResultHandler = new Handler(Looper.getMainLooper()){
         @Override
@@ -76,9 +75,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
-    private void spinnerListener(){
-
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,23 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                 , android.R.layout.simple_spinner_item, University);
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
         spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                parent.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String univ = parent.getItemAtPosition(position).toString();
-                        Toast.makeText(LoginActivity.this, univ, Toast.LENGTH_SHORT).show();
-                        //listener.onClisk(position,univ);
-                    }
-                });
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
 
         binding.btnLoginCreat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,16 +105,31 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 JSONObject packet = new JSONObject();
+                JSONObject data = new JSONObject();
+               /* spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String univer = parent.getItemAtPosition(position).toString();
+                        try {
+                            data.put("university",univer);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });*/
                 try {
                     packet.put("type",1);
                     packet.put("status" , 10);
                     packet.put("msg","登錄資料打包中");
-                    JSONObject data = new JSONObject();
                     data.put("acc",binding.txtLoginAcc.getText().toString());
                     data.put("pwd",binding.txtLoginPwd.getText().toString());
                    // data.put("univ",binding.spinnerLoginSchool.getSelectedItemId());
                     packet.put("data",data);
-
+                    Toast.makeText(LoginActivity.this, data.toString(), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     Log.w("api","請檢查click的cord");
                 }
