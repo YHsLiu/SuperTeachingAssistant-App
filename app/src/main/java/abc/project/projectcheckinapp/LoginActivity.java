@@ -55,16 +55,19 @@ public class LoginActivity extends AppCompatActivity {
                 contextEditor.putString("userID",binding.txtLoginAcc.getText().toString());
                 contextEditor.putBoolean("isLogin",true);
                 contextEditor.apply();
-
+                preferences = getSharedPreferences("app_config",MODE_PRIVATE);
                 // 跳轉到 老師 /學生 頁面
                 /*if (binding.radioLoginStudent.isChecked()){
                     intent = new Intent(LoginActivity.this, 學生Activity.class );
-                    Bundle bundleToOther = new Bundle();
-                    bundleToOther.putString("stuId",binding.txtLoginAcc.getText().toString()); // 這是學號
-                    intent.putExtras(bundleToOther); // 學號帶到學生畫面
+                    // 好像用SharedPreference比較好
+                    //Bundle bundleToOther = new Bundle();
+                    //bundleToOther.putString("stuId",binding.txtLoginAcc.getText().toString()); // 這是學號
+                    //intent.putExtras(bundleToOther); // 學號帶到學生畫面
+                    preferences.edit().putString("學號",binding.txtLoginAcc.toString()).apply();
                     startActivity(intent);
                 } else {
                     intent = new Intent(LoginActivity.this, 老師Activity.class );
+                    preferences.edit().putString("教師編號",binding.txtLoginAcc.toString()).apply();
                     startActivity(intent);
                 }*/
             } else {
