@@ -45,11 +45,12 @@ public class RegistrationActivity extends AppCompatActivity {
             if( bundle.getInt("status")== 11) {
                 Toast.makeText(RegistrationActivity.this, "註冊成功", Toast.LENGTH_SHORT).show();
                 //判斷是老師or學生 決定跳轉頁
-                //IntentR = new Intent(RegistrationActivity.this,MainActivity.class);
-
-
-
-
+                if(bindingR.radioRegStd.isChecked()){
+                    IntentR = new Intent(RegistrationActivity.this,StudenrActivity.class);
+                }
+                if(bindingR.radioRegTch.isChecked()){
+                    IntentR = new Intent(RegistrationActivity.this,TeacherActivity.class);
+                }
 
             } else {
                 Toast.makeText(RegistrationActivity.this, bundle.getString("mesg"), Toast.LENGTH_LONG).show();
