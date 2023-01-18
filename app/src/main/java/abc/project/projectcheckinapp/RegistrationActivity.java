@@ -61,14 +61,16 @@ public class RegistrationActivity extends AppCompatActivity {
         bindingR = ActivityRegistrationBinding.inflate(getLayoutInflater());
         setContentView(bindingR.getRoot());
 
+
         executor = Executors.newSingleThreadExecutor();
 
         // RadioGroup 的事件處理
         bindingR.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
+            int identity = 0;
+        @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton StdOrTch = (RadioButton)  findViewById(checkedId);
-                Toast.makeText(RegistrationActivity.this, "你選取的身分是: " + StdOrTch.getText() , Toast.LENGTH_SHORT).show();
+               RadioButton StdOrTch = (RadioButton)  findViewById(checkedId);
+               Toast.makeText(RegistrationActivity.this, "你選取的身分是: " + StdOrTch.getText() , Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -88,6 +90,12 @@ public class RegistrationActivity extends AppCompatActivity {
                     data.put("name", bindingR.txtRegName.getText().toString());
                     data.put("pwd", bindingR.txtRegPwd.getText().toString());
                     data.put("email", bindingR.txtRegMail.getText().toString());
+                    if(bindingR.radioRegStd.isChecked()){
+                        data.put("identity", bindingR.radioRegStd.getText().toString());
+                    }
+                    if(bindingR.radioRegTch.isChecked()){
+                        data.put("identity", bindingR.radioRegTch.getText().toString());
+                    }
                     packet.put("data", data);
                     Log.w("API格式", packet.toString(4));
                 } catch (JSONException e) {
@@ -106,10 +114,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
     }
 
     class SimpaleAPIWorker implements  Runnable {

@@ -24,7 +24,7 @@
         android:id="@+id/textView3"
         android:layout_width="203dp"
         android:layout_height="22dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="7dp"
         android:gravity="center"
         android:text="@string/reg_subtitle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +35,7 @@
         android:id="@+id/img_reg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="17dp"
+        android:layout_marginBottom="14dp"
         app:layout_constraintBottom_toTopOf="@+id/spinner_reg_school"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
@@ -84,7 +84,7 @@
 
     <EditText
         android:id="@+id/txt_reg_depart"
-        android:layout_width="164dp"
+        android:layout_width="wrap_content"
         android:layout_height="51dp"
         android:layout_marginTop="270dp"
         android:ems="10"
