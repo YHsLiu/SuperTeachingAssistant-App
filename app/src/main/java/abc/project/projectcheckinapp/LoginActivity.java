@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences preferences;
     Intent intent;
     SharedPreferences.Editor contextEditor;
+    Spinner spinner;
 
 
     Handler loginResultHandler = new Handler(Looper.getMainLooper()){
@@ -55,12 +56,18 @@ public class LoginActivity extends AppCompatActivity {
                 contextEditor.putBoolean("isLogin",true);
                 contextEditor.apply();
 
-                // 跳轉到 老師 /學生 頁面
+                // 跳轉到 老師 /學生 頁面 (SpringBoot要查詢id)
                 /*if (binding.radioLoginStudent.isChecked()){
                     intent = new Intent(LoginActivity.this, 學生Activity.class );
+                    Bundle stuBundle = new Bundle();
+                    stuBundle.putInt("sid",sid);
+                    intent.putExtras(stuBundle);
                     startActivity(intent);
                 } else {
-                    intent = new Intent(LoginActivity.this, 老師Activity.class );
+                    intent = new Intent(LoginActivity.this, TeacherMainActivity.class );
+                    Bundle tecBundle = new Bundle();
+                    stuBundle.putInt("tid",tid);
+                    intent.putExtras(tecBundle);
                     startActivity(intent);
                 }*/
             } else {
@@ -83,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         executor = Executors.newSingleThreadExecutor();
         preferences = this.getPreferences(MODE_PRIVATE);
 
-        Spinner spinner = binding.spinnerLoginSchool;
+        spinner = binding.spinnerLoginSchool;
         // spinner 設定
         UniversityArray ua = new UniversityArray();
         ArrayList<String> University =ua.getArrayToSpinner(getResources().openRawResource(R.raw.university));
@@ -91,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                 , android.R.layout.simple_spinner_item, University);
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
         spinner.setAdapter(adapter);
+
 
 
         binding.btnLoginCreat.setOnClickListener(new View.OnClickListener() {
@@ -147,10 +155,13 @@ public class LoginActivity extends AppCompatActivity {
         if (Remember){
             binding.txtLoginAcc.setText(preferences.getString("account",""));
             binding.txtLoginPwd.setText(preferences.getString("password",""));
+            spinner.setSelection(preferences.getInt("university",0));
             binding.checkLoginRemenber.setChecked(true);
         } else {
             editor.putString("account","");
             editor.putString("password","");
+            editor.putInt("university",0);
+            editor.apply();
         }
         binding.checkLoginRemenber.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -159,9 +170,12 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("account",binding.txtLoginAcc.getText().toString());
                     editor.putString("password",binding.txtLoginPwd.getText().toString());
                     editor.putBoolean("isRemember",true);
+                    editor.putInt("university",spinner.getSelectedItemPosition());
+                    Toast.makeText(LoginActivity.this, "選項"+spinner.getSelectedItemPosition(), Toast.LENGTH_SHORT).show();
                 } else {
                     editor.putString("account","");
                     editor.putString("password","");
+                    editor.putInt("university",0);
                     editor.putBoolean("isRemember",false);
                 }
                 editor.apply();
