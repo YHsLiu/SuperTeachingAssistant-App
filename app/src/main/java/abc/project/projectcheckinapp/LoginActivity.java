@@ -27,6 +27,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.databinding.ActivityLoginBinding;
+import abc.project.projectcheckinapp.rawData.SpinnerListener;
 import abc.project.projectcheckinapp.rawData.UniversityArray;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -41,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences preferences;
     Intent intent;
     SharedPreferences.Editor contextEditor;
+    Spinner spinner = binding.spinnerLoginSchool;
+    SpinnerListener listener;
 
     Handler loginResultHandler = new Handler(Looper.getMainLooper()){
         @Override
@@ -72,6 +75,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     };
+
+    private void spinnerListener(){
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,9 +92,25 @@ public class LoginActivity extends AppCompatActivity {
         ArrayList<String> University =ua.getArrayToSpinner(getResources().openRawResource(R.raw.university));
         ArrayAdapter adapter = new ArrayAdapter(LoginActivity.this
                 , android.R.layout.simple_spinner_item, University);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        binding.spinnerLoginSchool.setAdapter(adapter);
-        // 有問題Toast.makeText(this, String.valueOf(binding.spinnerLoginSchool.getSelectedItemId()), Toast.LENGTH_SHORT).show();
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                parent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String univ = parent.getItemAtPosition(position).toString();
+                        Toast.makeText(LoginActivity.this, univ, Toast.LENGTH_SHORT).show();
+                        //listener.onClisk(position,univ);
+                    }
+                });
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         binding.btnLoginCreat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,4 +216,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
 }
