@@ -8,8 +8,12 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_InputCourseCode">輸入課程代碼</string>
+    <string name="menu_EnterClass">進入教室</string>
+    <string name="menu_Table">我的課表</string>
+    <string name="menu_Set">個人設定</string>
+    <string name="menu_stdMainPage">學生主頁</string>
 
     <string name="login_acc">帳號</string>
     <string name="login_pwd">密碼</string>
@@ -39,6 +43,8 @@
     <string name="Realmain_info5">再也不怕忘記幾點上課了</string>
     <string name="Realmain_info6">查閱最新課堂消息</string>
     <string name="Realmain_info7">內建布告欄 師生溝通無阻攔</string>
+    <string name="title_activity_student">StudentActivity</string>
+    <string name="menu_gallery">Gallery</string>
 
 
 </resources>

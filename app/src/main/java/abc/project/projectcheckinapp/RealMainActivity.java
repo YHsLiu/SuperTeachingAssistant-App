@@ -29,9 +29,8 @@ public class RealMainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //跳轉到登入畫面
                 Intent intent = new Intent();
-                intent = new Intent(RealMainActivity.this, LoginActivity.class);
+                intent = new Intent(RealMainActivity.this, StudentActivity.class);
                 startActivity(intent);
-
 
             }
         });
