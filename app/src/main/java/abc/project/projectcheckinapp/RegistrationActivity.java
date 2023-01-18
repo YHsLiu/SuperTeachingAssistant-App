@@ -10,6 +10,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -60,6 +62,16 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(bindingR.getRoot());
 
         executor = Executors.newSingleThreadExecutor();
+
+        // RadioGroup 的事件處理
+        bindingR.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton StdOrTch = (RadioButton)  findViewById(checkedId);
+                Toast.makeText(RegistrationActivity.this, "你選取的身分是: " + StdOrTch.getText() , Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
         //處理註冊帳號按鈕
         bindingR.btnCreateAcc.setOnClickListener(new View.OnClickListener() {
