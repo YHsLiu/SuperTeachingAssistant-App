@@ -10,17 +10,21 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.databinding.ActivityRegistrationBinding;
+import abc.project.projectcheckinapp.rawData.UniversityArray;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -61,8 +65,17 @@ public class RegistrationActivity extends AppCompatActivity {
         bindingR = ActivityRegistrationBinding.inflate(getLayoutInflater());
         setContentView(bindingR.getRoot());
 
-
         executor = Executors.newSingleThreadExecutor();
+
+        // spinner 設定
+        Spinner spinner = bindingR.spinnerRegSchool;
+        UniversityArray ua = new UniversityArray();
+        ArrayList<String> University =ua.getArrayToSpinner(getResources().openRawResource(R.raw.university));
+        ArrayAdapter adapter = new ArrayAdapter(RegistrationActivity.this
+                , android.R.layout.simple_spinner_item, University);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
+        spinner.setAdapter(adapter);
+
 
         // RadioGroup 的事件處理
         bindingR.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -80,11 +93,13 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 JSONObject packet = new JSONObject();
+                String univer = spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString();  //spinner 選的大學內容
                 try {
                     packet.put("type", 1);
                     packet.put("status", 10);
                     packet.put("mesg", "註冊資料 測試封包");
                     JSONObject data = new JSONObject();
+                    data.put("univ",univer);
                     data.put("department", bindingR.txtRegDepart.getText().toString());
                     data.put("acc", bindingR.txtRegAcc.getText().toString());
                     data.put("name", bindingR.txtRegName.getText().toString());
