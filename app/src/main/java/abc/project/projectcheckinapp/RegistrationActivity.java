@@ -38,6 +38,13 @@ public class RegistrationActivity extends AppCompatActivity {
             Bundle bundle = msg.getData();
             if( bundle.getInt("status")== 11) {
                 Toast.makeText(RegistrationActivity.this, "註冊成功", Toast.LENGTH_SHORT).show();
+                //判斷是老師or學生 決定跳轉頁
+                //IntentR = new Intent(RegistrationActivity.this,MainActivity.class);
+
+
+
+
+
             } else {
                 Toast.makeText(RegistrationActivity.this, bundle.getString("mesg"), Toast.LENGTH_LONG).show();
             }
@@ -58,7 +65,6 @@ public class RegistrationActivity extends AppCompatActivity {
         bindingR.btnCreateAcc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 JSONObject packet = new JSONObject();
                 try {
                     packet.put("type", 1);
@@ -85,12 +91,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
                 SimpaleAPIWorker apiCaller = new SimpaleAPIWorker(request);
                 executor.execute(apiCaller);
-
-                //判斷是老師or學生 決定跳轉頁
-                //IntentR = new Intent(RegistrationActivity.this,MainActivity.class);
-
-
-
 
             }
         });
