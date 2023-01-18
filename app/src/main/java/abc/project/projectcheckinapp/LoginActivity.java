@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences preferences;
     Intent intent;
     SharedPreferences.Editor contextEditor;
-    Spinner spinner = binding.spinnerLoginSchool;
+
 
     Handler loginResultHandler = new Handler(Looper.getMainLooper()){
         @Override
@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         executor = Executors.newSingleThreadExecutor();
         preferences = this.getPreferences(MODE_PRIVATE);
 
+        Spinner spinner = binding.spinnerLoginSchool;
         // spinner 設定
         UniversityArray ua = new UniversityArray();
         ArrayList<String> University =ua.getArrayToSpinner(getResources().openRawResource(R.raw.university));
@@ -106,27 +107,15 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 JSONObject packet = new JSONObject();
                 JSONObject data = new JSONObject();
-               /* spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        String univer = parent.getItemAtPosition(position).toString();
-                        try {
-                            data.put("university",univer);
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
 
-                    }
-                });*/
+                String univer = spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString();
                 try {
                     packet.put("type",1);
                     packet.put("status" , 10);
                     packet.put("msg","登錄資料打包中");
                     data.put("acc",binding.txtLoginAcc.getText().toString());
                     data.put("pwd",binding.txtLoginPwd.getText().toString());
+                    data.put("univ",univer);
                    // data.put("univ",binding.spinnerLoginSchool.getSelectedItemId());
                     packet.put("data",data);
                     Toast.makeText(LoginActivity.this, data.toString(), Toast.LENGTH_SHORT).show();
