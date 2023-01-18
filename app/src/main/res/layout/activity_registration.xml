@@ -136,7 +136,7 @@
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="218dp"
+        android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:checkedButton="@id/radio_reg_std"
         android:orientation="horizontal"
@@ -148,13 +148,13 @@
             android:id="@+id/radio_reg_std"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="RadioButton" />
+            android:text="@string/reg_btn_std" />
 
         <RadioButton
             android:id="@+id/radio_reg_tch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="RadioButton" />
+            android:text="@string/reg_btn_tch" />
 
     </RadioGroup>
 

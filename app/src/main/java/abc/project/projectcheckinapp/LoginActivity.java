@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences preferences;
     Intent intent;
     SharedPreferences.Editor contextEditor;
-    Spinner spinner = binding.spinnerLoginSchool;
+
 
     Handler loginResultHandler = new Handler(Looper.getMainLooper()){
         @Override
@@ -84,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         preferences = this.getPreferences(MODE_PRIVATE);
 
         // spinner 設定
+        Spinner spinner = binding.spinnerLoginSchool;
         UniversityArray ua = new UniversityArray();
         ArrayList<String> University =ua.getArrayToSpinner(getResources().openRawResource(R.raw.university));
         ArrayAdapter adapter = new ArrayAdapter(LoginActivity.this
