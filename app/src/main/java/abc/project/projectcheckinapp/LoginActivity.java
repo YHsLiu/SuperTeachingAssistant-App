@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -42,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences preferences;
     Intent intent;
     SharedPreferences.Editor contextEditor;
-
+    Spinner spinner;
 
     Handler loginResultHandler = new Handler(Looper.getMainLooper()){
         @Override
@@ -58,6 +59,9 @@ public class LoginActivity extends AppCompatActivity {
                 // 跳轉到 老師 /學生 頁面
                 /*if (binding.radioLoginStudent.isChecked()){
                     intent = new Intent(LoginActivity.this, 學生Activity.class );
+                    Bundle bundleToOther = new Bundle();
+                    bundleToOther.putString("stuId",binding.txtLoginAcc.getText().toString()); // 這是學號
+                    intent.putExtras(bundleToOther); // 學號帶到學生畫面
                     startActivity(intent);
                 } else {
                     intent = new Intent(LoginActivity.this, 老師Activity.class );
@@ -68,9 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                 contextEditor.putString("userID","");
                 contextEditor.putBoolean("isLogin",false);
                 contextEditor.apply();
-
                 // 加錯誤小視窗
-
             }
         }
     };
@@ -83,10 +85,20 @@ public class LoginActivity extends AppCompatActivity {
         executor = Executors.newSingleThreadExecutor();
         preferences = this.getPreferences(MODE_PRIVATE);
 
-        Spinner spinner = binding.spinnerLoginSchool;
+
         // spinner 設定
+        spinner = binding.spinnerLoginSchool;
+        Boolean FirstTime = preferences.getBoolean("isFirstTime",true);
         UniversityArray ua = new UniversityArray();
-        ArrayList<String> University =ua.getArrayToSpinner(getResources().openRawResource(R.raw.university));
+        SQLiteDatabase db = openOrCreateDatabase("UniversityInfo",MODE_PRIVATE,null);
+        ArrayList<String> University;
+        if ( FirstTime ) {
+            University = ua.FirstTimeGetSpinner(getResources().openRawResource(R.raw.university),db);
+            preferences.edit().putBoolean("isFirstTime",false).apply();
+        } else {
+            University = ua.GetSpinnerFromDB(db);
+        }
+        db.close();
         ArrayAdapter adapter = new ArrayAdapter(LoginActivity.this
                 , android.R.layout.simple_spinner_item, University);
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
@@ -107,7 +119,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 JSONObject packet = new JSONObject();
                 JSONObject data = new JSONObject();
-
                 String univer = spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString();
                 try {
                     packet.put("type",1);
@@ -116,9 +127,8 @@ public class LoginActivity extends AppCompatActivity {
                     data.put("acc",binding.txtLoginAcc.getText().toString());
                     data.put("pwd",binding.txtLoginPwd.getText().toString());
                     data.put("univ",univer);
-                    // data.put("univ",binding.spinnerLoginSchool.getSelectedItemId());
                     packet.put("data",data);
-                    Toast.makeText(LoginActivity.this, data.toString(), Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(LoginActivity.this, data.toString(), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     Log.w("api","請檢查click的cord");
                 }
@@ -147,6 +157,7 @@ public class LoginActivity extends AppCompatActivity {
         if (Remember){
             binding.txtLoginAcc.setText(preferences.getString("account",""));
             binding.txtLoginPwd.setText(preferences.getString("password",""));
+            spinner.setSelection(preferences.getInt("university",0));
             binding.checkLoginRemenber.setChecked(true);
         } else {
             editor.putString("account","");
@@ -158,10 +169,12 @@ public class LoginActivity extends AppCompatActivity {
                 if (isChecked){
                     editor.putString("account",binding.txtLoginAcc.getText().toString());
                     editor.putString("password",binding.txtLoginPwd.getText().toString());
+                    editor.putInt("university",spinner.getSelectedItemPosition());
                     editor.putBoolean("isRemember",true);
                 } else {
                     editor.putString("account","");
                     editor.putString("password","");
+                    editor.putInt("university",0);
                     editor.putBoolean("isRemember",false);
                 }
                 editor.apply();
