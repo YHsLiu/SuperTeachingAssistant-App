@@ -27,6 +27,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.databinding.ActivityLoginBinding;
+import abc.project.projectcheckinapp.rawData.SpinnerListener;
 import abc.project.projectcheckinapp.rawData.UniversityArray;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -41,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences preferences;
     Intent intent;
     SharedPreferences.Editor contextEditor;
+
 
     Handler loginResultHandler = new Handler(Looper.getMainLooper()){
         @Override
@@ -72,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,14 +83,15 @@ public class LoginActivity extends AppCompatActivity {
         executor = Executors.newSingleThreadExecutor();
         preferences = this.getPreferences(MODE_PRIVATE);
 
+        Spinner spinner = binding.spinnerLoginSchool;
         // spinner 設定
         UniversityArray ua = new UniversityArray();
         ArrayList<String> University =ua.getArrayToSpinner(getResources().openRawResource(R.raw.university));
         ArrayAdapter adapter = new ArrayAdapter(LoginActivity.this
                 , android.R.layout.simple_spinner_item, University);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        binding.spinnerLoginSchool.setAdapter(adapter);
-        // 有問題Toast.makeText(this, String.valueOf(binding.spinnerLoginSchool.getSelectedItemId()), Toast.LENGTH_SHORT).show();
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
+        spinner.setAdapter(adapter);
+
 
         binding.btnLoginCreat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,16 +106,19 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 JSONObject packet = new JSONObject();
+                JSONObject data = new JSONObject();
+
+                String univer = spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString();
                 try {
                     packet.put("type",1);
                     packet.put("status" , 10);
                     packet.put("msg","登錄資料打包中");
-                    JSONObject data = new JSONObject();
                     data.put("acc",binding.txtLoginAcc.getText().toString());
                     data.put("pwd",binding.txtLoginPwd.getText().toString());
-                   // data.put("univ",binding.spinnerLoginSchool.getSelectedItemId());
+                    data.put("univ",univer);
+                    // data.put("univ",binding.spinnerLoginSchool.getSelectedItemId());
                     packet.put("data",data);
-
+                    Toast.makeText(LoginActivity.this, data.toString(), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     Log.w("api","請檢查click的cord");
                 }
@@ -193,4 +200,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
 }

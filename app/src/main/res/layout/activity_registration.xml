@@ -24,7 +24,7 @@
         android:id="@+id/textView3"
         android:layout_width="203dp"
         android:layout_height="22dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="7dp"
         android:gravity="center"
         android:text="@string/reg_subtitle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +35,7 @@
         android:id="@+id/img_reg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="14dp"
         app:layout_constraintBottom_toTopOf="@+id/spinner_reg_school"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
@@ -44,20 +44,20 @@
 
     <Spinner
         android:id="@+id/spinner_reg_school"
-        android:layout_width="407dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="122dp"
-        android:layout_marginBottom="122dp"
-        android:background="@color/design_default_color_secondary"
-        app:layout_constraintBottom_toTopOf="@+id/txt_reg_name"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/design_default_color_surface"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/txt_reg_depart"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/txt_reg_acc"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="51dp"
         android:layout_marginTop="6dp"
         android:ems="10"
         android:hint="@string/login_in_put_acc"
@@ -69,37 +69,9 @@
         app:layout_constraintTop_toBottomOf="@+id/txt_reg_depart" />
 
     <EditText
-        android:id="@+id/txt_reg_mail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
-        android:ems="10"
-        android:hint="@string/reg_email"
-        android:inputType="textPersonName"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/radio_reg_pos_std"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/txt_reg_pwd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:ems="10"
-        android:hint="@string/reg_input_pwd"
-        android:inputType="textPersonName"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_reg_name" />
-
-    <EditText
         android:id="@+id/txt_reg_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="51dp"
         android:layout_marginTop="7dp"
         android:ems="10"
         android:hint="@string/reg_name"
@@ -113,8 +85,8 @@
     <EditText
         android:id="@+id/txt_reg_depart"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="296dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="270dp"
         android:ems="10"
         android:hint="@string/reg_in_put_department"
         android:inputType="textPersonName"
@@ -124,52 +96,69 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RadioButton
-        android:id="@+id/radio_reg_pos_teac"
+    <EditText
+        android:id="@+id/txt_reg_pwd"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="145dp"
-        android:layout_marginBottom="145dp"
-        android:text="@string/reg_btn_tch"
+        android:layout_height="51dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/reg_input_pwd"
+        android:inputType="textPassword"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.671"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txt_reg_name"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/txt_reg_name"
+        app:layout_constraintTop_toBottomOf="@+id/txt_reg_name" />
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
+    <EditText
+        android:id="@+id/txt_reg_mail"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="46dp"
-        android:layout_marginBottom="27dp"
-        app:layout_constraintBottom_toBottomOf="@+id/radio_reg_pos_teac"
+        android:layout_height="51dp"
+        android:layout_marginTop="4dp"
+        android:ems="10"
+        android:hint="@string/reg_email"
+        android:inputType="textEmailAddress"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_reg_mail" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/txt_reg_pwd"
+        app:layout_constraintTop_toBottomOf="@+id/txt_reg_pwd" />
 
     <Button
         android:id="@+id/btn_createAcc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="25dp"
         android:text="@string/reg_create_acc"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radio_reg_pos_teac" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
-    <RadioButton
-        android:id="@+id/radio_reg_pos_std"
+    <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="92dp"
-        android:text="@string/reg_btn_std"
-        android:textSize="14sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/radio_reg_pos_teac"
-        app:layout_constraintEnd_toStartOf="@+id/radio_reg_pos_teac"
-        app:layout_constraintHorizontal_bias="0.521"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="60dp"
+        android:checkedButton="@id/radio_reg_std"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_reg_mail">
+
+        <RadioButton
+            android:id="@+id/radio_reg_std"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reg_btn_std" />
+
+        <RadioButton
+            android:id="@+id/radio_reg_tch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reg_btn_tch" />
+
+    </RadioGroup>
+
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

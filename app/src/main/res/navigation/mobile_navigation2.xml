@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation2"
+    app:startDestination="@+id/nav_stdMainPage">
+
+    <fragment
+        android:id="@+id/nav_stdMainPage"
+        android:name="abc.project.projectcheckinapp.ui.StudentMainPage.StudentMainPageFragment"
+        android:label="@string/menu_stdMainPage"
+        tools:layout="@layout/fragment_studentmainpage" />
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="abc.project.projectcheckinapp.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="abc.project.projectcheckinapp.ui.gallery.GalleryFragment"
+        android:label="@string/menu_gallery"
+        tools:layout="@layout/fragment_gallery" />
+
+    <fragment
+        android:id="@+id/nav_EnterClass"
+        android:name="abc.project.projectcheckinapp.ui.EnterClass.EnterClassFragment"
+        android:label="@string/menu_EnterClass"
+        tools:layout="@layout/fragment_enterclass" />
+
+    <fragment
+        android:id="@+id/nav_InputCourseCode"
+        android:name="abc.project.projectcheckinapp.ui.InputCourseCode.InputCourseCodeFragment"
+        android:label="@string/menu_InputCourseCode"
+        tools:layout="@layout/fragment_inputcoursecode" />
+
+</navigation>

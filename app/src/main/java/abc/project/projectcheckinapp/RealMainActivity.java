@@ -27,10 +27,10 @@ public class RealMainActivity extends AppCompatActivity {
         RMbinding.btnMainLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //跳轉到登入畫面
                 Intent intent = new Intent();
-                intent = new Intent(RealMainActivity.this, LoginActivity.class);
+                intent = new Intent(RealMainActivity.this, StudentActivity.class);
                 startActivity(intent);
-
 
             }
         });
