@@ -20,22 +20,12 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binding.btnMainGoReg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent();
-                intent = new Intent(HomeFragment.this.getContext(), RegistrationActivity.class);
-                startActivity(intent);
-            }
-        });
 
         //final TextView textView = binding.textHome;
         //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);

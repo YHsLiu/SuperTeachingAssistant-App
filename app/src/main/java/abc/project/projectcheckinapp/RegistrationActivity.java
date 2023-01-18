@@ -10,17 +10,21 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.databinding.ActivityRegistrationBinding;
+import abc.project.projectcheckinapp.rawData.UniversityArray;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -41,11 +45,12 @@ public class RegistrationActivity extends AppCompatActivity {
             if( bundle.getInt("status")== 11) {
                 Toast.makeText(RegistrationActivity.this, "註冊成功", Toast.LENGTH_SHORT).show();
                 //判斷是老師or學生 決定跳轉頁
-                //IntentR = new Intent(RegistrationActivity.this,MainActivity.class);
-
-
-
-
+                if(bindingR.radioRegStd.isChecked()){
+                    IntentR = new Intent(RegistrationActivity.this,StudentActivity.class);
+                }
+                /*if(bindingR.radioRegTch.isChecked()){
+                    IntentR = new Intent(RegistrationActivity.this,TeacherActivity.class);
+                }*/
 
             } else {
                 Toast.makeText(RegistrationActivity.this, bundle.getString("mesg"), Toast.LENGTH_LONG).show();
@@ -63,12 +68,23 @@ public class RegistrationActivity extends AppCompatActivity {
 
         executor = Executors.newSingleThreadExecutor();
 
+        // spinner 設定
+        Spinner spinner = bindingR.spinnerRegSchool;
+        UniversityArray ua = new UniversityArray();
+        ArrayList<String> University =ua.getArrayToSpinner(getResources().openRawResource(R.raw.university));
+        ArrayAdapter adapter = new ArrayAdapter(RegistrationActivity.this
+                , android.R.layout.simple_spinner_item, University);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
+        spinner.setAdapter(adapter);
+
+
         // RadioGroup 的事件處理
         bindingR.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
+            int identity = 0;
+        @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton StdOrTch = (RadioButton)  findViewById(checkedId);
-                Toast.makeText(RegistrationActivity.this, "你選取的身分是: " + StdOrTch.getText() , Toast.LENGTH_SHORT).show();
+               RadioButton StdOrTch = (RadioButton)  findViewById(checkedId);
+               Toast.makeText(RegistrationActivity.this, "你選取的身分是: " + StdOrTch.getText() , Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -78,16 +94,24 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 JSONObject packet = new JSONObject();
+                String univer = spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString();  //spinner 選的大學內容
                 try {
                     packet.put("type", 1);
                     packet.put("status", 10);
                     packet.put("mesg", "註冊資料 測試封包");
                     JSONObject data = new JSONObject();
+                    data.put("univ",univer);
                     data.put("department", bindingR.txtRegDepart.getText().toString());
                     data.put("acc", bindingR.txtRegAcc.getText().toString());
                     data.put("name", bindingR.txtRegName.getText().toString());
                     data.put("pwd", bindingR.txtRegPwd.getText().toString());
                     data.put("email", bindingR.txtRegMail.getText().toString());
+                    if(bindingR.radioRegStd.isChecked()){
+                        data.put("identity", bindingR.radioRegStd.getText().toString());
+                    }
+                    if(bindingR.radioRegTch.isChecked()){
+                        data.put("identity", bindingR.radioRegTch.getText().toString());
+                    }
                     packet.put("data", data);
                     Log.w("API格式", packet.toString(4));
                 } catch (JSONException e) {
@@ -106,10 +130,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
     }
 
     class SimpaleAPIWorker implements  Runnable {
