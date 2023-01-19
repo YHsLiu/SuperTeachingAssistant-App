@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Teacher.TeacherMainFragment">
+    tools:context=".ui.Teacher.NewClassFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="老師主畫面"
+        android:text="這是老師新增課程畫面"
         android:textSize="34sp" />
 
 </FrameLayout>
