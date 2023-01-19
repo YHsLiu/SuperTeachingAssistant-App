@@ -3,6 +3,7 @@ package abc.project.projectcheckinapp.rawData;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.CursorAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,8 +30,9 @@ public class UniversityArray {
         StringBuilder sb =new StringBuilder();
         String line;
         String drop_sql = "drop table if exists University;";
-        String create_sql = "create table University (univ_name text);";
-        db.execSQL(drop_sql+create_sql);
+        String create_sql = "create table University (_id integer autoincrement,univ_name text);";
+        db.execSQL(drop_sql);
+        db.execSQL(create_sql);
         ArrayList< String > universityArray =new ArrayList<>();
         try {
             while ((line = br.readLine()) != null)
@@ -50,13 +52,10 @@ public class UniversityArray {
         return universityArray;
     }
 
-    public ArrayList<String> GetSpinnerFromDB(SQLiteDatabase db){
-        String sql = "select * from University;";
+    public Cursor GetSpinnerFromDB(SQLiteDatabase db){
+        String sql = "select _id , univ_name from University;";
         Cursor cursor = db.rawQuery(sql,null);
-        ArrayList< String > universityArray =new ArrayList<>();
-        for (int i=0; i<cursor.getCount();i++){
-            universityArray.add(cursor.getString(i));
-        }
-        return universityArray;
+        //String queryCols =cursor.getString(0);
+        return cursor;
     }
 }
