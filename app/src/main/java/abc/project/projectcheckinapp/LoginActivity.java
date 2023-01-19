@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -44,7 +45,6 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences.Editor contextEditor;
     Spinner spinner;
 
-
     Handler loginResultHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -55,19 +55,19 @@ public class LoginActivity extends AppCompatActivity {
                 contextEditor.putString("userID",binding.txtLoginAcc.getText().toString());
                 contextEditor.putBoolean("isLogin",true);
                 contextEditor.apply();
-
-                // 跳轉到 老師 /學生 頁面 (SpringBoot要查詢id)
+                preferences = getSharedPreferences("app_config",MODE_PRIVATE);
+                // 跳轉到 老師 /學生 頁面
                 /*if (binding.radioLoginStudent.isChecked()){
                     intent = new Intent(LoginActivity.this, 學生Activity.class );
-                    Bundle stuBundle = new Bundle();
-                    stuBundle.putInt("sid",sid);
-                    intent.putExtras(stuBundle);
+                    // 好像用SharedPreference比較好
+                    //Bundle bundleToOther = new Bundle();
+                    //bundleToOther.putString("stuId",binding.txtLoginAcc.getText().toString()); // 這是學號
+                    //intent.putExtras(bundleToOther); // 學號帶到學生畫面
+                    preferences.edit().putString("學號",binding.txtLoginAcc.toString()).apply();
                     startActivity(intent);
                 } else {
-                    intent = new Intent(LoginActivity.this, TeacherMainActivity.class );
-                    Bundle tecBundle = new Bundle();
-                    stuBundle.putInt("tid",tid);
-                    intent.putExtras(tecBundle);
+                    intent = new Intent(LoginActivity.this, 老師Activity.class );
+                    preferences.edit().putString("教師編號",binding.txtLoginAcc.toString()).apply();
                     startActivity(intent);
                 }*/
             } else {
@@ -75,9 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                 contextEditor.putString("userID","");
                 contextEditor.putBoolean("isLogin",false);
                 contextEditor.apply();
-
                 // 加錯誤小視窗
-
             }
         }
     };
@@ -90,15 +88,24 @@ public class LoginActivity extends AppCompatActivity {
         executor = Executors.newSingleThreadExecutor();
         preferences = this.getPreferences(MODE_PRIVATE);
 
-        spinner = binding.spinnerLoginSchool;
+
         // spinner 設定
+        spinner = binding.spinnerLoginSchool;
+        Boolean FirstTime = preferences.getBoolean("isFirstTime",true);
         UniversityArray ua = new UniversityArray();
-        ArrayList<String> University =ua.getArrayToSpinner(getResources().openRawResource(R.raw.university));
+        SQLiteDatabase db = openOrCreateDatabase("UniversityInfo",MODE_PRIVATE,null);
+        ArrayList<String> University;
+        if ( FirstTime ) {
+            University = ua.FirstTimeGetSpinner(getResources().openRawResource(R.raw.university),db);
+            preferences.edit().putBoolean("isFirstTime",false).apply();
+        } else {
+            University = ua.GetSpinnerFromDB(db);
+        }
+        db.close();
         ArrayAdapter adapter = new ArrayAdapter(LoginActivity.this
                 , android.R.layout.simple_spinner_item, University);
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
         spinner.setAdapter(adapter);
-
 
 
         binding.btnLoginCreat.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +122,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 JSONObject packet = new JSONObject();
                 JSONObject data = new JSONObject();
-
                 String univer = spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString();
                 try {
                     packet.put("type",1);
@@ -124,9 +130,8 @@ public class LoginActivity extends AppCompatActivity {
                     data.put("acc",binding.txtLoginAcc.getText().toString());
                     data.put("pwd",binding.txtLoginPwd.getText().toString());
                     data.put("univ",univer);
-                    // data.put("univ",binding.spinnerLoginSchool.getSelectedItemId());
                     packet.put("data",data);
-                    Toast.makeText(LoginActivity.this, data.toString(), Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(LoginActivity.this, data.toString(), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     Log.w("api","請檢查click的cord");
                 }
@@ -160,8 +165,6 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             editor.putString("account","");
             editor.putString("password","");
-            editor.putInt("university",0);
-            editor.apply();
         }
         binding.checkLoginRemenber.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -169,9 +172,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (isChecked){
                     editor.putString("account",binding.txtLoginAcc.getText().toString());
                     editor.putString("password",binding.txtLoginPwd.getText().toString());
-                    editor.putBoolean("isRemember",true);
                     editor.putInt("university",spinner.getSelectedItemPosition());
-                    Toast.makeText(LoginActivity.this, "選項"+spinner.getSelectedItemPosition(), Toast.LENGTH_SHORT).show();
+                    editor.putBoolean("isRemember",true);
                 } else {
                     editor.putString("account","");
                     editor.putString("password","");
