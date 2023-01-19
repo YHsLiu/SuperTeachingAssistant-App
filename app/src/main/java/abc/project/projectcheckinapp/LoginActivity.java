@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,13 +17,18 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.CursorAdapter;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -93,19 +99,30 @@ public class LoginActivity extends AppCompatActivity {
         spinner = binding.spinnerLoginSchool;
         Boolean FirstTime = preferences.getBoolean("isFirstTime",true);
         UniversityArray ua = new UniversityArray();
-        SQLiteDatabase db = openOrCreateDatabase("UniversityInfo",MODE_PRIVATE,null);
-        ArrayList<String> University;
+        ArrayList< String > universityArray;
+        SQLiteDatabase db = openOrCreateDatabase("UniversityInfo2",MODE_PRIVATE,null); //
         if ( FirstTime ) {
-            University = ua.FirstTimeGetSpinner(getResources().openRawResource(R.raw.university),db);
+            universityArray = ua.FirstTimeGetSpinner(getResources().openRawResource(R.raw.university),db);
             preferences.edit().putBoolean("isFirstTime",false).apply();
+            db.close();
+            ArrayAdapter adapter = new ArrayAdapter(LoginActivity.this
+                    , android.R.layout.simple_spinner_item, universityArray);
+            adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
+            spinner.setAdapter(adapter);
         } else {
-            University = ua.GetSpinnerFromDB(db);
+            Cursor mycursor = ua.GetSpinnerFromDB(db);
+            String[] univName = new String[]{"univ_name"};
+            int[] adapterRowViews = new int[]{android.R.id.text1};
+            SimpleCursorAdapter adapter1 = new SimpleCursorAdapter(this,android.R.layout.simple_spinner_item
+                    ,mycursor,univName,adapterRowViews,0);
+            adapter1.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
+            spinner.setAdapter(adapter1);
+            db.close();
+
         }
-        db.close();
-        ArrayAdapter adapter = new ArrayAdapter(LoginActivity.this
-                , android.R.layout.simple_spinner_item, University);
-        adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
-        spinner.setAdapter(adapter);
+
+
+
 
 
         binding.btnLoginCreat.setOnClickListener(new View.OnClickListener() {
