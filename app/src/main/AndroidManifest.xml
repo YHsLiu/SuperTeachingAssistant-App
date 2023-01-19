@@ -14,7 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectCheckInApp"
         tools:targetApi="31">
-
+        <activity
+            android:name=".SecondActivity"
+            android:exported="false"
+            android:label="@string/title_activity_second"
+            android:theme="@style/Theme.ProjectCheckInApp.NoActionBar" />
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
@@ -23,18 +27,17 @@
             android:exported="false" />
         <activity
             android:name=".RealMainActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.ProjectCheckInApp.NoActionBar" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/Theme.ProjectCheckInApp.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

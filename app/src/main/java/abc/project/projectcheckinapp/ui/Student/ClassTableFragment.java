@@ -1,6 +1,10 @@
 package abc.project.projectcheckinapp.ui.Student;
 
+import static android.content.Context.MODE_PRIVATE;
+import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
+
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -18,6 +22,7 @@ import abc.project.projectcheckinapp.databinding.FragmentClasstableBinding;
 public class ClassTableFragment extends Fragment {
 
     SQLiteDatabase db;
+    private ContentValues contentValues ;
     private FragmentClasstableBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -26,13 +31,16 @@ public class ClassTableFragment extends Fragment {
         binding = FragmentClasstableBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        //開資料庫
+
+        db = getActivity().openOrCreateDatabase("ClassTableDB",MODE_PRIVATE,null);
         String drop_sql = "drop table if exists ClassTable;";
-        String create_sql = "create table University (_id integer primary key autoincrement,univ_name text);";
+        String create_sql = "create table ClassTable (_id text primary key,Form_Name text);";
         db.execSQL(drop_sql);
         db.execSQL(create_sql);
 
 
-        binding.text11.setOnClickListener(new View.OnClickListener() {
+        binding.t01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final EditText editText = new EditText(getActivity());
@@ -42,12 +50,18 @@ public class ClassTableFragment extends Fragment {
                 builder.setPositiveButton("確認", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        binding.text11.setText(editText.getText());
-                        Toast.makeText(getActivity(), "確認修改課程", Toast.LENGTH_SHORT).show();
+                        binding.t01.setText(editText.getText());
 
+                        //寫入資料庫
 
+                        String insert_sql = "insert into ClassTable ('_id','Form_name') values ("+binding.t01.toString()+","+editText.getText()+");";
+                        db.execSQL(insert_sql);
 
+                        /*contentValues = new ContentValues();
+                        contentValues.put("Form_Name",binding.t01.getText().toString());
+                        db.update("ClassTable", contentValues, "_id = " + editText.getId(), null);   */
 
+                        Toast.makeText(getActivity(), "課名寫入資料庫", Toast.LENGTH_SHORT).show();
                     }
                 });
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
