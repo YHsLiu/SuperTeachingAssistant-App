@@ -49,7 +49,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 Toast.makeText(RegistrationActivity.this, "註冊成功", Toast.LENGTH_SHORT).show();
                 //判斷是老師or學生 決定跳轉頁
                 if(bindingR.radioRegStd.isChecked()){
-                    IntentR = new Intent(RegistrationActivity.this,StudentActivity.class);
+                    IntentR = new Intent(RegistrationActivity.this,MainActivity.class);
                 }
                 /*if(bindingR.radioRegTch.isChecked()){
                     IntentR = new Intent(RegistrationActivity.this,TeacherActivity.class);
@@ -75,8 +75,9 @@ public class RegistrationActivity extends AppCompatActivity {
         SQLiteDatabase db = openOrCreateDatabase("UniversityInfo",MODE_PRIVATE,null);
         Spinner spinner = bindingR.spinnerRegSchool;
         UniversityArray ua = new UniversityArray();
+
         Cursor mycursor = ua.GetSpinnerFromDB(db);
-        String[] univName = new String[]{"univname"};
+        String[] univName = new String[]{"univ_name"};
         int[] adapterRowViews = new int[]{android.R.id.text1};
         SimpleCursorAdapter adapter1 = new SimpleCursorAdapter(this,android.R.layout.simple_spinner_item
                 ,mycursor,univName,adapterRowViews,0);

@@ -1,7 +1,10 @@
 package abc.project.projectcheckinapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -35,8 +38,9 @@ public class RealMainActivity extends AppCompatActivity {
             }
         });
 
-
     }
+
+
 
     //建立 OptionMenu
     @Override
