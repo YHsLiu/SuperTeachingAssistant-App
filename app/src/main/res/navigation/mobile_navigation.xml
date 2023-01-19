@@ -21,8 +21,8 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_nav_home_to_nav_stdMainPage"
-            app:destination="@id/nav_stdMainPage" />
+            android:id="@+id/action_nav_home_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
     <fragment
@@ -51,5 +51,39 @@
             android:id="@+id/action_classTableFragment_to_nav_EnterClass"
             app:destination="@id/nav_EnterClass" />
     </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="abc.project.projectcheckinapp.ui.home.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_nav_stdMainPage"
+            app:destination="@id/nav_stdMainPage" />
+        <action
+            android:id="@+id/action_loginFragment_to_teacherMainFragment"
+            app:destination="@id/teacherMainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/teacherMainFragment"
+        android:name="abc.project.projectcheckinapp.ui.Teacher.TeacherMainFragment"
+        android:label="fragment_teacher_main"
+        tools:layout="@layout/fragment_teacher_main" >
+        <action
+            android:id="@+id/action_teacherMainFragment_to_newClassFragment"
+            app:destination="@id/newClassFragment" />
+        <action
+            android:id="@+id/action_teacherMainFragment_to_teacherEnterClassFragment"
+            app:destination="@id/teacherEnterClassFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newClassFragment"
+        android:name="abc.project.projectcheckinapp.ui.Teacher.NewClassFragment"
+        android:label="fragment_new_class"
+        tools:layout="@layout/fragment_new_class" />
+    <fragment
+        android:id="@+id/teacherEnterClassFragment"
+        android:name="abc.project.projectcheckinapp.ui.Teacher.TeacherEnterClassFragment"
+        android:label="fragment_teacher_enter_class"
+        tools:layout="@layout/fragment_teacher_enter_class" />
 
 </navigation>
