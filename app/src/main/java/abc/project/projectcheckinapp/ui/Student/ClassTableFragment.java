@@ -2,6 +2,7 @@ package abc.project.projectcheckinapp.ui.Student;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import abc.project.projectcheckinapp.databinding.FragmentClasstableBinding;
 
 public class ClassTableFragment extends Fragment {
 
+    SQLiteDatabase db;
     private FragmentClasstableBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -23,6 +25,12 @@ public class ClassTableFragment extends Fragment {
 
         binding = FragmentClasstableBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        String drop_sql = "drop table if exists ClassTable;";
+        String create_sql = "create table University (_id integer primary key autoincrement,univ_name text);";
+        db.execSQL(drop_sql);
+        db.execSQL(create_sql);
+
 
         binding.text11.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,6 +44,9 @@ public class ClassTableFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         binding.text11.setText(editText.getText());
                         Toast.makeText(getActivity(), "確認修改課程", Toast.LENGTH_SHORT).show();
+
+
+
 
                     }
                 });

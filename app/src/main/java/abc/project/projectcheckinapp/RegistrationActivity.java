@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -73,11 +75,15 @@ public class RegistrationActivity extends AppCompatActivity {
         SQLiteDatabase db = openOrCreateDatabase("UniversityInfo",MODE_PRIVATE,null);
         Spinner spinner = bindingR.spinnerRegSchool;
         UniversityArray ua = new UniversityArray();
-        ArrayList<String> University = ua.GetSpinnerFromDB(db);
-        ArrayAdapter adapter = new ArrayAdapter(RegistrationActivity.this
-                , android.R.layout.simple_spinner_item, University);
-        adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
-        spinner.setAdapter(adapter);
+
+        Cursor mycursor = ua.GetSpinnerFromDB(db);
+        String[] univName = new String[]{"univ_name"};
+        int[] adapterRowViews = new int[]{android.R.id.text1};
+        SimpleCursorAdapter adapter1 = new SimpleCursorAdapter(this,android.R.layout.simple_spinner_item
+                ,mycursor,univName,adapterRowViews,0);
+        adapter1.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
+        spinner.setAdapter(adapter1);
+        db.close();
 
 
         // RadioGroup 的事件處理
