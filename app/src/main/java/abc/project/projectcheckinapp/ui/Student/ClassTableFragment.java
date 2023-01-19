@@ -17,12 +17,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentClasstableBinding;
 
 public class ClassTableFragment extends Fragment {
 
     SQLiteDatabase db;
-    private ContentValues contentValues ;
     private FragmentClasstableBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -39,6 +39,11 @@ public class ClassTableFragment extends Fragment {
         db.execSQL(drop_sql);
         db.execSQL(create_sql);
 
+        //1/19  待補
+        //db.rawQuery("select * from ClassTable where _id=?",)
+
+
+
 
         binding.t01.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,13 +59,8 @@ public class ClassTableFragment extends Fragment {
 
                         //寫入資料庫
 
-                        String insert_sql = "insert into ClassTable ('_id','Form_name') values ("+binding.t01.toString()+","+editText.getText()+");";
-                        db.execSQL(insert_sql);
-
-                        /*contentValues = new ContentValues();
-                        contentValues.put("Form_Name",binding.t01.getText().toString());
-                        db.update("ClassTable", contentValues, "_id = " + editText.getId(), null);   */
-
+                        String insert_sql = "insert into ClassTable values (?,?)";
+                        db.execSQL(insert_sql,new String[]{String.valueOf(binding.t01.getId()),editText.getText().toString()});
                         Toast.makeText(getActivity(), "課名寫入資料庫", Toast.LENGTH_SHORT).show();
                     }
                 });
