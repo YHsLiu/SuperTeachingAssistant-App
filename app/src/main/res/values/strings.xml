@@ -15,6 +15,9 @@
     <string name="menu_Set">個人設定</string>
     <string name="menu_stdMainPage">學生主頁</string>
     <string name="menu_gallery1">Gallery</string>
+    <string name="menu_tecHome2">首頁</string>
+    <string name="menu_tecNewClass">新增課程</string>
+    <string name="menu_tecEnterClass">進入教室</string>
 
     <string name="login_acc">帳號</string>
     <string name="login_pwd">密碼</string>
