@@ -46,7 +46,7 @@ public class LotteryActivity extends AppCompatActivity {
                 String depart = bundle.getString("stuDep");
                 AlertDialog.Builder builder = new AlertDialog.Builder(LotteryActivity.this);
                 builder.setTitle("抽到的是");
-                builder.setMessage("學生姓名:"+name+"  學號:"+id+"  科系:"+depart);
+                builder.setMessage("學生姓名:"+name+"\r\n學號: "+id+"\r\n科系: "+depart);
                 builder.setPositiveButton("關閉", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {                    }
@@ -120,7 +120,7 @@ public class LotteryActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         // 要從前面的SharedPreferences帶入cid
         preferences = this.getSharedPreferences("app_config",MODE_PRIVATE);
-        int cid = preferences.getInt("cid",0);
+        int cid = 1;//preferences.getInt("cid",0);
         if ( cid == 0 ){
             Toast.makeText(this, "無課程資料，請先重新進入教室或回報問題", Toast.LENGTH_LONG).show();
         }
