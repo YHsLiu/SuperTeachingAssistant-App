@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.ActivitySecondBinding;
 
-public class SecondActivity extends AppCompatActivity {
+public class TeacherActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivitySecondBinding binding;
@@ -42,9 +42,9 @@ public class SecondActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_tec_main, R.id.nav_tec_newclass, R.id.nav_tec_enter)
                 .setOpenableLayout(drawer)
-                .build();
+                .build(); // 缺個人設定
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_second);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -53,7 +53,7 @@ public class SecondActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.second, menu);
+        getMenuInflater().inflate(R.menu.menu_for_teacher, menu);
         return true;
     }
 

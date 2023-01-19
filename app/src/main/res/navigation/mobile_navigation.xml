@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_tec_main">
 
     <fragment
         android:id="@+id/nav_stdMainPage"
@@ -16,7 +16,7 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_home"
+        android:id="@+id/nav_tec_main"
         android:name="abc.project.projectcheckinapp.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" >
@@ -32,11 +32,11 @@
         tools:layout="@layout/fragment_enterclass" >
         <action
             android:id="@+id/action_nav_EnterClass_to_nav_InputCourseCode"
-            app:destination="@id/nav_InputCourseCode" />
+            app:destination="@id/nav_tec_newclass" />
     </fragment>
 
     <fragment
-        android:id="@+id/nav_InputCourseCode"
+        android:id="@+id/nav_tec_newclass"
         android:name="abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment"
         android:label="@string/menu_InputCourseCode"
         tools:layout="@layout/fragment_inputcoursecode">

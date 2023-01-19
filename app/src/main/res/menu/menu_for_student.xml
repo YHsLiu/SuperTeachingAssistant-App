@@ -11,7 +11,7 @@
             android:title="@string/menu_home" />
 
         <item
-            android:id="@+id/nav_InputCourseCode"
+            android:id="@+id/nav_tec_newclass"
             android:icon="@drawable/ic_menu_inputcoursecode"
             android:title="@string/menu_InputCourseCode" />
 
