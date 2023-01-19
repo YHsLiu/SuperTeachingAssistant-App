@@ -53,6 +53,7 @@
     <string name="Class_table_THU">THU</string>
     <string name="Class_table_FRI">FRI</string>
     <string name="Class_table_noon">午休</string>
+    <string name="title_activity_second">SecondActivity</string>
 
 
 </resources>

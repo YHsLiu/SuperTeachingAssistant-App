@@ -53,9 +53,13 @@ public class ClassTableFragment extends Fragment {
                         binding.t01.setText(editText.getText());
 
                         //寫入資料庫
-                        contentValues = new ContentValues();
+
+                        String insert_sql = "insert into ClassTable ('_id','Form_name') values ("+binding.t01.toString()+","+editText.getText()+");";
+                        db.execSQL(insert_sql);
+
+                        /*contentValues = new ContentValues();
                         contentValues.put("Form_Name",binding.t01.getText().toString());
-                        db.update("ClassTable", contentValues, "_id = " + editText.getId(), null);
+                        db.update("ClassTable", contentValues, "_id = " + editText.getId(), null);   */
 
                         Toast.makeText(getActivity(), "課名寫入資料庫", Toast.LENGTH_SHORT).show();
                     }
