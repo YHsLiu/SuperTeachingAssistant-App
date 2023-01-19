@@ -6,20 +6,50 @@
     app:startDestination="@+id/nav_home">
 
     <fragment
+        android:id="@+id/nav_stdMainPage"
+        android:name="abc.project.projectcheckinapp.ui.Student.StudentMainPageFragment"
+        android:label="@string/menu_stdMainPage"
+        tools:layout="@layout/fragment_studentmainpage" >
+        <action
+            android:id="@+id/action_nav_stdMainPage_to_classTableFragment"
+            app:destination="@id/nav_classTable" />
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_home"
         android:name="abc.project.projectcheckinapp.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_nav_stdMainPage"
+            app:destination="@id/nav_stdMainPage" />
+    </fragment>
 
     <fragment
-        android:id="@+id/nav_inputcoursecode"
+        android:id="@+id/nav_EnterClass"
+        android:name="abc.project.projectcheckinapp.ui.Student.EnterClassFragment"
+        android:label="@string/menu_EnterClass"
+        tools:layout="@layout/fragment_enterclass" >
+        <action
+            android:id="@+id/action_nav_EnterClass_to_nav_InputCourseCode"
+            app:destination="@id/nav_InputCourseCode" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_InputCourseCode"
         android:name="abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment"
         android:label="@string/menu_InputCourseCode"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_inputcoursecode">
+
+    </fragment>
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="abc.project.projectcheckinapp.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_classTable"
+        android:name="abc.project.projectcheckinapp.ui.Student.ClassTableFragment"
+        android:label="ClassTableFragment" >
+        <action
+            android:id="@+id/action_classTableFragment_to_nav_EnterClass"
+            app:destination="@id/nav_EnterClass" />
+    </fragment>
+
 </navigation>

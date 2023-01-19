@@ -32,9 +32,9 @@ public class HomeFragment extends Fragment {
         binding.btnToA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 使用 NavController 切換到 AFragement
+                // 使用 NavController 切換到 classTableFragement
                 // 請使用 Mobile_navigation 中的 Action ID
-                navController.navigate(R.id.nav_stdMainPage);
+                navController.navigate(R.id.nav_classTable);
             }
         });
         return root;

@@ -47,7 +47,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 Toast.makeText(RegistrationActivity.this, "註冊成功", Toast.LENGTH_SHORT).show();
                 //判斷是老師or學生 決定跳轉頁
                 if(bindingR.radioRegStd.isChecked()){
-                    IntentR = new Intent(RegistrationActivity.this,StudentActivity.class);
+                    IntentR = new Intent(RegistrationActivity.this,MainActivity.class);
                 }
                 /*if(bindingR.radioRegTch.isChecked()){
                     IntentR = new Intent(RegistrationActivity.this,TeacherActivity.class);
