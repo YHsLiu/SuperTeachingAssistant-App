@@ -30,7 +30,7 @@ public class UniversityArray {
         StringBuilder sb =new StringBuilder();
         String line;
         String drop_sql = "drop table if exists University;";
-        String create_sql = "create table University (_id integer autoincrement,univ_name text);";
+        String create_sql = "create table University (_id integer primary key autoincrement,univ_name text);";
         db.execSQL(drop_sql);
         db.execSQL(create_sql);
         ArrayList< String > universityArray =new ArrayList<>();
@@ -42,7 +42,7 @@ public class UniversityArray {
             for (int i=0; i<jsonArray.length();i++){
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 universityArray.add(jsonObject.getString("學校名稱"));
-                db.execSQL("insert into University values (?)",
+                db.execSQL("insert into University(univ_name) values (?)",
                         new String[]{ jsonObject.getString("學校名稱") });
             }
             db.close();
