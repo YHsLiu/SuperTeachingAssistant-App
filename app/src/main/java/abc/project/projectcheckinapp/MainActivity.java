@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_inputcoursecode, R.id.nav_slideshow, R.id.nav_stdMainPage, R.id.nav_inputcoursecode)   //影響設定是返回建or Menu
+                R.id.nav_home, R.id.nav_inputcoursecode, R.id.nav_stdMainPage, R.id.nav_inputcoursecode)   //影響設定是返回建or Menu
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);

@@ -14,9 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectCheckInApp"
         tools:targetApi="31">
-        <activity
-            android:name=".LotteryActivity"
-            android:exported="false" />
+
         <activity
             android:name=".StudentActivity"
             android:exported="false" />

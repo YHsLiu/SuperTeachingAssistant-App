@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -69,9 +70,10 @@ public class RegistrationActivity extends AppCompatActivity {
         executor = Executors.newSingleThreadExecutor();
 
         // spinner 設定
+        SQLiteDatabase db = openOrCreateDatabase("UniversityInfo",MODE_PRIVATE,null);
         Spinner spinner = bindingR.spinnerRegSchool;
         UniversityArray ua = new UniversityArray();
-        ArrayList<String> University =ua.getArrayToSpinner(getResources().openRawResource(R.raw.university));
+        ArrayList<String> University = ua.GetSpinnerFromDB(db);
         ArrayAdapter adapter = new ArrayAdapter(RegistrationActivity.this
                 , android.R.layout.simple_spinner_item, University);
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);

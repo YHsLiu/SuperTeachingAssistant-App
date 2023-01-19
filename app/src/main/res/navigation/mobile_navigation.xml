@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_inputcoursecode"
-        android:name="abc.project.projectcheckinapp.ui.InputCourseCode.InputCourseCodeFragment"
+        android:name="abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment"
         android:label="@string/menu_InputCourseCode"
         tools:layout="@layout/fragment_gallery" />
 

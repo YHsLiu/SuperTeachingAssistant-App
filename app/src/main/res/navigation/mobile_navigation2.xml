@@ -3,35 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation2"
-    app:startDestination="@+id/nav_stdMainPage">
+    app:startDestination="@+id/nav_home">
 
     <fragment
         android:id="@+id/nav_stdMainPage"
-        android:name="abc.project.projectcheckinapp.ui.StudentMainPage.StudentMainPageFragment"
+        android:name="abc.project.projectcheckinapp.ui.Student.StudentMainPageFragment"
         android:label="@string/menu_stdMainPage"
-        tools:layout="@layout/fragment_studentmainpage" />
+        tools:layout="@layout/fragment_studentmainpage" >
+        <action
+            android:id="@+id/action_nav_stdMainPage_to_nav_EnterClass"
+            app:destination="@id/nav_EnterClass" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_home"
         android:name="abc.project.projectcheckinapp.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
-
-    <fragment
-        android:id="@+id/nav_gallery"
-        android:name="abc.project.projectcheckinapp.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_nav_stdMainPage"
+            app:destination="@id/nav_stdMainPage" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_EnterClass"
-        android:name="abc.project.projectcheckinapp.ui.EnterClass.EnterClassFragment"
+        android:name="abc.project.projectcheckinapp.ui.Student.EnterClassFragment"
         android:label="@string/menu_EnterClass"
-        tools:layout="@layout/fragment_enterclass" />
+        tools:layout="@layout/fragment_enterclass" >
+        <action
+            android:id="@+id/action_nav_EnterClass_to_nav_InputCourseCode"
+            app:destination="@id/nav_InputCourseCode" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_InputCourseCode"
-        android:name="abc.project.projectcheckinapp.ui.InputCourseCode.InputCourseCodeFragment"
+        android:name="abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment"
         android:label="@string/menu_InputCourseCode"
         tools:layout="@layout/fragment_inputcoursecode" />
 
