@@ -91,8 +91,6 @@ public class LotteryFragment extends Fragment {
                         executor.execute(apiCaller);
                     }
                 });
-                dialog = builder.create();
-                dialog.show();
             } else {
                 builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("抽完了");
@@ -119,9 +117,9 @@ public class LotteryFragment extends Fragment {
                 builder.setNegativeButton("關閉", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {    }    });
-                dialog = builder.create();
-                dialog.show();
             }
+            dialog = builder.create();
+            dialog.show();
         }
     };
     public LotteryFragment() {
