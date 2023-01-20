@@ -1,9 +1,9 @@
 # ProjectCheckInApp
 
-### Android Studio
+## Android Studio
 **注意：要與所有Activity共用的SharedPreferance，請用：** </p>
 **SharedPreferences preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);** </p>
-</p>
+
 ### Axure 專案草稿
 1.13 劉:axure的專案草稿.rp (登入>老師介面>1.新增課程 2.教室選擇 > 進教室) </p>
 1.14 劉:axure的專案草稿.rp (微調進教室 > 學生名單半完成) </p>
