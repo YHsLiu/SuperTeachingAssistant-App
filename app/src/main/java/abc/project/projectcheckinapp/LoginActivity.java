@@ -56,29 +56,26 @@ public class LoginActivity extends AppCompatActivity {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
-            if (bundle.getInt("status" )==11){
-                contextEditor = LoginActivity.this.getSharedPreferences("user_info",MODE_PRIVATE).edit();
-                contextEditor.putString("userID",binding.txtLoginAcc.getText().toString());
-                contextEditor.putBoolean("isLogin",true);
+            if (bundle.getInt("status" )==11) // 登入成功
+            {   contextEditor = LoginActivity.this.getSharedPreferences("userInfo",MODE_PRIVATE).edit(); // 所有Activity共用
+                contextEditor.putString("userID",binding.txtLoginAcc.getText().toString()); // 帳號(學號/教師編號)
+                contextEditor.putBoolean("isStudent",binding.radioLoginStudent.isChecked()); // 判別師/生
+                contextEditor.putBoolean("isLogin",true); // 已登入
                 contextEditor.apply();
-                preferences = getSharedPreferences("app_config",MODE_PRIVATE);
                 // 跳轉到 老師 /學生 頁面
                 /*if (binding.radioLoginStudent.isChecked()){
                     intent = new Intent(LoginActivity.this, 學生Activity.class );
-                    // 好像用SharedPreference比較好
-                    //Bundle bundleToOther = new Bundle();
-                    //bundleToOther.putString("stuId",binding.txtLoginAcc.getText().toString()); // 這是學號
-                    //intent.putExtras(bundleToOther); // 學號帶到學生畫面
-                    preferences.edit().putString("學號",binding.txtLoginAcc.toString()).apply();
+
                     startActivity(intent);
                 } else {
                     intent = new Intent(LoginActivity.this, 老師Activity.class );
-                    preferences.edit().putString("教師編號",binding.txtLoginAcc.toString()).apply();
+
                     startActivity(intent);
                 }*/
             } else {
-                contextEditor = LoginActivity.this.getSharedPreferences("user_info",MODE_PRIVATE).edit();
+                contextEditor = LoginActivity.this.getSharedPreferences("userInfo",MODE_PRIVATE).edit();
                 contextEditor.putString("userID","");
+                contextEditor.putBoolean("isStudent",true);
                 contextEditor.putBoolean("isLogin",false);
                 contextEditor.apply();
                 // 加錯誤小視窗
@@ -93,7 +90,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         executor = Executors.newSingleThreadExecutor();
         preferences = this.getPreferences(MODE_PRIVATE);
-
 
         // spinner 設定
         spinner = binding.spinnerLoginSchool;
@@ -121,10 +117,6 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
-
-
-
-
         binding.btnLoginCreat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,7 +125,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         binding.btnLoginLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,7 +161,6 @@ public class LoginActivity extends AppCompatActivity {
                 executor.execute(apiCaller);
             }
         });
-
         // checkbox
         SharedPreferences.Editor editor = preferences.edit();
         Boolean Remember = preferences.getBoolean("isRemember",false);
@@ -179,9 +169,6 @@ public class LoginActivity extends AppCompatActivity {
             binding.txtLoginPwd.setText(preferences.getString("password",""));
             spinner.setSelection(preferences.getInt("university",0));
             binding.checkLoginRemenber.setChecked(true);
-        } else {
-            editor.putString("account","");
-            editor.putString("password","");
         }
         binding.checkLoginRemenber.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -190,22 +177,22 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("account",binding.txtLoginAcc.getText().toString());
                     editor.putString("password",binding.txtLoginPwd.getText().toString());
                     editor.putInt("university",spinner.getSelectedItemPosition());
+                    editor.putBoolean("isStudent",binding.radioLoginStudent.isChecked());
                     editor.putBoolean("isRemember",true);
                 } else {
                     editor.putString("account","");
                     editor.putString("password","");
                     editor.putInt("university",0);
+                    editor.putBoolean("isStudent",true);
                     editor.putBoolean("isRemember",false);
                 }
                 editor.apply();
             }
         });
-
     }
     class SimpleAPIWorker implements Runnable{
         OkHttpClient client;
         Request request;
-
         public SimpleAPIWorker(Request request) {
             this.request = request;
             client = new OkHttpClient();
@@ -233,5 +220,4 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
-
 }
