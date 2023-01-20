@@ -58,6 +58,11 @@
     <string name="tecMain_txt4">引導與啟發比批評更適合孩子</string>
     <string name="tecMain_create_class">新增課程</string>
     <string name="tecMain_select_class">教室選擇</string>
+
+    <string name="tecLottery_title">抽籤說明</string>
+    <string name="tecLottery_txt1">抽籤以當天有點名的學生名單為主，
+        若當日無點名紀錄，則以全班名單為主</string>
+    <string name="tecLottery_btn">抽籤</string>
     <string name="drawer_logout">登出</string>
     =======
 
