@@ -63,6 +63,10 @@
     <string name="tecLottery_txtt">說明：</string>
     <string name="tecLottery_txt1">抽籤會以當天有點名的學生名單為主，若當日無點名紀錄，則以全班名單為主</string>
     <string name="tecLottery_btn">抽籤</string>
+
+    <string name="tecStuList_select">查詢</string>
+    <string name="tecStuList_inputId">請輸入姓名</string>
+    <string name="tecStuList_id">學號：</string>
     <string name="drawer_logout">登出</string>
     =======
 
