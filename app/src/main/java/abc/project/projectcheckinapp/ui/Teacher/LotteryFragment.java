@@ -58,7 +58,7 @@ public class LotteryFragment extends Fragment {
                 String id = bundle.getString("stuId");
                 String depart = bundle.getString("stuDep");
                 builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("抽到的是...");
+                builder.setTitle("抽籤結果");
                 builder.setMessage("學生姓名:"+name+"\r\n學號: "+id+"\r\n科系: "+depart);
                 builder.setPositiveButton("關閉", new DialogInterface.OnClickListener() {
                     @Override
@@ -93,22 +93,13 @@ public class LotteryFragment extends Fragment {
                 });
             } else {
                 builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("抽完了");
+                builder.setTitle("抽籤結果");
                 builder.setMessage("學生都抽過囉!");
-                builder.setPositiveButton("再抽一次", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("重新抽籤", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        JSONObject packet = new JSONObject();
-                        try {
-                            packet.put("type",1);
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-                        MediaType mediaType = MediaType.parse("application/json");
-                        RequestBody body = RequestBody.create(packet.toString(),mediaType);
                         Request request = new Request.Builder()
                                 .url("http://192.168.255.62:8864/api/lottery/clear")
-                                .post(body)
                                 .build();
                         ClearAPIWorker apiWorker = new ClearAPIWorker(request);
                         executor.execute(apiWorker);
@@ -120,6 +111,17 @@ public class LotteryFragment extends Fragment {
             }
             dialog = builder.create();
             dialog.show();
+        }
+    };
+    Handler lotteryResetResultHandler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            Bundle bundle = msg.getData();
+            Boolean isClear = bundle.getBoolean("isClear",false);
+            if (isClear == false){
+                Toast.makeText(getActivity(), "系統運行異常，請重新進入教室或回報問題", Toast.LENGTH_SHORT).show();
+            }
         }
     };
     public LotteryFragment() {
@@ -226,16 +228,17 @@ public class LotteryFragment extends Fragment {
         }
         @Override
         public void run() {
+            Bundle bundle = new Bundle();
             try {
                 Response response = client.newCall(request).execute();
-                String jsonString = response.body().string();
-                Log.w("api","API回應:"+jsonString);
-                //JSONObject result = new JSONObject(jsonString);
-                //Message m = lotteryResetResultHandler.obtainMessage();
-                //Bundle bundle = new Bundle();
-                // bundle.putString("type",result.getString("type"));
-                // m.setData(bundle);
-                //lotteryResetResultHandler.sendMessage(m);
+                if (response.isSuccessful()){
+                    bundle.putBoolean("isClear",true);
+                } else{
+                    bundle.putBoolean("isClear",false);
+                }
+                Message m = lotteryResetResultHandler.obtainMessage();
+                m.setData(bundle);
+                lotteryResetResultHandler.sendMessage(m);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

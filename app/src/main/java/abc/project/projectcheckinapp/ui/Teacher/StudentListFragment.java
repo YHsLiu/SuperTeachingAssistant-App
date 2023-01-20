@@ -2,6 +2,7 @@ package abc.project.projectcheckinapp.ui.Teacher;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.app.VoiceInteractor;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -12,15 +13,28 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.concurrent.ExecutorService;
 
+import abc.project.projectcheckinapp.LoginActivity;
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentLotteryBinding;
 import abc.project.projectcheckinapp.databinding.FragmentStudentListBinding;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,13 +64,89 @@ public class StudentListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
+    Handler studentListResultHandler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            Bundle bundle = msg.getData();
+            if (bundle.getInt("status" )==11) // 登入成功
+            {   contextEditor = LoginActivity.this.getSharedPreferences("userInfo",MODE_PRIVATE).edit(); // 所有Activity共用
+                contextEditor.putString("userID",binding.txtLoginAcc.getText().toString()); // 帳號(學號/教師編號)
+                contextEditor.putBoolean("isStudent",binding.radioLoginStudent.isChecked()); // 判別師/生
+                contextEditor.putBoolean("isLogin",true); // 已登入
+                contextEditor.apply();
+                // 跳轉到 老師 /學生 頁面
+                /*if (binding.radioLoginStudent.isChecked()){
+                    intent = new Intent(LoginActivity.this, 學生Activity.class );
 
+                    startActivity(intent);
+                } else {
+                    intent = new Intent(LoginActivity.this, 老師Activity.class );
+
+                    startActivity(intent);
+                }*/
+            } else {
+                contextEditor = LoginActivity.this.getSharedPreferences("userInfo",MODE_PRIVATE).edit();
+                contextEditor.putString("userID","");
+                contextEditor.putBoolean("isStudent",true);
+                contextEditor.putBoolean("isLogin",false);
+                contextEditor.apply();
+                // 加錯誤小視窗
+            }
+        }
+    };
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentStudentListBinding.inflate(inflater,container,false);
         preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
+        int cid = preferences.getInt("cid",0);
+        JSONObject packet = new JSONObject();
+        try {
+            packet.put("type",1);
+            packet.put("cid",cid);
+        } catch (JSONException e) {
+            Log.w("error","packet");
+        }
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(packet.toString(),mediaType);
+        Request request = new Request.Builder()
+                .url("")
+                .post(body).build();
+        SimpleAPIWorker simpleAPIWorker = new SimpleAPIWorker(request);
+        executor.execute(simpleAPIWorker);
+
         return binding.getRoot();
+    }
+    class SimpleAPIWorker implements Runnable{
+        OkHttpClient client;
+        Request request;
+        public SimpleAPIWorker(Request request) {
+            this.request = request;
+            client = new OkHttpClient();
+        }
+        @Override
+        public void run() {
+            try {
+                Response response = client.newCall(request).execute();
+                String jsonString = response.body().string();
+                Log.w("api","API回應:"+jsonString);
+                JSONObject result = new JSONObject(jsonString);
+                Message m = studentListResultHandler.obtainMessage();
+                Bundle bundle = new Bundle();
+                if ( result.getInt("type")==2){
+                    bundle.putString("mes",result.getString("mes"));
+                    bundle.putInt("status",result.getInt("status") );
+                } else {
+                    bundle.putString("mes", "登入失敗");
+                    bundle.putInt("status",result.getInt("status") );
+                }
+                m.setData(bundle);
+                studentListResultHandler.sendMessage(m);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override
