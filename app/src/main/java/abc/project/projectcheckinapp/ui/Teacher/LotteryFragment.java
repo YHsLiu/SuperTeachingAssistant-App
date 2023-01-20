@@ -43,9 +43,11 @@ import okhttp3.Response;
 public class LotteryFragment extends Fragment {
     FragmentLotteryBinding binding;
     NavController navController;
-    Button lotteryBtn;
     SharedPreferences preferences;
     ExecutorService executor;
+    AlertDialog.Builder builder;
+    AlertDialog dialog;
+
     Handler lotteryResultHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -55,13 +57,12 @@ public class LotteryFragment extends Fragment {
                 String name = bundle.getString("stuName");
                 String id = bundle.getString("stuId");
                 String depart = bundle.getString("stuDep");
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("抽到的是");
+                builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("抽到的是...");
                 builder.setMessage("學生姓名:"+name+"\r\n學號: "+id+"\r\n科系: "+depart);
                 builder.setPositiveButton("關閉", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {                    }
-                });
+                    public void onClick(DialogInterface dialog, int which) {     }  });
                 builder.setNegativeButton("下一位", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -90,10 +91,10 @@ public class LotteryFragment extends Fragment {
                         executor.execute(apiCaller);
                     }
                 });
-                AlertDialog dialog = builder.create();
+                dialog = builder.create();
                 dialog.show();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("抽完了");
                 builder.setMessage("學生都抽過囉!");
                 builder.setPositiveButton("再抽一次", new DialogInterface.OnClickListener() {
@@ -117,9 +118,9 @@ public class LotteryFragment extends Fragment {
                 });
                 builder.setNegativeButton("關閉", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
+                    public void onClick(DialogInterface dialog, int which) {    }    });
+                dialog = builder.create();
+                dialog.show();
             }
         }
     };
@@ -146,20 +147,19 @@ public class LotteryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentLotteryBinding.inflate(inflater,container,false);
-        // 要從前面的SharedPreferences帶入cid
         preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
-        int cid = 1;//preferences.getInt("cid",0);
-        if ( cid == 0 ){
-            Toast.makeText(getActivity(), "無課程資料，請先重新進入教室或回報問題", Toast.LENGTH_LONG).show();
-        }
-        lotteryBtn = binding.btnTec3Act;
-        lotteryBtn.setOnClickListener(new View.OnClickListener() {
+        binding.btnTec3Act.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 JSONObject packet = new JSONObject();
                 // 在點名的地方要設Boolean(rollCall) & date 來check有無點名與點名紀錄
+                // 要從前面的SharedPreferences帶入cid
                 Boolean rollCall = preferences.getBoolean("rollCall",false);
                 int date = preferences.getInt("date",0);
+                int cid = preferences.getInt("cid",0);
+                if ( cid == 0 ){
+                    Toast.makeText(getActivity(), "無課程資料，請先重新進入教室或回報問題", Toast.LENGTH_LONG).show();
+                }
                 try {
                     packet.put("type",1);
                     packet.put("status",10);
