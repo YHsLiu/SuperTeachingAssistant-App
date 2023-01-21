@@ -1,9 +1,10 @@
 package abc.project.projectcheckinapp.ui.Teacher;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
 
-import android.app.VoiceInteractor;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,12 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 
-import abc.project.projectcheckinapp.LoginActivity;
-import abc.project.projectcheckinapp.R;
-import abc.project.projectcheckinapp.databinding.FragmentLotteryBinding;
 import abc.project.projectcheckinapp.databinding.FragmentStudentListBinding;
 import abc.project.projectcheckinapp.rawData.AdapterAllStu;
 import okhttp3.MediaType;
@@ -52,6 +49,8 @@ public class StudentListFragment extends Fragment {
     SharedPreferences preferences;
     ExecutorService executor;
     RecyclerView recyclerView;
+    SQLiteDatabase db;
+    int cid;
     AlertDialog.Builder builder;
     AlertDialog dialog;
     public StudentListFragment() {
@@ -75,15 +74,25 @@ public class StudentListFragment extends Fragment {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
-            JSONArray stuInfo;
+            JSONArray stuInfos;
+            cid = preferences.getInt("cid",0);
+            db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null); // 將學生資訊存進裝置的DB
+            // 每個跟RecyclerView有關的資料都存進裝置名為 allList 的DB中，以table名稱來區別每個list
+            db.execSQL("drop table if exists "+cid+"_allstu;");
+            db.execSQL("create table "+cid+"_allstu(name text, depart text, stuId text);");
             try {
-                stuInfo =new JSONArray( bundle.getString("list"));
+                stuInfos =new JSONArray( bundle.getString("list") );
+                for (int i = 0; i<stuInfos.length();i++){
+                    JSONObject stuInfo = stuInfos.getJSONObject(i);
+                    db.execSQL("insert into "+cid+"_allstu values (?,?,?);",
+                            new String[] { stuInfo.getString("姓名"),
+                                           stuInfo.getString("科系"),
+                                           stuInfo.getString("學號")}); }
+                db.close();
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-            recyclerView =binding.RecyclerStuAll;
-            recyclerView.setAdapter(new AdapterAllStu(stuInfo));
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         }
     };
     @Override
@@ -91,7 +100,7 @@ public class StudentListFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentStudentListBinding.inflate(inflater,container,false);
         preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
-        int cid = preferences.getInt("cid",0);
+        cid = preferences.getInt("cid",0);
         JSONObject packet = new JSONObject();
         try {
             packet.put("type",1);
@@ -107,6 +116,10 @@ public class StudentListFragment extends Fragment {
         SimpleAPIWorker simpleAPIWorker = new SimpleAPIWorker(request);
         executor.execute(simpleAPIWorker);
 
+        db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
+        recyclerView =binding.RecyclerStuAll;
+        recyclerView.setAdapter(new AdapterAllStu(db,cid,));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return binding.getRoot();
     }
     class SimpleAPIWorker implements Runnable{
@@ -129,7 +142,7 @@ public class StudentListFragment extends Fragment {
                     String stuInfo = result.getJSONArray("list").toString();
                     bundle.putString("list",stuInfo);
                 } else {
-                    Log.e("api","api回應有問題");
+                    Log.e("error","api回應有問題");
                 }
                 m.setData(bundle);
                 studentListResultHandler.sendMessage(m);
