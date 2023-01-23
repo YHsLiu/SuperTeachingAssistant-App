@@ -67,6 +67,12 @@
     <string name="tecStuList_select">查詢</string>
     <string name="tecStuList_inputId">請輸入姓名</string>
     <string name="tecStuList_id">學號：</string>
+
+    <string name="tecNewClass_name">課程名稱</string>
+    <string name="tecNewClass_classCode">課程代碼</string>
+    <string name="tecNewClass_txt1">請輸入課程名稱與代碼</string>
+    <string name="tecNewClass_new">新 增</string>
+
     <string name="drawer_logout">登出</string>
     =======
 
