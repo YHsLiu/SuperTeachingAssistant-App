@@ -10,10 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 import abc.project.projectcheckinapp.R;
@@ -47,7 +43,7 @@ public class AdapterAllStu extends RecyclerView.Adapter<AdapterAllStu.ViewHolder
         cursor.close();
     }
 
-    public void setAllColumn(String select){
+    public void selectAllColumn(String select){
         // 輸入查詢 姓名 或 科系 或 學號
         result.clear();
         Cursor cursor;
@@ -82,12 +78,21 @@ public class AdapterAllStu extends RecyclerView.Adapter<AdapterAllStu.ViewHolder
         holder.studentName.setText(result.get(position).getStuname());
         holder.department.setText(result.get(position).getStudepart());
         holder.studentName.setText(result.get(position).getStuid());
-
+        holder.studentName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final int pos = holder.getAdapterPosition();
+                String name  = result.get(pos).getStuname();
+                String depart = result.get(pos).getStudepart();
+                String id = result.get(pos).getStuid();
+                click.onCliskForAllStuList(pos,name,depart,id);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return stuInfos.length();
+        return result.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{

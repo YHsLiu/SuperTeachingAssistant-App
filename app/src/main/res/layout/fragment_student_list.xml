@@ -23,7 +23,7 @@
                 android:layout_weight="1">
 
                 <EditText
-                    android:id="@+id/txt_tecL1_stuNum"
+                    android:id="@+id/txt_tecL1_select"
                     android:layout_width="276dp"
                     android:layout_height="46dp"
                     android:layout_weight="1"

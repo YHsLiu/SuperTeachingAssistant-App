@@ -3,6 +3,7 @@ package abc.project.projectcheckinapp.ui.Teacher;
 import static android.content.Context.MODE_PRIVATE;
 import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import java.util.concurrent.ExecutorService;
 
 import abc.project.projectcheckinapp.databinding.FragmentStudentListBinding;
 import abc.project.projectcheckinapp.rawData.AdapterAllStu;
+import abc.project.projectcheckinapp.rawData.ClickListener;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -51,6 +53,8 @@ public class StudentListFragment extends Fragment {
     RecyclerView recyclerView;
     SQLiteDatabase db;
     int cid;
+    ClickListener clickListener;
+    AdapterAllStu adapter;
     AlertDialog.Builder builder;
     AlertDialog dialog;
     public StudentListFragment() {
@@ -92,7 +96,6 @@ public class StudentListFragment extends Fragment {
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-
         }
     };
     @Override
@@ -118,7 +121,27 @@ public class StudentListFragment extends Fragment {
 
         db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
         recyclerView =binding.RecyclerStuAll;
-        recyclerView.setAdapter(new AdapterAllStu(db,cid,));
+        clickListener = new ClickListener() {
+            @Override
+            public void onCliskForAllStuList(int position, String stuname, String studepart, String stuid) {
+                builder.setMessage("學生姓名："+stuname+"\r\n科系："+studepart+"\r\n學號："+stuid);
+                builder.setPositiveButton("點名", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                      // 設定click後的動作
+                      // 先建好點名單的Table再回來做
+                    }
+                });
+            }
+        };
+        adapter = new AdapterAllStu(db,clickListener,cid);
+        binding.btnTecLSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.selectAllColumn(binding.txtTecL1Select.getText().toString());
+                adapter.notifyDataSetChanged();
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return binding.getRoot();
     }
