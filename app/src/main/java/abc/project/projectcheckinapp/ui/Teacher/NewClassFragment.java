@@ -19,6 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 
 import abc.project.projectcheckinapp.databinding.FragmentNewClassBinding;
@@ -59,17 +61,25 @@ public class NewClassFragment extends Fragment {
         binding = FragmentNewClassBinding.inflate(inflater,container,false);
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         int tid = preferences.getInt("tid",0);
-        String className, classCode;
         binding.btnTecNCreat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 JSONObject packet = new JSONObject();
                 JSONObject data = new JSONObject();
+                SimpleDateFormat year = new SimpleDateFormat("yyyy");
+                int semester;  // 判斷學年
+                if (Integer.parseInt(new SimpleDateFormat("MM").format(new Date()))>=9) {
+                    semester = Integer.parseInt(year.format(new Date())) - 1911;
+                } else {
+                    semester = Integer.parseInt(year.format(new Date())) - 1912;
+                }
                 try {
                     packet.put("type",1);
                     packet.put("status",10);
+                    data.put("tid",tid);
                     data.put("className",binding.txtTecNName.getText().toString());
                     data.put("classCode",binding.txtTecNCord.getText().toString());
+                    data.put("semester",semester);
                     packet.put("classInfo",data);
                 } catch (JSONException e) {
                     Log.e("error","packet");
@@ -77,7 +87,7 @@ public class NewClassFragment extends Fragment {
                 MediaType mediaType = MediaType.parse("application/json");
                 RequestBody body = RequestBody.create(packet.toString(),mediaType);
                 Request request= new Request.Builder()
-                        .url("http://192.168.255.62:8864/api/member/login/student")
+                        .url("http://192.168.255.62:8864/api/createclass")
                         .post(body)
                         .build();
             }
