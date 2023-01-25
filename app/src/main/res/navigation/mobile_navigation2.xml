@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_nav_tec_enter_to_rollCallFragment"
             app:destination="@id/rollCallFragment" />
+        <action
+            android:id="@+id/action_nav_tec_enter_to_recordFragment"
+            app:destination="@id/recordFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_tec_lottery"
@@ -65,4 +68,9 @@
             android:id="@+id/action_selectRoomFragment_to_nav_tec_enter"
             app:destination="@id/nav_tec_enter" />
     </fragment>
+    <fragment
+        android:id="@+id/recordFragment"
+        android:name="abc.project.projectcheckinapp.ui.Teacher.RecordFragment"
+        android:label="fragment_record"
+        tools:layout="@layout/fragment_record" />
 </navigation>
