@@ -34,9 +34,10 @@ public class AdapterAllStu extends RecyclerView.Adapter<AdapterAllStu.ViewHolder
             cursor.moveToFirst();
             do {
                 StuModel stuModel = new StuModel(
-                        cursor.getString(0),
+                        cursor.getInt(0),
                         cursor.getString(1),
-                        cursor.getString(2));
+                        cursor.getString(2),
+                        cursor.getString(3));
                 result.add(stuModel);
             }while ( ( cursor.moveToNext()));
         }
@@ -56,10 +57,10 @@ public class AdapterAllStu extends RecyclerView.Adapter<AdapterAllStu.ViewHolder
             cursor.moveToFirst();
             do {
                 StuModel stuModel = new StuModel(
-                        cursor.getString(0),
+                        cursor.getInt(0),
                         cursor.getString(1),
-                        cursor.getString(2)
-                );
+                        cursor.getString(2),
+                        cursor.getString(3));
                 result.add(stuModel);
             }while (cursor.moveToNext());
             cursor.close();
@@ -82,10 +83,11 @@ public class AdapterAllStu extends RecyclerView.Adapter<AdapterAllStu.ViewHolder
             @Override
             public void onClick(View v) {
                 final int pos = holder.getAdapterPosition();
+                int sid = result.get(pos).getSid();
                 String name  = result.get(pos).getStuname();
                 String depart = result.get(pos).getStudepart();
                 String id = result.get(pos).getStuid();
-                click.onCliskForAllStuList(pos,name,depart,id);
+                click.onCliskForAllStuList(pos,sid,name,depart,id);
             }
         });
     }

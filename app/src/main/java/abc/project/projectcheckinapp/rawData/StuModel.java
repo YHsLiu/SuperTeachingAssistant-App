@@ -1,14 +1,27 @@
 package abc.project.projectcheckinapp.rawData;
 
 public class StuModel {
+    private int sid;
     private String stuname;
     private String studepart;
     private String stuid;
 
-    public StuModel(String stuname, String studepart, String stuid) {
+    public StuModel() {
+    }
+
+    public StuModel(int sid, String stuname, String studepart, String stuid) {
+        this.sid = sid;
         this.stuname = stuname;
         this.studepart = studepart;
         this.stuid = stuid;
+    }
+
+    public int getSid() {
+        return sid;
+    }
+
+    public void setSid(int sid) {
+        this.sid = sid;
     }
 
     public String getStuname() {
