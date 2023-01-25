@@ -51,7 +51,7 @@ public class AdapterAllStu extends RecyclerView.Adapter<AdapterAllStu.ViewHolder
         if (select.equals("")){
             cursor = db.rawQuery("select * from "+cid+"_allstu;",null);
         } else {
-            cursor = db.rawQuery("select * from "+cid+"_allstu where name=? or depart=? or stuId=?;",new String[]{select});
+            cursor = db.rawQuery("select * from "+cid+"_allstu where name=? or depart=? or stuId=?;",new String[]{select,select,select});
         }
         if (cursor.getCount()>0){
             cursor.moveToFirst();
@@ -87,7 +87,7 @@ public class AdapterAllStu extends RecyclerView.Adapter<AdapterAllStu.ViewHolder
                 String name  = result.get(pos).getStuname();
                 String depart = result.get(pos).getStudepart();
                 String id = result.get(pos).getStuid();
-                click.onCliskForAllStuList(pos,sid,name,depart,id);
+                click.onClickForAllStuList(pos,sid,name,depart,id);
             }
         });
     }

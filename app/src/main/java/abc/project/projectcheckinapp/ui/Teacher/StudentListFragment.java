@@ -122,7 +122,7 @@ public class StudentListFragment extends Fragment {
                 throw new RuntimeException(e);
             }
             mediaType = MediaType.parse("application/json");
-            RequestBody body = RequestBody.create(packet2.toString(),mediaType);
+            RequestBody body2 = RequestBody.create(packet2.toString(),mediaType);
             if (bundle.getInt("status") == 12){
                 builder.setPositiveButton("點名", new DialogInterface.OnClickListener() {
                     @Override
@@ -130,7 +130,7 @@ public class StudentListFragment extends Fragment {
                         // 設定click後的動作
                         Request request = new Request.Builder()
                                 .url("http://192.168.255.62:8864/api/rollcall/manual/call")
-                                .post(body).build();
+                                .post(body2).build();
                         ManualRollCallAPIWorker manualAPIWorker = new ManualRollCallAPIWorker(request);
                         executor.execute(manualAPIWorker);
                     }
@@ -141,8 +141,8 @@ public class StudentListFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         // 設定click後的動作
                         Request request = new Request.Builder()
-                                .url("http://192.168.255.62:8864/api/rollcall/manual/call")
-                                .post(body).build();
+                                .url("http://192.168.255.62:8864/api/rollcall/manual/cancel")
+                                .post(body2).build();
                         ManualRollCallAPIWorker manualAPIWorker = new ManualRollCallAPIWorker(request);
                         executor.execute(manualAPIWorker);
                     }
@@ -180,7 +180,7 @@ public class StudentListFragment extends Fragment {
         recyclerView =binding.RecyclerStuAll;
         clickListener = new ClickListener() {
             @Override
-            public void onCliskForAllStuList(int position,int sid, String stuname, String studepart, String stuid) {
+            public void onClickForAllStuList(int position,int sid, String stuname, String studepart, String stuid) {
                 builder.setMessage("學生姓名："+stuname+"\r\n科系："+studepart+"\r\n學號："+stuid);
                 JSONObject packet1 = new JSONObject();
                 try {
@@ -192,13 +192,18 @@ public class StudentListFragment extends Fragment {
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-                mediaType = MediaType.parse("application/json");
-                RequestBody body = RequestBody.create(packet1.toString(),mediaType);
-                Request request = new Request.Builder()
+                RequestBody body1 = RequestBody.create(packet1.toString(),mediaType);
+                Request request1 = new Request.Builder()
                         .url("http://192.168.255.62:8864/api/rollcall/manual/check")
-                        .post(body).build();
-                ManualCheckAPIWorker manualAPIWorker = new ManualCheckAPIWorker(request);
+                        .post(body1).build();
+                ManualCheckAPIWorker manualAPIWorker = new ManualCheckAPIWorker(request1);
                 executor.execute(manualAPIWorker);
+                builder.setNegativeButton("關閉", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {        }
+                });
+                dialog = builder.create();
+                dialog.show();
             }
         };
         adapter = new AdapterAllStu(db,clickListener,cid);
