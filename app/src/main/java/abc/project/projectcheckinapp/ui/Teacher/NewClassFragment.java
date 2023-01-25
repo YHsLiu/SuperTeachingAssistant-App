@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,8 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 
-import abc.project.projectcheckinapp.LoginActivity;
-import abc.project.projectcheckinapp.LotteryActivity;
+import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentNewClassBinding;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -45,8 +45,10 @@ public class NewClassFragment extends Fragment {
     FragmentNewClassBinding binding;
     NavController navController;
     SharedPreferences preferences;
+    SharedPreferences.Editor contextEditor;
     ExecutorService executor;
     AlertDialog.Builder builder;
+    AlertDialog dialog;
     Handler createClassResultHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -59,12 +61,20 @@ public class NewClassFragment extends Fragment {
                 builder.setPositiveButton("進教室", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        preferences = getActivity().getSharedPreferences("userInfo",Context.MODE_PRIVATE);
+                        contextEditor = preferences.edit();
+                        contextEditor.putInt("cid",bundle.getInt("cid")).apply();
+                        navController.navigate(R.id.action_nav_tec_newclass_to_nav_tec_enter);
                     }
-                })
-
+                });
+                builder.setNegativeButton("關閉", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {    }
+                });
+                dialog = builder.create();
+                dialog.show();
             } else {
-
+                Toast.makeText(getActivity(), "新增失敗,代碼已被使用", Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -142,6 +152,7 @@ public class NewClassFragment extends Fragment {
                 Message m = createClassResultHandler.obtainMessage();
                 Bundle bundle = new Bundle();
                 bundle.putInt("status",result.getInt("status") );
+                bundle.putInt("cid",result.getInt("cid") );
                 m.setData(bundle);
                 createClassResultHandler.sendMessage(m);
             } catch (Exception e) {
