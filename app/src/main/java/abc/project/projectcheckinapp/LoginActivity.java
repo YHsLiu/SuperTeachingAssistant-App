@@ -53,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
             if (bundle.getInt("status" )==11) // 登入成功
             {   contextEditor.putBoolean("isStudent",binding.radioLoginStudent.isChecked()); // 判別師/生
                 contextEditor.putBoolean("isLogin",true); // 已登入
-                contextEditor.apply();
                 // 跳轉到 老師 /學生 頁面
                 if (binding.radioLoginStudent.isChecked()){
                     /*intent = new Intent(LoginActivity.this, 學生Activity.class );
