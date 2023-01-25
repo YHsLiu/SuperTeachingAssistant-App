@@ -80,6 +80,11 @@
     <string name="tecRollCall_btn_rollcall">點名</string>
     <string name="tecRollCall_btn_endRollcall">結束</string>
     <string name="tecRollCall_NoRollcall">&#160;&#160;&#160;&#160;未出席：</string>
+
+    <string name="tecSelectRoom_title">教室選擇</string>
+    <string name="tecSelectRoom_txt_select">輸入課程名稱/代碼</string>
+    <string name="tecSelectRoom_item_class">課程名稱</string>
+    <string name="tecSelectRoom_item_code">課程代碼：</string>
     <string name="drawer_logout">登出</string>
     =======
 
