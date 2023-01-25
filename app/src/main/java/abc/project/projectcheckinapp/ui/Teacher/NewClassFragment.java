@@ -84,7 +84,6 @@ public class NewClassFragment extends Fragment {
 
     public static NewClassFragment newInstance(String param1, String param2) {
         NewClassFragment fragment = new NewClassFragment();
-        Bundle args = new Bundle();
         return fragment;
     }
 
