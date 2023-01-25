@@ -53,9 +53,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tecMain_txt1">老師 歡迎回來</string>
-    <string name="tecMain_txt2">願您依舊對教育充滿熱情</string>
-    <string name="tecMain_txt3">和您分享一句話</string>
-    <string name="tecMain_txt4">引導與啟發比批評更適合孩子</string>
+    <string name="tecMain_txt2">願您依舊對教育充滿熱情
+        \n和您分享一句話
+        \n引導與啟發比批評更適合孩子</string>
     <string name="tecMain_create_class">新增課程</string>
     <string name="tecMain_select_class">教室選擇</string>
 
