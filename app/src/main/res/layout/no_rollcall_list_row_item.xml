@@ -24,7 +24,7 @@
                 android:layout_height="45sp">
 
                 <TextView
-                    android:id="@+id/txt_tec2_noRollcallCard_name"
+                    android:id="@+id/txt_tec2_NoCallCard_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/droid_sans_fallback_full"
@@ -33,20 +33,20 @@
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.25"
+                    app:layout_constraintHorizontal_bias="0.16"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.72" />
 
                 <TextView
-                    android:id="@+id/txt_tec2_noRollcallCard_depart"
+                    android:id="@+id/txt_tec2_noCallCard_depart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
+                    android:layout_marginStart="30dp"
                     android:text="學生科系"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/txt_tec2_noRollcallCard_name"
+                    app:layout_constraintStart_toEndOf="@+id/txt_tec2_NoCallCard_name"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.75" />
 
@@ -60,16 +60,17 @@
                     android:id="@+id/textView24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="72dp"
                     android:text="@string/tecStuList_id"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.23"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.444" />
 
                 <TextView
-                    android:id="@+id/txt_tec2_noRollcallCard_id"
+                    android:id="@+id/txt_tec2_noCallCard_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="00000"
@@ -87,7 +88,7 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/btn_tec2_noRollcallCard"
+                android:id="@+id/btn_tec2_noCallCard"
                 android:layout_width="70sp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/droid_sans_fallback_full"
