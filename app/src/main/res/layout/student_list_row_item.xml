@@ -19,7 +19,7 @@
             android:layout_height="50sp">
 
             <TextView
-                android:id="@+id/txt_tecL1_stuCard_name"
+                android:id="@+id/txt_tec2_noRollcallCard_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/droid_sans_fallback_full"
@@ -34,7 +34,7 @@
                 app:layout_constraintVertical_bias="0.52" />
 
             <TextView
-                android:id="@+id/txt_tecL1_stuCard_depart"
+                android:id="@+id/txt_tec2_noRollcallCard_depart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="170dp"
@@ -64,7 +64,7 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/txt_tecL1_stuCard_id"
+                android:id="@+id/txt_tec2_noRollcallCard_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00000"

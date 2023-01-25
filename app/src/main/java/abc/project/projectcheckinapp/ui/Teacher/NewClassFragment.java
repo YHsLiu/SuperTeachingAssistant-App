@@ -1,21 +1,25 @@
 package abc.project.projectcheckinapp.ui.Teacher;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,10 +27,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 
+import abc.project.projectcheckinapp.LoginActivity;
+import abc.project.projectcheckinapp.LotteryActivity;
 import abc.project.projectcheckinapp.databinding.FragmentNewClassBinding;
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +46,28 @@ public class NewClassFragment extends Fragment {
     NavController navController;
     SharedPreferences preferences;
     ExecutorService executor;
+    AlertDialog.Builder builder;
+    Handler createClassResultHandler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            Bundle bundle = msg.getData();
+            if (bundle.getInt("status" )==11) // 新增課程成功
+            {   builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("新增成功");
+                builder.setMessage("直接進入教室嗎?");
+                builder.setPositiveButton("進教室", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+
+            } else {
+
+            }
+        }
+    };
     public NewClassFragment() {
         // Required empty public constructor
     }
@@ -90,9 +120,34 @@ public class NewClassFragment extends Fragment {
                         .url("http://192.168.255.62:8864/api/createclass")
                         .post(body)
                         .build();
+                SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
+                executor.execute(apiCaller);
             }
         });
+
         return binding.getRoot();
+    }
+    class SimpleAPIWorker implements Runnable{
+        OkHttpClient client;
+        Request request;
+        public SimpleAPIWorker(Request request) {
+            this.request = request;
+            client = new OkHttpClient();
+        }
+        @Override
+        public void run() {
+            try {
+                Response response = client.newCall(request).execute();
+                JSONObject result = new JSONObject(response.body().string());
+                Message m = createClassResultHandler.obtainMessage();
+                Bundle bundle = new Bundle();
+                bundle.putInt("status",result.getInt("status") );
+                m.setData(bundle);
+                createClassResultHandler.sendMessage(m);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override

@@ -103,6 +103,7 @@ public class StudentListFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentStudentListBinding.inflate(inflater,container,false);
         preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
+        builder = new AlertDialog.Builder(getActivity());
         cid = preferences.getInt("cid",0);
         JSONObject packet = new JSONObject();
         try {

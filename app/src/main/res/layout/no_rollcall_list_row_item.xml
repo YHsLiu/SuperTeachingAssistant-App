@@ -24,7 +24,7 @@
                 android:layout_height="45sp">
 
                 <TextView
-                    android:id="@+id/txt_tecL1_stuCard_name"
+                    android:id="@+id/txt_tec2_noRollcallCard_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/droid_sans_fallback_full"
@@ -39,14 +39,14 @@
                     app:layout_constraintVertical_bias="0.72" />
 
                 <TextView
-                    android:id="@+id/txt_tecL1_stuCard_depart"
+                    android:id="@+id/txt_tec2_noRollcallCard_depart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:text="學生科系"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/txt_tecL1_stuCard_name"
+                    app:layout_constraintStart_toEndOf="@+id/txt_tec2_noRollcallCard_name"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.75" />
 
@@ -69,7 +69,7 @@
                     app:layout_constraintVertical_bias="0.444" />
 
                 <TextView
-                    android:id="@+id/txt_tecL1_stuCard_id"
+                    android:id="@+id/txt_tec2_noRollcallCard_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="00000"
@@ -87,7 +87,7 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/btn_tec2_noRollcallCard"
                 android:layout_width="70sp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/droid_sans_fallback_full"

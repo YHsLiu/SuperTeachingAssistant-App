@@ -99,9 +99,9 @@ public class AdapterAllStu extends RecyclerView.Adapter<AdapterAllStu.ViewHolder
         TextView studentName, department, idNum;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            studentName = itemView.findViewById(R.id.txt_tecL1_stuCard_name);
-            department = itemView.findViewById(R.id.txt_tecL1_stuCard_depart);
-            idNum = itemView.findViewById(R.id.txt_tecL1_stuCard_id);
+            studentName = itemView.findViewById(R.id.txt_tec2_noRollcallCard_name);
+            department = itemView.findViewById(R.id.txt_tec2_noRollcallCard_depart);
+            idNum = itemView.findViewById(R.id.txt_tec2_noRollcallCard_id);
         }
     }
 }

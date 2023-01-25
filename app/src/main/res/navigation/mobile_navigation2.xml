@@ -3,38 +3,66 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation2"
-    app:startDestination="@+id/nav_tec_main">
+    app:startDestination="@id/rollCallFragment">
 
-    <fragment
-        android:id="@+id/nav_tec_main"
-        android:name="abc.project.projectcheckinapp.ui.test.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
-
-    <fragment
-        android:id="@+id/nav_gallery"
-        android:name="abc.project.projectcheckinapp.ui.test.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
-        android:id="@+id/nav_tec_enter"
-        android:name="abc.project.projectcheckinapp.ui.test.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/nav_tec_main"
         android:name="abc.project.projectcheckinapp.ui.Teacher.TeacherMainFragment"
         android:label="fragment_teacher_main"
-        tools:layout="@layout/fragment_teacher_main" />
+        tools:layout="@layout/fragment_teacher_main" >
+        <action
+            android:id="@+id/action_nav_tec_main_to_nav_tec_newclass"
+            app:destination="@id/nav_tec_newclass" />
+        <action
+            android:id="@+id/action_nav_tec_main_to_selectRoomFragment"
+            app:destination="@id/selectRoomFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_tec_newclass"
         android:name="abc.project.projectcheckinapp.ui.Teacher.NewClassFragment"
         android:label="fragment_new_class"
-        tools:layout="@layout/fragment_new_class" />
+        tools:layout="@layout/fragment_new_class" >
+        <action
+            android:id="@+id/action_nav_tec_newclass_to_nav_tec_enter"
+            app:destination="@id/nav_tec_enter" />
+    </fragment>
     <fragment
         android:id="@+id/nav_tec_enter"
         android:name="abc.project.projectcheckinapp.ui.Teacher.TeacherEnterClassFragment"
         android:label="fragment_teacher_enter_class"
-        tools:layout="@layout/fragment_teacher_enter_class" />
+        tools:layout="@layout/fragment_teacher_enter_class" >
+        <action
+            android:id="@+id/action_nav_tec_enter_to_nav_tec_stulist"
+            app:destination="@id/nav_tec_stulist" />
+        <action
+            android:id="@+id/action_nav_tec_enter_to_nav_tec_lottery"
+            app:destination="@id/nav_tec_lottery" />
+        <action
+            android:id="@+id/action_nav_tec_enter_to_rollCallFragment"
+            app:destination="@id/rollCallFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_tec_lottery"
+        android:name="abc.project.projectcheckinapp.ui.Teacher.LotteryFragment"
+        android:label="fragment_lottery"
+        tools:layout="@layout/fragment_lottery" />
+    <fragment
+        android:id="@+id/nav_tec_stulist"
+        android:name="abc.project.projectcheckinapp.ui.Teacher.StudentListFragment"
+        android:label="fragment_student_list"
+        tools:layout="@layout/fragment_student_list" />
+    <fragment
+        android:id="@+id/rollCallFragment"
+        android:name="abc.project.projectcheckinapp.ui.Teacher.RollCallFragment"
+        android:label="fragment_roll_call"
+        tools:layout="@layout/fragment_roll_call" />
+    <fragment
+        android:id="@+id/selectRoomFragment"
+        android:name="abc.project.projectcheckinapp.ui.Teacher.SelectRoomFragment"
+        android:label="fragment_select_room"
+        tools:layout="@layout/fragment_select_room" >
+        <action
+            android:id="@+id/action_selectRoomFragment_to_nav_tec_enter"
+            app:destination="@id/nav_tec_enter" />
+    </fragment>
 </navigation>
