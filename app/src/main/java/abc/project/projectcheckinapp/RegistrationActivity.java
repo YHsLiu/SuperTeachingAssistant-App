@@ -89,10 +89,10 @@ public class RegistrationActivity extends AppCompatActivity {
         // RadioGroup 的事件處理
         bindingR.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             int identity = 0;
-        @Override
+            @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-               RadioButton StdOrTch = (RadioButton)  findViewById(checkedId);
-               Toast.makeText(RegistrationActivity.this, "你選取的身分是: " + StdOrTch.getText() , Toast.LENGTH_SHORT).show();
+                RadioButton StdOrTch = (RadioButton)  findViewById(checkedId);
+                Toast.makeText(RegistrationActivity.this, "你選取的身分是: " + StdOrTch.getText() , Toast.LENGTH_SHORT).show();
 
             }
         });

@@ -1,52 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@color/gray"
+    android:layout_margin="1dip">
 
     <TableRow
         android:id="@+id/Row_week"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@color/android_blue"
+        android:layout_margin="0.5dip">
 
         <TextView
             android:id="@+id/txt_mon"
-            android:layout_width="wrap_content"
+            android:layout_width="71dp"
             android:layout_height="40dp"
             android:gravity="center"
-            android:text="@string/Class_table_MON" />
+            android:textColor="@color/white"
+            android:text="@string/Class_table_MON"
+            android:background="@color/android_blue"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/txt_tue"
-            android:layout_width="wrap_content"
+            android:layout_width="71dp"
             android:layout_height="40dp"
             android:gravity="center"
+            android:textColor="@color/white"
             android:text="@string/Class_table_TUE" />
 
         <TextView
             android:id="@+id/txt_wed"
-            android:layout_width="wrap_content"
+            android:layout_width="71dp"
             android:layout_height="40dp"
             android:gravity="center"
+            android:textColor="@color/white"
             android:text="@string/Class_table_WED" />
 
         <TextView
             android:id="@+id/txt_thu"
-            android:layout_width="wrap_content"
+            android:layout_width="71dp"
             android:layout_height="40dp"
             android:gravity="center"
+            android:textColor="@color/white"
             android:text="@string/Class_table_THU" />
 
         <TextView
             android:id="@+id/txt_fri"
-            android:layout_width="wrap_content"
+            android:layout_width="71dp"
             android:layout_height="40dp"
             android:gravity="center"
+            android:textColor="@color/white"
             android:text="@string/Class_table_FRI" />
 
         <TextView
             android:id="@+id/txt_timeline"
-            android:layout_width="35dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:gravity="center" />
 
@@ -56,111 +68,144 @@
         android:id="@+id/Row_1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_margin="0.5dip">
 
         <TextView
             android:id="@+id/t01"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="工程數學(一)" />
+            android:text="工程數學(一)"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/text2_1"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="外國語文(法)" />
+            android:text="外國語文(法)"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/text3_1"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
-            android:gravity="center" />
+            android:gravity="center"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/text4_1"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/text5_1"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/txt_time1"
             android:layout_width="wrap_content"
             android:layout_height="80dp"
+            android:layout_margin="0.5dip"
             android:background="@color/white"
             android:gravity="center"
-            android:text="8-10" />
+            android:text="8-10"
+            android:textSize="12sp" />
     </TableRow>
 
     <TableRow
         android:id="@+id/Row_2"
-        android:layout_width="70dp"
+        android:layout_width="71dp"
         android:layout_height="80dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_margin="0.5dip">
 
         <TextView
             android:id="@+id/textView33"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/textView32"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/textView31"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="初學者程式設計暑期先修特別優惠班" />
+            android:text="初學者程式設計暑期先修特別優惠班"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/textView30"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/textView29"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/txt_time2"
             android:layout_width="wrap_content"
             android:layout_height="80dp"
+            android:layout_margin="0.5dip"
+            android:background="@color/white"
             android:gravity="center"
-            android:text="10-12" />
+            android:text="10-12"
+            android:textSize="12sp" />
     </TableRow>
 
     <TableRow
         android:id="@+id/Row_noon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_margin="0.5dip">
 
         <TextView
             android:id="@+id/txt_noon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="0.5dip"
             android:layout_span="6"
+            android:background="@color/white"
             android:gravity="center"
             android:text="@string/Class_table_noon" />
     </TableRow>
@@ -169,97 +214,127 @@
         android:id="@+id/Row_3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_margin="0.5dip">
 
         <TextView
             android:id="@+id/textView20"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/textView19"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/textView18"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/textView17"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/textView16"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/txt_time3"
             android:layout_width="wrap_content"
             android:layout_height="80dp"
+            android:layout_margin="0.5dip"
+            android:background="@color/white"
             android:gravity="center"
-            android:text="13-15" />
+            android:text="13-15"
+            android:textSize="12sp" />
     </TableRow>
 
     <TableRow
         android:id="@+id/Row_4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_margin="0.5dip">
 
         <TextView
             android:id="@+id/textView37"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/textView36"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/textView35"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/textView34"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/textView27"
-            android:layout_width="70dp"
+            android:layout_width="71dp"
             android:layout_height="80dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:background="@color/white"
+            android:layout_margin="0.5dip"/>
 
         <TextView
             android:id="@+id/txt_time4"
             android:layout_width="35dp"
             android:layout_height="80dp"
+            android:layout_margin="0.5dip"
+            android:background="@color/white"
             android:gravity="center"
-            android:text="15-17" />
+            android:text="15-17"
+            android:textSize="12sp" />
     </TableRow>
 </TableLayout>
