@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +28,7 @@ import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.databinding.ActivityLoginBinding;
 import abc.project.projectcheckinapp.rawData.UniversityArray;
+import abc.project.projectcheckinapp.ui.test.TeacherActivity;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -47,29 +49,25 @@ public class LoginActivity extends AppCompatActivity {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
+            contextEditor = LoginActivity.this.getSharedPreferences("userInfo",MODE_PRIVATE).edit(); // 所有Activity共用
             if (bundle.getInt("status" )==11) // 登入成功
-            {   contextEditor = LoginActivity.this.getSharedPreferences("userInfo",MODE_PRIVATE).edit(); // 所有Activity共用
-                contextEditor.putString("userID",binding.txtLoginAcc.getText().toString()); // 帳號(學號/教師編號)
-                contextEditor.putBoolean("isStudent",binding.radioLoginStudent.isChecked()); // 判別師/生
+            {   contextEditor.putBoolean("isStudent",binding.radioLoginStudent.isChecked()); // 判別師/生
                 contextEditor.putBoolean("isLogin",true); // 已登入
                 contextEditor.apply();
                 // 跳轉到 老師 /學生 頁面
-                /*if (binding.radioLoginStudent.isChecked()){
-                    intent = new Intent(LoginActivity.this, 學生Activity.class );
-
-                    startActivity(intent);
+                if (binding.radioLoginStudent.isChecked()){
+                    /*intent = new Intent(LoginActivity.this, 學生Activity.class );
+                    contextEditor.putInt("sid",bundle.getInt("userID"));
+                    contextEditor.apply();
+                    startActivity(intent);*/
                 } else {
-                    intent = new Intent(LoginActivity.this, 老師Activity.class );
-
+                    intent = new Intent(LoginActivity.this, TeacherActivity.class );
+                    contextEditor.putInt("tid",bundle.getInt("userID"));
+                    contextEditor.apply();
                     startActivity(intent);
-                }*/
+                }
             } else {
-                contextEditor = LoginActivity.this.getSharedPreferences("userInfo",MODE_PRIVATE).edit();
-                contextEditor.putString("userID","");
-                contextEditor.putBoolean("isStudent",true);
-                contextEditor.putBoolean("isLogin",false);
-                contextEditor.apply();
-                // 加錯誤小視窗
+                Toast.makeText(LoginActivity.this, "無此帳號，請確認資料是否正確或建立帳號", Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -105,7 +103,6 @@ public class LoginActivity extends AppCompatActivity {
             adapter1.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
             spinner.setAdapter(adapter1);
             db.close();
-
         }
 
         binding.btnLoginCreat.setOnClickListener(new View.OnClickListener() {
@@ -200,6 +197,7 @@ public class LoginActivity extends AppCompatActivity {
                 if ( result.getInt("status")==11){
                     bundle.putString("mes",result.getString("mes"));
                     bundle.putInt("status",result.getInt("status") );
+                    bundle.putInt("userID",result.getInt("userId"));
                 } else {
                     bundle.putString("mes", "登入失敗");
                     bundle.putInt("status",result.getInt("status") );
