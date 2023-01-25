@@ -54,7 +54,7 @@ public class NewClassFragment extends Fragment {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
-            if (bundle.getInt("status" )==11) // 新增課程成功
+            if (bundle.getInt("status" )==12) // 新增課程成功
             {   builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("新增成功");
                 builder.setMessage("直接進入教室嗎?");
@@ -100,6 +100,10 @@ public class NewClassFragment extends Fragment {
         binding = FragmentNewClassBinding.inflate(inflater,container,false);
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         int tid = preferences.getInt("tid",0);
+        if (tid == 0){
+            Toast.makeText(getActivity(), "請重新登入", Toast.LENGTH_SHORT).show();
+            return binding.getRoot();
+        }
         binding.btnTecNCreat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,7 +118,7 @@ public class NewClassFragment extends Fragment {
                 }
                 try {
                     packet.put("type",1);
-                    packet.put("status",10);
+                    packet.put("status",11);
                     data.put("tid",tid);
                     data.put("className",binding.txtTecNName.getText().toString());
                     data.put("classCode",binding.txtTecNCord.getText().toString());
