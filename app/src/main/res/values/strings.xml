@@ -73,6 +73,13 @@
     <string name="tecNewClass_txt1">請輸入課程名稱與代碼</string>
     <string name="tecNewClass_new">新 增</string>
 
+    <string name="tecRollCall_title">點名系統</string>
+    <string name="tecRollCall_txt">1.點選「點名」開放學生線上點名
+        \n2.點選「結束」後，系統將統計未點名之學生名單於下方，可手動點名
+        \n3.點名紀錄一天至多一次，若再次點名則會以最新紀錄為主</string>
+    <string name="tecRollCall_btn_rollcall">點名</string>
+    <string name="tecRollCall_btn_endRollcall">結束</string>
+    <string name="tecRollCall_NoRollcall">未出席：</string>
     <string name="drawer_logout">登出</string>
     =======
 
