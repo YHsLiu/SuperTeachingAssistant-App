@@ -101,5 +101,10 @@
     <string name="Class_table_noon">午休</string>
     <string name="title_activity_second">SecondActivity</string>
 
+    <string name="stdInputCode_title">請輸入課程代碼</string>
+    <string name="stdInputCode_continue">Continue</string>
+    <string name="stdInputCode_errorMesg">查無此課程</string>
+
+
 
 </resources>

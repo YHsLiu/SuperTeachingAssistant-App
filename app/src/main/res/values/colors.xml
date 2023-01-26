@@ -9,6 +9,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="android_blue">#FF225C6E</color>
     <color name="gray">#ffcccccc</color>
+    <color name="skin">#FBE4C1</color>
+    <color name="drakgray">#333333</color>
+    <color name="red">#D9001B</color>
+
+
+
 
 
 </resources>

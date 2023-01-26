@@ -119,7 +119,6 @@ public class ClassTableFragment extends Fragment implements View.OnClickListener
                 binding.t01.setText(editText.getText());
 
                 //寫入資料庫
-
                 String insert_sql = "insert into ClassTable values (?,?)";
                 db.execSQL(insert_sql,new String[]{String.valueOf(binding.t01.getId()),editText.getText().toString()});
                 Toast.makeText(getActivity(), "課名寫入資料庫", Toast.LENGTH_SHORT).show();
