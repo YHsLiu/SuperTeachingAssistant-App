@@ -12,9 +12,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +25,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
+import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentInputcoursecodeBinding;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -33,6 +37,8 @@ public class InputCourseCodeFragment extends Fragment {
 
     private FragmentInputcoursecodeBinding binding;
     ExecutorService executor;
+    NavController navController;    //Global宣告, 在onViewCreated方法中找出navController
+
 
     Handler inputCodeHandler = new Handler(Looper.getMainLooper()){
 
@@ -46,7 +52,7 @@ public class InputCourseCodeFragment extends Fragment {
                 builder.setPositiveButton("進入課程", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {                          //跳轉至課程頁面
-
+                        navController.navigate(R.id.action_nav_stdMainPage_to_nav_EnterClass);
                     }
                 });
                 builder.setNeutralButton("關閉", new DialogInterface.OnClickListener() {
@@ -101,6 +107,14 @@ public class InputCourseCodeFragment extends Fragment {
 
 
         return root;
+
+    }
+
+    @Override
+    //當view已經建好 才可以執行會改變UI畫面的行為
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);                             //找出navController
 
     }
 

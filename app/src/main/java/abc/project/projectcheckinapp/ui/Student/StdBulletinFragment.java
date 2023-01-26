@@ -9,19 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import abc.project.projectcheckinapp.R;
-import abc.project.projectcheckinapp.databinding.FragmentReviseStdDataBinding;
 
 
-public class ReviseStdDataFragment extends Fragment {
+public class StdBulletinFragment extends Fragment {
 
-    FragmentReviseStdDataBinding binding;
 
-    public ReviseStdDataFragment() {
+    public StdBulletinFragment() {
         // Required empty public constructor
     }
 
-    public static ReviseStdDataFragment newInstance(String param1, String param2) {
-        ReviseStdDataFragment fragment = new ReviseStdDataFragment();
+
+    public static StdBulletinFragment newInstance(String param1, String param2) {
+        StdBulletinFragment fragment = new StdBulletinFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -36,8 +35,7 @@ public class ReviseStdDataFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        binding = FragmentReviseStdDataBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_std_bulletin, container, false);
     }
 }

@@ -41,7 +41,17 @@
         android:id="@+id/nav_EnterClass"
         android:name="abc.project.projectcheckinapp.ui.Student.EnterClassFragment"
         android:label="@string/menu_EnterClass"
-        tools:layout="@layout/fragment_enterclass" />
+        tools:layout="@layout/fragment_enterclass" >
+        <action
+            android:id="@+id/action_nav_EnterClass_to_stdRollCallFragment"
+            app:destination="@id/stdRollCallFragment" />
+        <action
+            android:id="@+id/action_nav_EnterClass_to_stdRecordFragment"
+            app:destination="@id/stdRecordFragment" />
+        <action
+            android:id="@+id/action_nav_EnterClass_to_stdBulletinFragment"
+            app:destination="@id/stdBulletinFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_classTable"
@@ -90,5 +100,20 @@
         android:id="@+id/inputCourseCodeFragment"
         android:name="abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment"
         android:label="InputCourseCodeFragment" />
+    <fragment
+        android:id="@+id/stdRollCallFragment"
+        android:name="abc.project.projectcheckinapp.ui.Student.StdRollCallFragment"
+        android:label="fragment_std_roll_call"
+        tools:layout="@layout/fragment_std_roll_call" />
+    <fragment
+        android:id="@+id/stdRecordFragment"
+        android:name="abc.project.projectcheckinapp.ui.Student.StdRecordFragment"
+        android:label="fragment_std_record"
+        tools:layout="@layout/fragment_std_record" />
+    <fragment
+        android:id="@+id/stdBulletinFragment"
+        android:name="abc.project.projectcheckinapp.ui.Student.StdBulletinFragment"
+        android:label="fragment_std_bulletin"
+        tools:layout="@layout/fragment_std_bulletin" />
 
 </navigation>
