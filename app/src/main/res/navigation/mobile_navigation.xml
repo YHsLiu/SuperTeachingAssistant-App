@@ -13,6 +13,18 @@
         <action
             android:id="@+id/action_nav_stdMainPage_to_classTableFragment"
             app:destination="@id/nav_classTable" />
+        <action
+            android:id="@+id/action_nav_stdMainPage_to_nav_EnterClass"
+            app:destination="@id/nav_EnterClass" />
+        <action
+            android:id="@+id/action_nav_stdMainPage_to_nav_tec_newclass"
+            app:destination="@id/nav_tec_newclass" />
+        <action
+            android:id="@+id/action_nav_stdMainPage_to_reviseStdDataFragment"
+            app:destination="@id/reviseStdDataFragment" />
+        <action
+            android:id="@+id/action_nav_stdMainPage_to_inputCourseCodeFragment"
+            app:destination="@id/inputCourseCodeFragment" />
     </fragment>
 
     <fragment
@@ -29,28 +41,12 @@
         android:id="@+id/nav_EnterClass"
         android:name="abc.project.projectcheckinapp.ui.Student.EnterClassFragment"
         android:label="@string/menu_EnterClass"
-        tools:layout="@layout/fragment_enterclass" >
-        <action
-            android:id="@+id/action_nav_EnterClass_to_nav_InputCourseCode"
-            app:destination="@id/nav_tec_newclass" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/nav_tec_newclass"
-        android:name="abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment"
-        android:label="@string/menu_InputCourseCode"
-        tools:layout="@layout/fragment_inputcoursecode">
-
-    </fragment>
+        tools:layout="@layout/fragment_enterclass" />
 
     <fragment
         android:id="@+id/nav_classTable"
         android:name="abc.project.projectcheckinapp.ui.Student.ClassTableFragment"
-        android:label="ClassTableFragment" >
-        <action
-            android:id="@+id/action_classTableFragment_to_nav_EnterClass"
-            app:destination="@id/nav_EnterClass" />
-    </fragment>
+        android:label="ClassTableFragment" />
     <fragment
         android:id="@+id/loginFragment"
         android:name="abc.project.projectcheckinapp.ui.home.LoginFragment"
@@ -85,5 +81,14 @@
         android:name="abc.project.projectcheckinapp.ui.Teacher.TeacherEnterClassFragment"
         android:label="fragment_teacher_enter_class"
         tools:layout="@layout/fragment_teacher_enter_class" />
+    <fragment
+        android:id="@+id/reviseStdDataFragment"
+        android:name="abc.project.projectcheckinapp.ui.Student.ReviseStdDataFragment"
+        android:label="fragment_revise_std_data"
+        tools:layout="@layout/fragment_revise_std_data" />
+    <fragment
+        android:id="@+id/inputCourseCodeFragment"
+        android:name="abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment"
+        android:label="InputCourseCodeFragment" />
 
 </navigation>
