@@ -7,6 +7,49 @@
     android:layout_height="match_parent"
     tools:context=".ui.Student.StdRecordFragment">
 
+    <ImageView
+        android:id="@+id/image_rec_bulletin"
+        android:layout_width="86dp"
+        android:layout_height="78dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="68dp"
+        android:src="@drawable/布告欄"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.557"
+        app:layout_constraintStart_toEndOf="@+id/image_bult_record" />
+
+    <ImageView
+        android:id="@+id/image_rec_rollcall"
+        android:layout_width="86dp"
+        android:layout_height="78dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="68dp"
+        android:foregroundGravity="center"
+        android:padding="0dp"
+        android:paddingStart="0dp"
+        android:paddingLeft="0dp"
+        android:paddingTop="0dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/點名"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/image_bult_record"
+        app:layout_constraintHorizontal_bias="0.387"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/image_rec_record"
+        android:layout_width="86dp"
+        android:layout_height="78dp"
+        android:padding="0dp"
+        android:src="@drawable/點名紀錄"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.894" />
+
     <TextView
         android:id="@+id/textView19"
         android:layout_width="wrap_content"

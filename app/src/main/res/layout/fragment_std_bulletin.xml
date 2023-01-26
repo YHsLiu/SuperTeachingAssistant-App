@@ -20,4 +20,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/image_bult_record"
+        android:layout_width="86dp"
+        android:layout_height="78dp"
+        android:src="@drawable/點名紀錄"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.957"
+        android:padding="0dp"
+        />
+
+    <ImageView
+        android:id="@+id/image_bult_bulletin"
+        android:layout_width="86dp"
+        android:layout_height="78dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="28dp"
+        android:src="@drawable/布告欄"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.557"
+        app:layout_constraintStart_toEndOf="@+id/image_bult_record" />
+
+    <ImageView
+        android:id="@+id/image_bult_rollcall"
+        android:layout_width="86dp"
+        android:layout_height="78dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="28dp"
+        android:foregroundGravity="center"
+        android:padding="0dp"
+        android:paddingStart="0dp"
+        android:paddingLeft="0dp"
+        android:paddingTop="0dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/點名"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/image_bult_record"
+        app:layout_constraintHorizontal_bias="0.387"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

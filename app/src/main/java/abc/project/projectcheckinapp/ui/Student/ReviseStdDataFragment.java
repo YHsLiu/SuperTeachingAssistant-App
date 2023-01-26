@@ -3,6 +3,7 @@ package abc.project.projectcheckinapp.ui.Student;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import abc.project.projectcheckinapp.databinding.FragmentReviseStdDataBinding;
 public class ReviseStdDataFragment extends Fragment {
 
     FragmentReviseStdDataBinding binding;
+    NavController navController;
 
     public ReviseStdDataFragment() {
         // Required empty public constructor
