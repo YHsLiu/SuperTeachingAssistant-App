@@ -181,6 +181,7 @@ public class StudentListFragment extends Fragment {
         clickListener = new ClickListener() {
             @Override
             public void onClickForAllStuList(int position,int sid, String stuname, String studepart, String stuid) {
+                builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage("學生姓名："+stuname+"\r\n科系："+studepart+"\r\n學號："+stuid);
                 JSONObject packet1 = new JSONObject();
                 try {
