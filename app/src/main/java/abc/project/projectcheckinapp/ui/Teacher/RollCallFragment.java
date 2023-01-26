@@ -1,14 +1,43 @@
 package abc.project.projectcheckinapp.ui.Teacher;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import abc.project.projectcheckinapp.R;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.ExecutorService;
+
+import abc.project.projectcheckinapp.databinding.FragmentRollCallBinding;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,51 +45,193 @@ import abc.project.projectcheckinapp.R;
  * create an instance of this fragment.
  */
 public class RollCallFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    static int flag = 0; // 點名開關
+    FragmentRollCallBinding binding;
+    NavController navController;
+    SharedPreferences preferences;
+    ExecutorService executor;
+    SQLiteDatabase db;
+    AlertDialog.Builder builder;
+    AlertDialog dialog;
     public RollCallFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RollCallFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+    Handler OpenResultHandler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            Bundle bundle = msg.getData();
+            if (bundle.getInt("status")==12){
+                binding.btnTec2Start.setText("結束點名");
+                flag = 1;
+            }
+        }
+    };
+    Handler CloseResultHandler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            Bundle bundle = msg.getData();
+            binding.btnTec2Start.setText("已點名");
+            binding.btnTec2Start.setEnabled(false);
+            flag = 0;
+
+            JSONArray stuNoRCInfos;
+            preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
+            int cid = preferences.getInt("cid",0);
+            db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null); // 將學生資訊存進裝置的DB
+            // 每個跟RecyclerView有關的資料都存進裝置名為 allList 的DB中，以table名稱來區別每個list
+            db.execSQL("drop table if exists "+cid+"_no_rc_stu;");
+            db.execSQL("create table "+cid+"_no_rcstu(sid integer,name text, depart text, stuId text);");
+            try {
+                stuNoRCInfos =new JSONArray( bundle.getString("list") );
+                for (int i = 0; i<stuNoRCInfos.length();i++){
+                    JSONObject stuInfo = stuNoRCInfos.getJSONObject(i);
+                    db.execSQL("insert into "+cid+"_allstu values (?,?,?,?);",
+                            new Object[] { stuInfo.getInt("sid"),
+                                    stuInfo.getString("姓名"),
+                                    stuInfo.getString("科系"),
+                                    stuInfo.getString("學號")}); }
+                db.close();
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    };
     public static RollCallFragment newInstance(String param1, String param2) {
         RollCallFragment fragment = new RollCallFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_roll_call, container, false);
+        binding = FragmentRollCallBinding.inflate(inflater, container, false);
+        preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        int cid = preferences.getInt("cid",0);
+        if (cid == 0){
+            Toast.makeText(getActivity(), "請重新進入教室", Toast.LENGTH_SHORT).show();
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        String date = formatter.format(new Date());
+        MediaType mediaType = MediaType.parse("application/json");
+        JSONObject packet = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+            packet.put("type", 1);
+            packet.put("status", 11);
+            data.put("cid", cid);
+            data.put("date", date);
+            packet.put("data", data);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        RequestBody body = RequestBody.create(packet.toString(), mediaType);
+        binding.btnTec2Start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (flag == 0) {
+                    Request request = new Request.Builder()
+                            .url("http://192.168.255.62:8864/api/rollcall/teacher/open")
+                            .post(body)
+                            .build();
+                    SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
+                    executor.execute(apiCaller);
+                    if (flag == 0){
+                        builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage("今日已點名，是否刪除紀錄後重新點名?");
+                        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Request request = new Request.Builder()
+                                        .url("http://192.168.255.62:8864/api/rollcall/teacher/open/again")
+                                        .post(body)
+                                        .build();
+                                SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
+                                executor.execute(apiCaller);
+                            }
+                        });
+                        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {  flag = 0;  }
+                        });
+                        dialog = builder.create();
+                        dialog.show();
+                    }
+                } else {
+                    Request request = new Request.Builder()
+                            .url("http://192.168.255.62:8864/api/rollcall/teacher/close")
+                            .post(body)
+                            .build();
+                    SimpleAPIWorker2 apiCaller2 = new SimpleAPIWorker2(request);
+                    executor.execute(apiCaller2);
+
+                }
+            }
+        });
+        return binding.getRoot();
+    }
+
+    class SimpleAPIWorker implements Runnable {
+        OkHttpClient client;
+        Request request;
+        public SimpleAPIWorker(Request request) {
+            this.request = request;
+            client = new OkHttpClient();
+        }
+        @Override
+        public void run() {
+            try {
+                Response response = client.newCall(request).execute();
+                JSONObject result = new JSONObject(response.body().string());
+                Message m = OpenResultHandler.obtainMessage();
+                Bundle bundle = new Bundle();
+                bundle.putInt("status", result.getInt("status"));
+                m.setData(bundle);
+                OpenResultHandler.sendMessage(m);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    class SimpleAPIWorker2 implements Runnable {
+        OkHttpClient client;
+        Request request;
+        public SimpleAPIWorker2(Request request) {
+            this.request = request;
+            client = new OkHttpClient();
+        }
+        @Override
+        public void run() {
+            try {
+                Response response = client.newCall(request).execute();
+                JSONObject result = new JSONObject(response.body().string());
+                Message m = CloseResultHandler.obtainMessage();
+                Bundle bundle = new Bundle();
+                if ( result.getInt("type")==2){
+                    String stuNoRCInfo = result.getJSONArray("noRClist").toString();
+                    bundle.putString("noRClist",stuNoRCInfo);
+                    m.setData(bundle);
+                    CloseResultHandler.sendMessage(m);
+                } else {
+                    Log.e("error","api回應有問題");
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
     }
 }

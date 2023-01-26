@@ -1,16 +1,19 @@
 package abc.project.projectcheckinapp.ui.Teacher;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -19,8 +22,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +31,8 @@ import java.util.concurrent.ExecutorService;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentSelectRoomBinding;
+import abc.project.projectcheckinapp.rawData.AdapterClassroom;
+import abc.project.projectcheckinapp.rawData.ClickListener;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -43,7 +48,11 @@ public class SelectRoomFragment extends Fragment {
 
     FragmentSelectRoomBinding binding;
     NavController navController;
+    int tid;
+    SQLiteDatabase db;
     SharedPreferences preferences;
+    RecyclerView recyclerView;
+    ClickListener clickListener;
     SharedPreferences.Editor contextEditor;
     ExecutorService executor;
     Handler selectClassResultHandler = new Handler(Looper.getMainLooper()){
@@ -51,27 +60,23 @@ public class SelectRoomFragment extends Fragment {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
-            if (bundle.getInt("status" )==11) // 新增課程成功
-            {   builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("新增成功");
-                builder.setMessage("直接進入教室嗎?");
-                builder.setPositiveButton("進教室", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        preferences = getActivity().getSharedPreferences("userInfo",Context.MODE_PRIVATE);
-                        contextEditor = preferences.edit();
-                        contextEditor.putInt("cid",bundle.getInt("cid")).apply();
-                        navController.navigate(R.id.action_nav_tec_newclass_to_nav_tec_enter);
-                    }
-                });
-                builder.setNegativeButton("關閉", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {    }
-                });
-                dialog = builder.create();
-                dialog.show();
-            } else {
-                Toast.makeText(getActivity(), "新增失敗,代碼已被使用", Toast.LENGTH_LONG).show();
+            preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
+            tid = preferences.getInt("tid",0);
+            db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null); // 將學生資訊存進裝置的DB
+            // 每個跟RecyclerView有關的資料都存進裝置名為 allList 的DB中，以table名稱來區別每個list
+            db.execSQL("drop table if exists allroom;");
+            db.execSQL("create table allroom(cid integer,classname text, classcode text);");
+            try {
+                JSONArray roomInfos =new JSONArray( bundle.getString("roomList") );
+                for (int i = 0; i<roomInfos.length();i++){
+                    JSONObject stuInfo = roomInfos.getJSONObject(i);
+                    db.execSQL("insert into allroom values (?,?,?);",
+                            new Object[] { stuInfo.getInt("cid"),
+                                    stuInfo.getString("課程名稱"),
+                                    stuInfo.getString("課程代碼")}); }
+                db.close();
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
         }
     };
@@ -97,7 +102,7 @@ public class SelectRoomFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentSelectRoomBinding.inflate(inflater,container,false);
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        int tid = preferences.getInt("tid",0);
+        tid = preferences.getInt("tid",0);
         JSONObject packet = new JSONObject();
         try {
             packet.put("type",1);
@@ -114,16 +119,41 @@ public class SelectRoomFragment extends Fragment {
                 .build();
         SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
         executor.execute(apiCaller);
+
+        db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
+        recyclerView =binding.RecyclerClassroom;
+        clickListener = new ClickListener() {
+            @Override
+            public void onClickForAllStuList(int position, int sid, String stuname, String studepart, String stuid) {   }
+            @Override
+            public void onClickForClassroom(int position, int cid) {
+                contextEditor = preferences.edit();
+                contextEditor.putInt("cid",cid);
+                navController.navigate(R.id.action_selectRoomFragment_to_nav_tec_enter);
+            }
+        };
+        AdapterClassroom adapter = new AdapterClassroom(db,clickListener);
+        binding.btnTecSQuery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.selectRoom(binding.txtTecSName.getText().toString());
+                adapter.notifyDataSetChanged();
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return binding.getRoot();
     }
 
-    class SimpleAPIWorker implements Runnable{
+    class SimpleAPIWorker implements Runnable {
         OkHttpClient client;
         Request request;
+
         public SimpleAPIWorker(Request request) {
             this.request = request;
             client = new OkHttpClient();
         }
+
         @Override
         public void run() {
             try {
@@ -131,14 +161,15 @@ public class SelectRoomFragment extends Fragment {
                 JSONObject result = new JSONObject(response.body().string());
                 Message m = selectClassResultHandler.obtainMessage();
                 Bundle bundle = new Bundle();
-                bundle.putInt("status",result.getInt("status") );
-                bundle.putInt("cid",result.getInt("cid") );
+                bundle.putInt("status", result.getInt("type"));
+                bundle.putInt("roomList", result.getInt("list"));
                 m.setData(bundle);
                 selectClassResultHandler.sendMessage(m);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
