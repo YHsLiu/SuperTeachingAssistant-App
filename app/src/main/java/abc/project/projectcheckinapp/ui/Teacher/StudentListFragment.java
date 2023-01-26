@@ -205,6 +205,9 @@ public class StudentListFragment extends Fragment {
                 dialog = builder.create();
                 dialog.show();
             }
+
+            @Override
+            public void onClickForClassroom(int position, int cid) {  }
         };
         adapter = new AdapterAllStu(db,clickListener,cid);
         binding.btnTecLSelect.setOnClickListener(new View.OnClickListener() {
@@ -214,6 +217,7 @@ public class StudentListFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
+        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return binding.getRoot();
     }
