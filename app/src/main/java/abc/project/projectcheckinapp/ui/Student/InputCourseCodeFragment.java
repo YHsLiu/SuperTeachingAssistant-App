@@ -1,6 +1,10 @@
 package abc.project.projectcheckinapp.ui.Student;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,7 +42,8 @@ public class InputCourseCodeFragment extends Fragment {
     private FragmentInputcoursecodeBinding binding;
     ExecutorService executor;
     NavController navController;    //Global宣告, 在onViewCreated方法中找出navController
-
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     Handler inputCodeHandler = new Handler(Looper.getMainLooper()){
 
@@ -47,7 +52,9 @@ public class InputCourseCodeFragment extends Fragment {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle2 = msg.getData();
+            editor = preferences.edit();
             if(bundle2.getInt("status")==16){
+                editor.putString("classname",bundle2.getString("mesg")).commit();           //課程名稱共用給其他Activity
                 builder.setTitle("成功新增課程");
                 builder.setPositiveButton("進入課程", new DialogInterface.OnClickListener() {
                     @Override
@@ -76,6 +83,7 @@ public class InputCourseCodeFragment extends Fragment {
 
         binding = FragmentInputcoursecodeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
 
         //處理Continue按鈕
         binding.btnContinue.setOnClickListener(new View.OnClickListener() {
@@ -146,8 +154,8 @@ public class InputCourseCodeFragment extends Fragment {
                 JSONObject result = new JSONObject(responseBody);
                 Message m = inputCodeHandler.obtainMessage();
                 Bundle bundle = new Bundle();
-                if(bundle.getInt("status")==16){                        //成功加入課程
-                    bundle.putString("mesg",result.getString("mesg"));
+                if(result.getInt("status")==16){                         //成功加入課程
+                    bundle.putString("mesg",result.getString("mesg"));   //會抓出課程名稱
                     bundle.putInt("status",result.getInt("status"));
                 }
                 else {
