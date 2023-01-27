@@ -47,6 +47,7 @@ public class StdRollCallFragment extends Fragment {
     SimpleDateFormat dateFormat ;
     Date date ;
     String currentDate ;
+    int cid, sid;
     ExecutorService executor;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
@@ -63,7 +64,7 @@ public class StdRollCallFragment extends Fragment {
                 binding.btnStu1Checkin.setEnabled(false);
             }
             else{
-                Toast.makeText(getActivity(), "簽到失敗請再試一次", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "重複簽到了喔", Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -92,8 +93,10 @@ public class StdRollCallFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentStdRollCallBinding.inflate(inflater, container, false);
         //binding.btnStu1Checkin.setEnabled(true);
-        //把課程名稱從sharedPreferences中取出並顯示
-        preferences = getActivity().getSharedPreferences("claacode",Context.MODE_PRIVATE);
+        //把課程名稱+cid+sid從sharedPreferences中取出並顯示
+        preferences = getActivity().getSharedPreferences("userInfo",Context.MODE_PRIVATE);
+        cid = preferences.getInt("cid",0);
+        sid = preferences.getInt("sid",0);
         //classname = preferences.getString("classname","0");
         //binding.txtStu1ClassName.setText(classname);
         //設定簽到按鈕
@@ -101,8 +104,8 @@ public class StdRollCallFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                //顯示簽到時間
-                dateFormat = new SimpleDateFormat("yyyy年MM月dd日HH:mm:ss");
+                //取得簽到時間
+                dateFormat = new SimpleDateFormat("yyyyMMdd");
                 date = new Date(System.currentTimeMillis());
                 currentDate = dateFormat.format(date);
                 binding.btnStu1Checkin.setText(currentDate+"已簽到");
@@ -115,7 +118,9 @@ public class StdRollCallFragment extends Fragment {
                 try {
                     packet.put("type",1);
                     packet.put("status",20);
-                    data.put("stdDate",currentDate);
+                    data.put("date",currentDate);
+                    data.put("cid",cid);
+                    data.put("sid",sid);
                     packet.put("data",data);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -162,11 +167,9 @@ public class StdRollCallFragment extends Fragment {
                 Message m = StdRollCallHandler.obtainMessage();
                 Bundle bundle = new Bundle();
                 if(result.getInt("status")==21){                         //日期成功寫入資料庫
-                    bundle.putString("mesg",result.getString("mesg"));
                     bundle.putInt("status",result.getInt("status"));
                 }
                 else {
-                    bundle.putString("mesg","日期存取失敗");
                     bundle.putInt("status",result.getInt("status"));
                 }
                 m.setData(bundle);

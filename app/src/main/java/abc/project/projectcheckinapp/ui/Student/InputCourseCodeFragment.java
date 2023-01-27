@@ -56,6 +56,7 @@ public class InputCourseCodeFragment extends Fragment {
             editor = preferences.edit();
             if(bundle2.getInt("status")==16){
                 editor.putString("classname",bundle2.getString("mesg")).commit();           //課程名稱共用給其他Activity
+                editor.putString("cid",binding.txtStuACord.getText().toString());              //課程代碼cid共用
                 builder.setTitle("成功新增課程");
                 builder.setPositiveButton("進入課程", new DialogInterface.OnClickListener() {
                     @Override
@@ -84,7 +85,7 @@ public class InputCourseCodeFragment extends Fragment {
 
         binding = FragmentInputcoursecodeBinding.inflate(inflater, container, false);
         //View root = binding.getRoot();
-        preferences = getActivity().getSharedPreferences("claacode",Context.MODE_PRIVATE);
+        preferences = getActivity().getSharedPreferences("userInfo",Context.MODE_PRIVATE);
 
         //處理Continue按鈕
         binding.btnContinue.setOnClickListener(new View.OnClickListener() {
