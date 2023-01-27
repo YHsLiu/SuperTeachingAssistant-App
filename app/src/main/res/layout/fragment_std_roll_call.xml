@@ -11,100 +11,88 @@
         android:id="@+id/image_rcll_bulletin"
         android:layout_width="86dp"
         android:layout_height="78dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginBottom="68dp"
-        android:src="@drawable/布告欄"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/bulletin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.557"
-        app:layout_constraintStart_toEndOf="@+id/image_bult_record" />
+        app:layout_constraintStart_toEndOf="@+id/image_rcll_record"
+        app:layout_constraintTop_toTopOf="@+id/image_rcll_record" />
 
     <ImageView
         android:id="@+id/image_rcll_record"
         android:layout_width="86dp"
         android:layout_height="78dp"
         android:padding="0dp"
-        android:src="@drawable/點名紀錄"
+        android:src="@drawable/record"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.894" />
+        app:layout_constraintVertical_bias="0.929" />
 
     <ImageView
         android:id="@+id/image_rcll_rollcall"
         android:layout_width="86dp"
         android:layout_height="78dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="68dp"
+        android:layout_marginStart="4dp"
         android:foregroundGravity="center"
         android:padding="0dp"
         android:paddingStart="0dp"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:scaleType="centerInside"
-        android:src="@drawable/點名"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/image_bult_record"
+        android:src="@drawable/rollcall"
+        app:layout_constraintEnd_toStartOf="@+id/image_rcll_record"
         app:layout_constraintHorizontal_bias="0.387"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="這是點名的Fragment"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.455"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022" />
-
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="115dp"
-        android:layout_height="128dp"
-        android:layout_marginTop="124dp"
-        android:src="@drawable/RADAR"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/image_rcll_record" />
 
     <Button
         android:id="@+id/btn_stu1_checkin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="24dp"
         android:text="@string/stdrollcall_check"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/image_rcll_record"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView27" />
-
-    <TextView
-        android:id="@+id/txt_stu1_className"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="*從資料庫取得課程名稱"
-        android:textSize="35sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+        app:layout_constraintTop_toBottomOf="@+id/textView27"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView27"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="16dp"
         android:text="@string/stdrollcall_text1"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_stu1_className" />
+
+    <TextView
+        android:id="@+id/txt_stu1_className"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="256dp"
+        android:text="*從資料庫取得課程名稱"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="139dp"
+        android:layout_height="141dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/radar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

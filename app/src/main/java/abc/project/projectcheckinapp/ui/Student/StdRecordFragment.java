@@ -33,6 +33,12 @@ public class StdRecordFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        //時間存至共用sharedPreferences
+        //preferences.edit().putString("data",currentDate).apply();
+
+
+
     }
 
     @Override

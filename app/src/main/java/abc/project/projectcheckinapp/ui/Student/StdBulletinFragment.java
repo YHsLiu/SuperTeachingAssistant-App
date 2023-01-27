@@ -31,18 +31,6 @@ public class StdBulletinFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        binding.imageView7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
