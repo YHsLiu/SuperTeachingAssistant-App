@@ -45,12 +45,13 @@ public class InputCourseCodeFragment extends Fragment {
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
 
+
     Handler inputCodeHandler = new Handler(Looper.getMainLooper()){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             Bundle bundle2 = msg.getData();
             editor = preferences.edit();
             if(bundle2.getInt("status")==16){
@@ -82,7 +83,7 @@ public class InputCourseCodeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentInputcoursecodeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        //View root = binding.getRoot();
         preferences = getActivity().getSharedPreferences("claacode",Context.MODE_PRIVATE);
 
         //處理Continue按鈕
@@ -114,7 +115,7 @@ public class InputCourseCodeFragment extends Fragment {
         });
 
 
-        return root;
+        return binding.getRoot();
 
     }
 
@@ -135,7 +136,6 @@ public class InputCourseCodeFragment extends Fragment {
 
 
     class simpleAPIworker implements Runnable{
-
         OkHttpClient client;
         Request request;
 
@@ -146,7 +146,6 @@ public class InputCourseCodeFragment extends Fragment {
 
         @Override
         public void run() {
-
             try {
                 Response response = client.newCall(request).execute();
                 String responseBody = response.body().string();
@@ -166,19 +165,11 @@ public class InputCourseCodeFragment extends Fragment {
                 inputCodeHandler.sendMessage(m);
 
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
 
 
         }
     }
-
-
-
-
-
-
-
-
 
 }

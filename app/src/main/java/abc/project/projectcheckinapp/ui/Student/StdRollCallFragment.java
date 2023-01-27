@@ -8,9 +8,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -51,10 +53,9 @@ public class StdRollCallFragment extends Fragment {
 
 
     Handler StdRollCallHandler = new Handler(Looper.getMainLooper()){
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         @Override
         public void handleMessage(@NonNull Message msg) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             super.handleMessage(msg);
             Bundle bundle2 = msg.getData();
             if(bundle2.getInt("status")==21) {
@@ -82,11 +83,19 @@ public class StdRollCallFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding.btnStu1Checkin.setEnabled(true);
+
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = FragmentStdRollCallBinding.inflate(inflater, container, false);
+        //binding.btnStu1Checkin.setEnabled(true);
         //把課程名稱從sharedPreferences中取出並顯示
         preferences = getActivity().getSharedPreferences("claacode",Context.MODE_PRIVATE);
-        classname = preferences.getString("classname","0");
-        binding.txtStu1ClassName.setText(classname);
+        //classname = preferences.getString("classname","0");
+        //binding.txtStu1ClassName.setText(classname);
         //設定簽到按鈕
         binding.btnStu1Checkin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,13 +132,13 @@ public class StdRollCallFragment extends Fragment {
             }
         });
 
+        return binding.getRoot();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentStdRollCallBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
     }
 
     class simpleAPIworker implements Runnable{

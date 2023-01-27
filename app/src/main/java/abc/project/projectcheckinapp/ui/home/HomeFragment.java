@@ -34,7 +34,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 // 使用 NavController 切換到 classTableFragement
                 // 請使用 Mobile_navigation 中的 Action ID
-                navController.navigate(R.id.nav_classTable);
+                navController.navigate(R.id.nav_stdMainPage);
             }
         });
         return root;
