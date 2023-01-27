@@ -206,9 +206,10 @@ public class StudentListFragment extends Fragment {
                 dialog = builder.create();
                 dialog.show();
             }
-
             @Override
             public void onClickForClassroom(int position, int cid) {  }
+            @Override
+            public void onClickForNoRcStuList(int position, int sid) {   }
         };
         adapter = new AdapterAllStu(db,clickListener,cid);
         binding.btnTecLSelect.setOnClickListener(new View.OnClickListener() {
