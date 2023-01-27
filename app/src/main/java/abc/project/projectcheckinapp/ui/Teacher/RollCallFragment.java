@@ -14,6 +14,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -33,6 +35,8 @@ import java.util.Date;
 import java.util.concurrent.ExecutorService;
 
 import abc.project.projectcheckinapp.databinding.FragmentRollCallBinding;
+import abc.project.projectcheckinapp.rawData.AdapterNoRcStu;
+import abc.project.projectcheckinapp.rawData.ClickListener;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -51,6 +55,9 @@ public class RollCallFragment extends Fragment {
     SharedPreferences preferences;
     ExecutorService executor;
     SQLiteDatabase db;
+    RecyclerView recyclerView;
+    ClickListener clickListener;
+    AdapterNoRcStu adapter;
     AlertDialog.Builder builder;
     AlertDialog dialog;
     public RollCallFragment() {
@@ -173,7 +180,35 @@ public class RollCallFragment extends Fragment {
                             .build();
                     SimpleAPIWorker2 apiCaller2 = new SimpleAPIWorker2(request);
                     executor.execute(apiCaller2);
-
+                    recyclerView = binding.RecyclerStuAbsence;
+                    clickListener = new ClickListener() {
+                        @Override
+                        public void onClickForAllStuList(int position, int sid, String stuname, String studepart, String stuid) {  }
+                        @Override
+                        public void onClickForClassroom(int position, int cid) {  }
+                        @Override
+                        public void onClickForNoRcStuList(int position, int sid) {
+                            JSONObject packet1 = new JSONObject();
+                            JSONObject data1 = new JSONObject();
+                            try {
+                                data1.put("cid", cid);
+                                data1.put("sid",sid);
+                                data1.put("date", date);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                            Request request = new Request.Builder()
+                                .url("http://192.168.255.62:8864/api/rollcall/manual/call")
+                                .post(RequestBody.create(packet1.toString(), mediaType))
+                                .build();
+                            SimpleAPIWorker3 apiCaller = new SimpleAPIWorker3(request);
+                            executor.execute(apiCaller);
+                        }
+                    };
+                    db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
+                    adapter = new AdapterNoRcStu(db,clickListener,cid);
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 }
             }
         });
@@ -229,6 +264,23 @@ public class RollCallFragment extends Fragment {
             }
         }
     }
+    class SimpleAPIWorker3 implements Runnable {
+        OkHttpClient client;
+        Request request;
+        public SimpleAPIWorker3(Request request) {
+            this.request = request;
+            client = new OkHttpClient();
+        }
+        @Override
+        public void run() {
+            try {
+                client.newCall(request).execute();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

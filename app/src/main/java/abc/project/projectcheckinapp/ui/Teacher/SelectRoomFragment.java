@@ -131,6 +131,8 @@ public class SelectRoomFragment extends Fragment {
                 contextEditor.putInt("cid",cid);
                 navController.navigate(R.id.action_selectRoomFragment_to_nav_tec_enter);
             }
+            @Override
+            public void onClickForNoRcStuList(int position, int sid) {   }
         };
         AdapterClassroom adapter = new AdapterClassroom(db,clickListener);
         binding.btnTecSQuery.setOnClickListener(new View.OnClickListener() {
