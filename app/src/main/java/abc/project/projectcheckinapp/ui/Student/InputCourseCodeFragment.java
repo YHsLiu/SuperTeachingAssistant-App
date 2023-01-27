@@ -83,7 +83,7 @@ public class InputCourseCodeFragment extends Fragment {
 
         binding = FragmentInputcoursecodeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        preferences = getActivity().getSharedPreferences("claacode",Context.MODE_PRIVATE);
 
         //處理Continue按鈕
         binding.btnContinue.setOnClickListener(new View.OnClickListener() {

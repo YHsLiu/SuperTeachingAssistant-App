@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/imageView6"
-        android:layout_width="match_parent"
-        android:layout_height="227dp"
+        android:layout_width="411dp"
+        android:layout_height="606dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -24,7 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="128dp"
         android:text="@string/Realmain_btn_LoginOrReg"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +35,7 @@
         android:layout_height="30dp"
         android:layout_marginTop="70dp"
         android:text="@string/Realmain_subtitle"
-        android:textColor="@color/white"
+        android:textColor="@color/drakgray"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
