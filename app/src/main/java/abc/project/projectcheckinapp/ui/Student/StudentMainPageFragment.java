@@ -37,8 +37,13 @@ public class StudentMainPageFragment extends Fragment implements View.OnClickLis
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentStudentmainpageBinding.inflate(inflater, container, false);
-        binding.btnToB.setOnClickListener(this);
+        binding.btnGoclass.setOnClickListener(this);
         binding.btnHome.setOnClickListener(this);
+        binding.btnInputclasscode.setOnClickListener(this);
+        binding.btnGotoclass.setOnClickListener(this);
+        binding.btnClasstable.setOnClickListener(this);
+        binding.btnRevisedata.setOnClickListener(this);
+
 
         return binding.getRoot();
     }
