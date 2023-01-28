@@ -18,10 +18,7 @@ import android.view.ViewGroup;
 
 import java.util.concurrent.ExecutorService;
 
-import abc.project.projectcheckinapp.R;
-import abc.project.projectcheckinapp.databinding.FragmentReviseStdDataBinding;
 import abc.project.projectcheckinapp.databinding.FragmentStdRecordBinding;
-import abc.project.projectcheckinapp.ui.Teacher.RecordFragment;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
@@ -74,8 +71,8 @@ public class StdRecordFragment extends Fragment {
                         .url("http://192.168.255.67:8864/api/project/stdRecord")
                         .post(body)
                         .build();
-                RecordFragment.SimpleAPIWorker apiCaller = new RecordFragment.SimpleAPIWorker(request);
-                executor.execute(apiCaller);
+                /*SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
+                executor.execute(apiCaller);*/
             }
         });
 
