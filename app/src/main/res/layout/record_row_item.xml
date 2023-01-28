@@ -17,16 +17,16 @@
             android:textSize="8sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="定位用" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txt_tec4_recordCard_record"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/droid_sans_fallback_full"
-            android:text="學號  姓名"
+            android:text="點名紀錄"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/txt_tec4_recordCard_date"
             app:layout_constraintTop_toBottomOf="@+id/txt_tec4_recordCard_date" />
