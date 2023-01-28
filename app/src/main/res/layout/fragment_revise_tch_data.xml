@@ -23,36 +23,25 @@
         android:id="@+id/img_TCHrevise"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
-        app:layout_constraintBottom_toTopOf="@+id/spinner_TCHrevise_school"
+        android:layout_marginTop="56dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_TCHrevise_title"
         app:srcCompat="@mipmap/ic_launcher" />
-
-    <Spinner
-        android:id="@+id/spinner_TCHrevise_school"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:background="@color/design_default_color_surface"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="221dp" />
 
     <EditText
         android:id="@+id/txt_TCHrevise_TCHacc"
         android:layout_width="wrap_content"
         android:layout_height="51dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="44dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.578"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_TCHrevise_school" />
+        app:layout_constraintTop_toBottomOf="@+id/img_TCHrevise" />
 
     <TextView
         android:id="@+id/textView20"
@@ -107,12 +96,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="300dp"
+        android:layout_marginTop="60dp"
         android:text="@string/Revise_TCHacc"
         app:layout_constraintEnd_toStartOf="@+id/txt_TCHrevise_TCHacc"
         app:layout_constraintHorizontal_bias="0.564"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/img_TCHrevise" />
 
     <TextView
         android:id="@+id/textView29"

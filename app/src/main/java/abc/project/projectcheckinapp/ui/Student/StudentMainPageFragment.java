@@ -52,13 +52,24 @@ public class StudentMainPageFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.btn_toB:
+            case R.id.btn_goclass:
                 navController.navigate(R.id.nav_EnterClass);
                 break;
             case R.id.btn_home:
                 getActivity().onBackPressed();
                 break;
-
+            case R.id.btn_inputclasscode:
+                navController.navigate(R.id.nav_inputCourseCode);
+                break;
+            case R.id.btn_gotoclass:
+                navController.navigate(R.id.nav_EnterClass);
+                break;
+            case R.id.btn_classtable:
+                navController.navigate(R.id.nav_classTable);
+                break;
+            case R.id.btn_revisedata:
+                navController.navigate(R.id.nav_reviseStdData);
+                break;
         }
     }
 }
