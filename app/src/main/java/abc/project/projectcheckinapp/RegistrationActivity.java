@@ -28,6 +28,7 @@ import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.databinding.ActivityRegistrationBinding;
 import abc.project.projectcheckinapp.rawData.UniversityArray;
+import abc.project.projectcheckinapp.ui.test.TeacherActivity;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -52,9 +53,9 @@ public class RegistrationActivity extends AppCompatActivity {
                 if(bindingR.radioRegStd.isChecked()){
                     IntentR = new Intent(RegistrationActivity.this,MainActivity.class);
                 }
-                /*if(bindingR.radioRegTch.isChecked()){
+                if(bindingR.radioRegTch.isChecked()){
                     IntentR = new Intent(RegistrationActivity.this,TeacherActivity.class);
-                }*/
+                }
 
             } else {
                 Toast.makeText(RegistrationActivity.this, bundle.getString("mesg"), Toast.LENGTH_LONG).show();

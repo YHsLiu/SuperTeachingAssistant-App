@@ -163,7 +163,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txt_revise_name" />
 
     <Button
-        android:id="@+id/btn_createAcc"
+        android:id="@+id/btn_ReviseAcc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
