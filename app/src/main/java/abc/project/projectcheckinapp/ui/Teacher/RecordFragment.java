@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
@@ -31,6 +32,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 import abc.project.projectcheckinapp.databinding.FragmentRecordBinding;
+import abc.project.projectcheckinapp.rawData.AdapterRecord;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -49,49 +51,60 @@ public class RecordFragment extends Fragment {
     SharedPreferences preferences;
     ExecutorService executor;
     RecyclerView recyclerView;
+    AdapterRecord adapter;
     SQLiteDatabase db;
     int cid;
-    Handler OpenResultHandler = new Handler(Looper.getMainLooper()){
+    Handler RecordHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
             preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
             int cid = preferences.getInt("cid",0);
-            db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null); // 將學生資訊存進裝置的DB
-            // 每個跟RecyclerView有關的資料都存進裝置名為 allList 的DB中，以table名稱來區別每個list
-            db.execSQL("drop table if exists "+cid+"_record_semester;");
-            db.execSQL("create table "+cid+"_no_rcstu(sid integer,name text, depart text, stuId text);");
-            try {
-                JSONArray Info = new JSONArray(bundle.getString("list"));
-
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
+            JSONArray stuInfos;
+            db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
+            if (bundle.getInt("type") == 2) {  // semester紀錄
+                db.execSQL("drop table if exists " + cid + "_record_semester;");
+                db.execSQL("create table " + cid + "_record_semester(date text, stuId text,name text);");
+                try { stuInfos = new JSONArray(bundle.getString("list"));
+                      for (int i =0; i<stuInfos.length(); i++) {
+                        JSONObject stuInfo = stuInfos.getJSONObject(i);
+                        db.execSQL("insert into "+cid+"_record_semester values (?,?,?);",
+                                new Object[] { stuInfo.getInt("日期"),
+                                        stuInfo.getString("學號"),
+                                        stuInfo.getString("姓名")});  }
+                } catch (JSONException e) {  throw new RuntimeException(e);   }
+            } else if (bundle.getInt("type") == 3) {  // 今日點名紀錄
+                db.execSQL("drop table if exists " + cid + "_record_today;");
+                db.execSQL("create table " + cid + "_record_today(stuId text,name text);");
+                try { stuInfos = new JSONArray(bundle.getString("list"));
+                    for (int i =0; i<stuInfos.length(); i++) {
+                        JSONObject stuInfo = stuInfos.getJSONObject(i);
+                        db.execSQL("insert into "+cid+"_record_today values (?,?);",
+                                new Object[] { stuInfo.getString("學號"),
+                                               stuInfo.getString("姓名")});  }
+                } catch (JSONException e) {  throw new RuntimeException(e);   }
             }
-
+            db.close();
         }
     };
     public RecordFragment() {
         // Required empty public constructor
     }
-
-
     public static RecordFragment newInstance(String param1, String param2) {
         RecordFragment fragment = new RecordFragment();
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentRecordBinding.inflate(inflater, container, false);
+        recyclerView = binding.RecyclerRecord;
         preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
         cid = preferences.getInt("cid",0);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
@@ -118,9 +131,13 @@ public class RecordFragment extends Fragment {
                         .build();
                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
                 executor.execute(apiCaller);
+                db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
+                adapter = new AdapterRecord(db,cid);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                db.close();
             }
         });
-
         binding.btnTodayRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,6 +147,11 @@ public class RecordFragment extends Fragment {
                         .build();
                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
                 executor.execute(apiCaller);
+                db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
+                adapter = new AdapterRecord(db,date,cid);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                db.close();
             }
         });
         return binding.getRoot();
@@ -148,7 +170,8 @@ public class RecordFragment extends Fragment {
                 JSONObject result = new JSONObject(response.body().string());
                 Message m = RecordHandler.obtainMessage();
                 Bundle bundle = new Bundle();
-                bundle.putInt("list", result.getInt("list"));
+                bundle.putInt("type", result.getInt("type"));
+                bundle.putString("list", result.getString("list"));
                 m.setData(bundle);
                 RecordHandler.sendMessage(m);
             } catch (Exception e) {
