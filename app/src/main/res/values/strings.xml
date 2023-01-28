@@ -30,7 +30,7 @@
 
     <string name="reg_reg">註冊</string>
     <string name="reg_subtitle">Sign up and start learning</string>
-    <string name="reg_in_put_department">輸入科系</string>
+    <string name="reg_in_put_department">(學生)輸入科系</string>
     <string name="reg_name">姓名</string>
     <string name="reg_input_pwd">輸入密碼</string>
     <string name="reg_email">Email address</string>
@@ -107,6 +107,16 @@
 
     <string name="stdrollcall_text1">正在進行課堂點名</string>
     <string name="stdrollcall_check">簽到</string>
+
+    <string name="Revise_STDtitle">修改學生資料</string>
+    <string name="Revise_TCHtitle">修改教師資料</string>
+    <string name="Revise_dedpartment">科系</string>
+    <string name="Revise_STDacc">學號</string>
+    <string name="Revise_TCHacc">教師編號</string>
+    <string name="Revise_name">姓名</string>
+    <string name="Revise_pwd">密碼</string>
+    <string name="Revise_email">信箱</string>
+    <string name="Revise_revise">確認修改</string>
 
 
 </resources>

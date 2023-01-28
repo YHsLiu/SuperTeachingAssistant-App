@@ -1,4 +1,4 @@
-package abc.project.projectcheckinapp.ui.Student;
+package abc.project.projectcheckinapp.ui.Teacher;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -20,41 +20,40 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentReviseStdDataBinding;
+import abc.project.projectcheckinapp.databinding.FragmentReviseTchDataBinding;
+import abc.project.projectcheckinapp.ui.Student.ReviseStdDataFragment;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+public class ReviseTchDataFragment extends Fragment {
 
-public class ReviseStdDataFragment extends Fragment {
-
-    FragmentReviseStdDataBinding binding;
+    FragmentReviseTchDataBinding binding;
     NavController navController;
     SharedPreferences preferences;
     ExecutorService executor;
     JSONObject packet, data ;
 
-    Handler GetDataHandler = new Handler(Looper.getMainLooper()){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            Bundle bundle = msg.getData();
-            binding.txtReviseDepart.setText(bundle.getString("department"));
-            binding.txtReviseSTDacc.setText(bundle.getString("acc"));
-            binding.txtReviseName.setText(bundle.getString("name"));
-            binding.txtRevisePwd.setText(bundle.getString("pwd"));
-            binding.txtReviseMail.setText(bundle.getString("email"));
+    Handler GetTchDataHandler = new Handler(Looper.getMainLooper()){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                Bundle bundle = msg.getData();
+                binding.txtTCHreviseTCHacc.setText(bundle.getString("acc"));
+                binding.txtTCHreviseName.setText(bundle.getString("name"));
+                binding.txtTCHrevisePwd.setText(bundle.getString("pwd"));
+                binding.txtTCHreviseMail.setText(bundle.getString("email"));
 
-        }
-    };
+            }
+        };
 
-    Handler UpdateDataHandler = new Handler(Looper.getMainLooper()){
+    Handler UpdateTchDataHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
@@ -67,12 +66,13 @@ public class ReviseStdDataFragment extends Fragment {
         }
     };
 
-    public ReviseStdDataFragment() {
+
+    public ReviseTchDataFragment() {
         // Required empty public constructor
     }
 
-    public static ReviseStdDataFragment newInstance(String param1, String param2) {
-        ReviseStdDataFragment fragment = new ReviseStdDataFragment();
+    public static ReviseTchDataFragment newInstance(String param1, String param2) {
+        ReviseTchDataFragment fragment = new ReviseTchDataFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -84,33 +84,30 @@ public class ReviseStdDataFragment extends Fragment {
 
     }
 
-
-    //contextEditor.putInt("sid",bundle.getInt("userID"));
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentReviseStdDataBinding.inflate(inflater, container, false);
+        binding = FragmentReviseTchDataBinding.inflate(inflater, container, false);
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        int sid = preferences.getInt("sid",0);
+        int tid = preferences.getInt("tid",0);
         packet = new JSONObject();
         try {
             packet.put("type",1);
             packet.put("status",10);
-            data.put("sid",sid);
+            data.put("tid",tid);
             packet.put("data",data);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        RequestBody rb = RequestBody.create(packet.toString(),MediaType.parse("application/json"));
+        RequestBody rb = RequestBody.create(packet.toString(), MediaType.parse("application/json"));
         Request request = new Request.Builder()
-                .url("http://192.168.255.67:8864/api/project/GetData/student")
+                .url("http://192.168.255.67:8864/api/project/GetData/teacher")
                 .post(rb)
                 .build();
-        GetDataAPI getDataAPI = new GetDataAPI(request);
-        executor.execute(getDataAPI);
-
+        GetTchDataAPI getTchDataAPI = new GetTchDataAPI(request);
+        executor.execute(getTchDataAPI);
         //處理修改資料按鈕事件
-        binding.btnReviseAcc.setOnClickListener(new View.OnClickListener() {
+        binding.btnUpdateTChData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 JSONObject revPacket = new JSONObject();
@@ -118,12 +115,11 @@ public class ReviseStdDataFragment extends Fragment {
                 try {
                     revPacket.put("type",1);
                     revPacket.put("status",10);
-                    revData.put("sid",sid);
-                    revData.put("department",binding.txtReviseDepart.getText());
-                    revData.put("acc",binding.txtReviseSTDacc.getText());
-                    revData.put("name",binding.txtReviseName.getText());
-                    revData.put("pwd",binding.txtRevisePwd.getText());
-                    revData.put("email",binding.txtReviseMail.getText());
+                    revData.put("tid",tid);
+                    revData.put("acc",binding.txtTCHreviseTCHacc.getText());
+                    revData.put("name",binding.txtTCHreviseName.getText());
+                    revData.put("pwd",binding.txtTCHrevisePwd.getText());
+                    revData.put("email",binding.txtTCHreviseMail.getText());
                     revPacket.put("data",revData);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -131,13 +127,17 @@ public class ReviseStdDataFragment extends Fragment {
 
                 RequestBody rb = RequestBody.create(revPacket.toString(),MediaType.parse("application/json"));
                 Request request = new Request.Builder()
-                        .url("http://192.168.255.67:8864/api/project/UpdataData/student")
+                        .url("http://192.168.255.67:8864/api/project/UpdataData/teacher")
                         .post(rb)
                         .build();
-                UpdateDataAPI updateDataAPI = new UpdateDataAPI(request);
-                executor.execute(updateDataAPI);
+                UpdateTchDataAPI updateTchDataAPI = new UpdateTchDataAPI(request);
+                executor.execute(updateTchDataAPI);
+
+
+
             }
         });
+
 
         return binding.getRoot();
     }
@@ -145,12 +145,11 @@ public class ReviseStdDataFragment extends Fragment {
 
 
 
-
-     class GetDataAPI implements Runnable{
+    class GetTchDataAPI implements Runnable{
 
         OkHttpClient client;
         Request request;
-        public GetDataAPI(Request request){
+        public GetTchDataAPI(Request request){
             client = new OkHttpClient();
             this.request = request ;}
         @Override
@@ -162,17 +161,15 @@ public class ReviseStdDataFragment extends Fragment {
                 Log.w("api回應",responseBody);
                 JSONObject objectFromAPI = new JSONObject(responseBody);
                 JSONObject data = objectFromAPI.getJSONObject("data");
-                Message m = GetDataHandler.obtainMessage();
+                Message m = GetTchDataHandler.obtainMessage();
                 Bundle bundle = new Bundle();
-                bundle.putString("name",data.getString("學生姓名"));
+                bundle.putString("name",data.getString("教師姓名"));
                 bundle.putString("univ",data.getString("學校"));
-                bundle.putString("department",data.getString("科系"));
                 bundle.putString("email",data.getString("信箱"));
-                bundle.putString("acc",data.getString("學號"));
+                bundle.putString("acc",data.getString("教師編號"));
                 bundle.putString("pwd",data.getString("密碼"));
                 m.setData(bundle);
-                GetDataHandler.sendMessage(m);
-
+                GetTchDataHandler.sendMessage(m);
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -182,12 +179,11 @@ public class ReviseStdDataFragment extends Fragment {
         }
     }
 
-
-    class UpdateDataAPI implements Runnable{
+    class UpdateTchDataAPI implements Runnable{
 
         OkHttpClient client;
         Request request;
-        public UpdateDataAPI(Request request){
+        public UpdateTchDataAPI(Request request){
             client = new OkHttpClient();
             this.request = request ;}
         @Override
@@ -203,9 +199,9 @@ public class ReviseStdDataFragment extends Fragment {
                     bundle.putInt("status",12);
                     bundle.putString("mesg", "資料更新失敗");
                 }
-                Message m = UpdateDataHandler.obtainMessage();
+                Message m = UpdateTchDataHandler.obtainMessage();
                 m.setData(bundle);
-                UpdateDataHandler.sendMessage(m);
+                UpdateTchDataHandler.sendMessage(m);
             }catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -213,9 +209,4 @@ public class ReviseStdDataFragment extends Fragment {
 
         }
     }
-
-
-
-
-
 }
