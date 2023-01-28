@@ -65,7 +65,7 @@ public class RecordFragment extends Fragment {
             db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
             if (bundle.getInt("type") == 2) {  // semester紀錄
                 db.execSQL("drop table if exists " + cid + "_record_semester;");
-                db.execSQL("create table " + cid + "_record_semester(date text, stuId text,name text);");
+                db.execSQL("create table " + cid + "_record_semester(rc_date text, stuId text,name text);");
                 try { stuInfos = new JSONArray(bundle.getString("list"));
                       for (int i =0; i<stuInfos.length(); i++) {
                         JSONObject stuInfo = stuInfos.getJSONObject(i);
