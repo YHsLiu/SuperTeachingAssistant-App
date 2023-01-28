@@ -35,11 +35,28 @@ public class ReviseStdDataFragment extends Fragment {
 
     }
 
+    //contextEditor.putInt("sid",bundle.getInt("userID"));
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         binding = FragmentReviseStdDataBinding.inflate(inflater, container, false);
+        binding.txtReviseTitle.setHint("");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         return binding.getRoot();
     }
 }

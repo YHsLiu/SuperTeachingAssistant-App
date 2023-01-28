@@ -39,6 +39,7 @@ public class RegistrationActivity extends AppCompatActivity {
     ActivityRegistrationBinding bindingR;
     ExecutorService executor;
     Intent IntentR;      //註冊後跳轉頁面
+    String url=null;
 
     Handler regResultHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -109,16 +110,16 @@ public class RegistrationActivity extends AppCompatActivity {
                     packet.put("mesg", "註冊資料 測試封包");
                     JSONObject data = new JSONObject();
                     data.put("univ",univer);
-                    data.put("department", bindingR.txtRegDepart.getText().toString());
                     data.put("acc", bindingR.txtRegAcc.getText().toString());
                     data.put("name", bindingR.txtRegName.getText().toString());
                     data.put("pwd", bindingR.txtRegPwd.getText().toString());
                     data.put("email", bindingR.txtRegMail.getText().toString());
                     if(bindingR.radioRegStd.isChecked()){
-                        data.put("identity", bindingR.radioRegStd.getText().toString());
+                        data.put("department", bindingR.txtRegDepart.getText().toString());
+                        url = "http://192.168.255.67:8864/api/project/registration/student";
                     }
                     if(bindingR.radioRegTch.isChecked()){
-                        data.put("identity", bindingR.radioRegTch.getText().toString());
+                        url = "http://192.168.255.67:8864/api/project/registration/teacher";
                     }
                     packet.put("data", data);
                     Log.w("API格式", packet.toString(4));
@@ -129,7 +130,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 MediaType mytp = MediaType.parse("application/json");
                 RequestBody rb = RequestBody.create(packet.toString(),mytp);
                 Request request = new Request.Builder()
-                        .url("http://192.168.255.67:8864/api/project/registration")
+                        .url(url)
                         .post(rb)
                         .build();
 
