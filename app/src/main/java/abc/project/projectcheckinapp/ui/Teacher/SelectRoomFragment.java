@@ -28,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentSelectRoomBinding;
@@ -102,6 +103,7 @@ public class SelectRoomFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentSelectRoomBinding.inflate(inflater,container,false);
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        executor = Executors.newSingleThreadExecutor();
         tid = preferences.getInt("tid",0);
         JSONObject packet = new JSONObject();
         try {
