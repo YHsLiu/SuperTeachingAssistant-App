@@ -80,7 +80,7 @@ public class AdapterNoRcStu extends RecyclerView.Adapter<AdapterNoRcStu.ViewHold
     Button RollCall;
     public ViewHolder(@NonNull View itemView) {
         super(itemView);
-        studentName = itemView.findViewById(R.id.txt_tec2_NoCallCard_name);
+        studentName = itemView.findViewById(R.id.txt_std_card_date);
         department = itemView.findViewById(R.id.txt_tec2_noCallCard_depart);
         idNum = itemView.findViewById(R.id.txt_tec2_noCallCard_id);
         RollCall = itemView.findViewById(R.id.btn_tec2_noCallCard);

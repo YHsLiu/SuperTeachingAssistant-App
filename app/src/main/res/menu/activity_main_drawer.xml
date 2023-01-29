@@ -7,14 +7,7 @@
         <item
             android:id="@+id/nav_tec_main"
             android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
-        <item
-            android:id="@+id/nav_tec_newclass"
-            android:icon="@drawable/ic_menu_inputcoursecode"
-            android:title="@string/menu_InputCourseCode" />
-        <item
-            android:id="@+id/nav_tec_enter"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:title="@string/login_login" />
+
     </group>
 </menu>

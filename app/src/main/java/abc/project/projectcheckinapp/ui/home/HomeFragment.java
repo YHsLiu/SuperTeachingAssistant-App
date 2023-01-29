@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import abc.project.projectcheckinapp.LoginActivity;
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.RegistrationActivity;
 import abc.project.projectcheckinapp.databinding.FragmentHomeBinding;
@@ -23,11 +24,29 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private NavController navController;
 
+
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        return root;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        binding.btnMainLogin2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
+            }
+        });
+
 
         binding.btnToA.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,7 +56,6 @@ public class HomeFragment extends Fragment {
                 navController.navigate(R.id.nav_stdMainPage);
             }
         });
-        return root;
     }
 
     @Override

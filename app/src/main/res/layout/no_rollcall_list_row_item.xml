@@ -24,7 +24,7 @@
                 android:layout_height="45sp">
 
                 <TextView
-                    android:id="@+id/txt_tec2_NoCallCard_name"
+                    android:id="@+id/txt_std_card_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/droid_sans_fallback_full"
@@ -46,7 +46,7 @@
                     android:text="學生科系"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/txt_tec2_NoCallCard_name"
+                    app:layout_constraintStart_toEndOf="@+id/txt_std_card_date"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.75" />
 
