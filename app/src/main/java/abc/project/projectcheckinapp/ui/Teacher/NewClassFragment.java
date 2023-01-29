@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentNewClassBinding;
@@ -99,6 +100,7 @@ public class NewClassFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentNewClassBinding.inflate(inflater,container,false);
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        executor = Executors.newSingleThreadExecutor();
         int tid = preferences.getInt("tid",0);
         if (tid == 0){
             Toast.makeText(getActivity(), "請重新登入", Toast.LENGTH_SHORT).show();
@@ -129,8 +131,9 @@ public class NewClassFragment extends Fragment {
                 }
                 MediaType mediaType = MediaType.parse("application/json");
                 RequestBody body = RequestBody.create(packet.toString(),mediaType);
+                Log.e("apitest",packet.toString());
                 Request request= new Request.Builder()
-                        .url("http://192.168.255.62:8864/api/createclass")
+                        .url("http://192.168.1.162:8864/api/createclass")
                         .post(body)
                         .build();
                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
