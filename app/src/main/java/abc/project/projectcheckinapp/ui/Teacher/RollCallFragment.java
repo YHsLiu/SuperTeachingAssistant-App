@@ -53,6 +53,7 @@ public class RollCallFragment extends Fragment {
     FragmentRollCallBinding binding;
     NavController navController;
     SharedPreferences preferences;
+    SharedPreferences.Editor contextEditor;
     ExecutorService executor;
     SQLiteDatabase db;
     RecyclerView recyclerView;

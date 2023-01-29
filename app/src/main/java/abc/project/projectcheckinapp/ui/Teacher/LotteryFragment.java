@@ -26,6 +26,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 
 import abc.project.projectcheckinapp.databinding.FragmentLotteryBinding;
@@ -44,6 +46,8 @@ public class LotteryFragment extends Fragment {
     FragmentLotteryBinding binding;
     NavController navController;
     SharedPreferences preferences;
+    SharedPreferences LPreferences;
+    SharedPreferences.Editor contextEditorL;
     ExecutorService executor;
     AlertDialog.Builder builder;
     AlertDialog dialog;
@@ -53,7 +57,9 @@ public class LotteryFragment extends Fragment {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
-            if (bundle.getInt("status" )==11){
+            preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
+            LPreferences = getActivity().getPreferences(MODE_PRIVATE);
+            if (bundle.getInt("status" )==12){
                 String name = bundle.getString("stuName");
                 String id = bundle.getString("stuId");
                 String depart = bundle.getString("stuDep");
@@ -68,13 +74,12 @@ public class LotteryFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         JSONObject packet = new JSONObject();
                         // 在點名的地方要設Boolean(rollCall) & date 來check有無點名與點名紀錄
-                        Boolean rollCall = preferences.getBoolean("rollCall",false);
-                        int date = preferences.getInt("date",0);
+                        // Boolean rollCall = preferences.getBoolean("rollCall",false);
+                        String date = LPreferences.getString("date","");
                         int cid = preferences.getInt("cid",0);
                         try {
                             packet.put("type",1);
-                            packet.put("status",10);
-                            packet.put("rollCall",rollCall);
+                            packet.put("status",11);
                             packet.put("cid",cid);
                             packet.put("date",date);
                         } catch (JSONException e) {
@@ -154,16 +159,19 @@ public class LotteryFragment extends Fragment {
                 JSONObject packet = new JSONObject();
                 // 在點名的地方要設Boolean(rollCall) & date 來check有無點名與點名紀錄
                 // 要從前面的SharedPreferences帶入cid
-                Boolean rollCall = preferences.getBoolean("rollCall",false);
-                int date = preferences.getInt("date",0);
+                //Boolean rollCall = preferences.getBoolean("isRollCall",false);
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+                String date = formatter.format(new Date());
+                LPreferences = getActivity().getPreferences(MODE_PRIVATE);
+                contextEditorL = LPreferences.edit();
+                contextEditorL.putString("date",date);
                 int cid = preferences.getInt("cid",0);
                 if ( cid == 0 ){
                     Toast.makeText(getActivity(), "無課程資料，請先重新進入教室或回報問題", Toast.LENGTH_LONG).show();
                 }
                 try {
                     packet.put("type",1);
-                    packet.put("status",10);
-                    packet.put("rollCall",rollCall);
+                    packet.put("status",11);
                     packet.put("cid",cid);
                     packet.put("date",date);
                 } catch (JSONException e) {
@@ -201,7 +209,7 @@ public class LotteryFragment extends Fragment {
                 JSONObject stuInfo = result.getJSONObject("stuInfo");
                 Message m = lotteryResultHandler.obtainMessage();
                 Bundle bundle = new Bundle();
-                if ( result.getInt("status")==11){
+                if ( result.getInt("status")==12){
                     bundle.putString("stuName",stuInfo.getString("學生姓名"));
                     bundle.putString("stuId",stuInfo.getString("學號"));
                     bundle.putString("stuDep",stuInfo.getString("科系"));
