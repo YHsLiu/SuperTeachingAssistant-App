@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.SimpleCursorAdapter;
@@ -66,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             } else {
+                Toast.makeText(LoginActivity.this, ""+bundle.getInt("status"), Toast.LENGTH_SHORT).show();
                 Toast.makeText(LoginActivity.this, "無此帳號，請確認資料是否正確或建立帳號", Toast.LENGTH_LONG).show();
             }
         }
@@ -78,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         executor = Executors.newSingleThreadExecutor();
         preferences = this.getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
 
         // spinner 設定
         spinner = binding.spinnerLoginSchool;
@@ -95,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
             spinner.setAdapter(adapter);
         } else {
             Cursor mycursor = ua.GetSpinnerFromDB(db);
+            universityArray = ua.GetSpinnerArrayFromDB(db);
             String[] univName = new String[]{"univ_name"};
             int[] adapterRowViews = new int[]{android.R.id.text1};
             SimpleCursorAdapter adapter1 = new SimpleCursorAdapter(this,android.R.layout.simple_spinner_item
@@ -103,6 +107,18 @@ public class LoginActivity extends AppCompatActivity {
             spinner.setAdapter(adapter1);
             db.close();
         }
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String univer = universityArray.get(position);
+                editor.putString("univer",univer).apply();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         binding.btnLoginCreat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 JSONObject packet = new JSONObject();
                 JSONObject data = new JSONObject();
-                String univer = spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString();
+                String univer = preferences.getString("univer","");
                 try {
                     packet.put("type",1);
                     packet.put("status" , 10);
@@ -135,12 +151,12 @@ public class LoginActivity extends AppCompatActivity {
                 Request request;
                 if (binding.radioLoginStudent.isChecked()){
                     request = new Request.Builder()
-                            .url("http://192.168.255.62:8864/api/member/login/student")
+                            .url("http://192.168.1.162:8864/api/member/login/student")
                             .post(body)
                             .build();
                 } else {
                     request = new Request.Builder()
-                            .url("http://192.168.255.62:8864/api/member/login/teacher")
+                            .url("http://192.168.1.162:8864/api/member/login/teacher")
                             .post(body)
                             .build();
                 }
@@ -149,7 +165,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         // checkbox
-        SharedPreferences.Editor editor = preferences.edit();
         Boolean Remember = preferences.getBoolean("isRemember",false);
         if (Remember){
             binding.txtLoginAcc.setText(preferences.getString("account",""));
@@ -177,6 +192,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     class SimpleAPIWorker implements Runnable{
         OkHttpClient client;
         Request request;

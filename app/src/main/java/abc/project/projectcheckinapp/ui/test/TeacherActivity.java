@@ -29,7 +29,7 @@ public class TeacherActivity extends AppCompatActivity {
         binding = ActivitySecondBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.appBarSecond.toolbar);
+        //setSupportActionBar(binding.appBarSecond.toolbar);
         binding.appBarSecond.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

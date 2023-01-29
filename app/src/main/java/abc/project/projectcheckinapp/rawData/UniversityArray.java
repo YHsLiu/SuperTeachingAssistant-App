@@ -58,4 +58,17 @@ public class UniversityArray {
         //String queryCols =cursor.getString(0);
         return cursor;
     }
+    public ArrayList< String > GetSpinnerArrayFromDB(SQLiteDatabase db){
+        String sql = "select _id , univ_name from University;";
+        Cursor cursor = db.rawQuery(sql,null);
+        ArrayList< String > universityArray =new ArrayList<>();
+        cursor.moveToFirst();
+        String info;
+        do{
+            info = cursor.getString(1);
+            universityArray.add(info);
+        }while (cursor.moveToNext());
+        //String queryCols =cursor.getString(0);
+        return universityArray;
+    }
 }
