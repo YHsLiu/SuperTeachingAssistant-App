@@ -119,7 +119,7 @@ public class EnterClassFragment extends Fragment {
             public void onClickForClassroom(int position, int cid) {
                 contextEditor = preferences.edit();
                 contextEditor.putInt("cid",cid);
-                navController.navigate(R.id.);  // 你看要連哪個action
+                navController.navigate(R.id.nav_stdRollCall);  // 你看要連哪個action
             }
             @Override
             public void onClickForNoRcStuList(int position, int sid) {   }

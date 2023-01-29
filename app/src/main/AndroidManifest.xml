@@ -21,9 +21,6 @@
             android:name=".RegistrationActivity"
             android:exported="false" />
         <activity
-            android:name=".RealMainActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"

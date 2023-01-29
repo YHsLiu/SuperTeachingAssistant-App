@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_stdMainPage">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/nav_stdMainPage"
@@ -18,13 +18,10 @@
             app:destination="@id/nav_EnterClass" />
         <action
             android:id="@+id/action_nav_stdMainPage_to_reviseStdDataFragment"
-            app:destination="@id/reviseStdDataFragment" />
+            app:destination="@id/nav_reviseStdData" />
         <action
             android:id="@+id/action_nav_stdMainPage_to_inputCourseCodeFragment"
             app:destination="@id/nav_inputCourseCode" />
-        <action
-            android:id="@+id/action_nav_stdMainPage_to_loginActivity"
-            app:destination="@id/loginActivity" />
     </fragment>
 
     <fragment
@@ -37,10 +34,8 @@
             app:destination="@id/nav_stdRollCall" />
         <action
             android:id="@+id/action_nav_EnterClass_to_stdRecordFragment"
-            app:destination="@id/stdRecordFragment" />
-        <action
-            android:id="@+id/action_nav_EnterClass_to_stdBulletinFragment"
-            app:destination="@id/stdBulletinFragment" />
+            app:destination="@id/nav_stdRecord" />
+
     </fragment>
 
     <fragment
@@ -49,7 +44,7 @@
         android:label="ClassTableFragment"
         tools:layout="@layout/fragment_classtable"/>
     <fragment
-        android:id="@+id/reviseStdDataFragment"
+        android:id="@+id/nav_reviseStdData"
         android:name="abc.project.projectcheckinapp.ui.Student.ReviseStdDataFragment"
         android:label="fragment_revise_std_data"
         tools:layout="@layout/fragment_revise_std_data" />
@@ -64,14 +59,18 @@
         android:label="fragment_std_roll_call"
         tools:layout="@layout/fragment_std_roll_call" />
     <fragment
-        android:id="@+id/stdRecordFragment"
+        android:id="@+id/nav_stdRecord"
         android:name="abc.project.projectcheckinapp.ui.Student.StdRecordFragment"
         android:label="fragment_std_record"
         tools:layout="@layout/fragment_std_record" />
     <fragment
-        android:id="@+id/stdBulletinFragment"
-        android:name="abc.project.projectcheckinapp.ui.Student.StdBulletinFragment"
-        android:label="fragment_std_bulletin"
-        tools:layout="@layout/fragment_std_bulletin" />
+        android:id="@+id/homeFragment"
+        android:name="abc.project.projectcheckinapp.ui.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_nav_stdMainPage"
+            app:destination="@id/nav_stdMainPage" />
+    </fragment>
 
 </navigation>

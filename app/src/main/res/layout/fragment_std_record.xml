@@ -64,17 +64,8 @@
                 android:src="@drawable/record"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintHorizontal_bias="0.768"
                 app:layout_constraintStart_toStartOf="parent" />
-
-            <ImageView
-                android:id="@+id/image_rcll_bulletin"
-                android:layout_width="86dp"
-                android:layout_height="78dp"
-                android:src="@drawable/bulletin"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/image_rcll_record"
-                app:layout_constraintTop_toTopOf="@+id/image_rcll_record" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

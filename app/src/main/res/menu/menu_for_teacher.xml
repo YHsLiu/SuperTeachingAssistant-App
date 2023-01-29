@@ -16,6 +16,9 @@
             android:id="@+id/nav_tec_enter"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_tecEnterClass" />
-        <item android:title="@string/menu_Set" />
+        <item
+            android:id="@+id/nav_reviseTchData"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_Set" />
     </group>
 </menu>
