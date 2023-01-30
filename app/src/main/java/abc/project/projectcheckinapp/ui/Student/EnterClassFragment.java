@@ -51,6 +51,7 @@ public class EnterClassFragment extends Fragment {
     ClickListener clickListener;
     SharedPreferences.Editor contextEditor;
     ExecutorService executor;
+    AdapterClassroom adapter;
 
     public EnterClassFragment() {
     }
@@ -136,6 +137,16 @@ public class EnterClassFragment extends Fragment {
             @Override
             public void onClickForNoRcStuList(int position, int sid) {   }
         };
+        binding.btnStuSQuery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.selectRoom(binding.txtStuSSelect.getText().toString());
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+
+
         return root;
     }
 

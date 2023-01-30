@@ -157,6 +157,7 @@ public class StdRollCallFragment extends Fragment {
                 dateFormat = new SimpleDateFormat("yyyyMMdd");
                 date = new Date(System.currentTimeMillis());
                 currentDate = dateFormat.format(date);
+                Log.e("date",currentDate);
                 binding.btnStu1Checkin.setText(currentDate+"已簽到");
                 //時間存至共用sharedPreferences
                 preferences.edit().putString("data",currentDate).apply();
@@ -252,11 +253,11 @@ public class StdRollCallFragment extends Fragment {
                 JSONObject result = new JSONObject(responseBody);
                 Message m = EnterCheckRollCallHandler.obtainMessage();
                 Bundle bundle = new Bundle();
-                if(result.getInt("type")==2 && result.getInt("status")==12){                         //日期成功寫入資料庫
+                if(result.getInt("status")==12){                         //日期成功寫入資料庫
                     bundle.putInt("status",result.getInt("status"));
                     bundle.putString("mesg","未點名:點名按鈕設定可點選");
                 }
-                else if(result.getInt("type")==2 && result.getInt("status")==13){
+                else if(result.getInt("status")==13){
                     bundle.putInt("status",result.getInt("status"));
                     bundle.putString("mesg","已點名/重複點名(btn關掉)");
                 }

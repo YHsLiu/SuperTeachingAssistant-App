@@ -105,7 +105,7 @@
     <string name="stdInputCode_continue">Continue</string>
     <string name="stdInputCode_errorMesg">查無此課程</string>
 
-    <string name="stdrollcall_text1">正在進行課堂點名</string>
+    <string name="stdrollcall_text1">*請先確認老師是否已開放點名*</string>
     <string name="stdrollcall_check">簽到</string>
 
     <string name="Revise_STDtitle">修改學生資料</string>
