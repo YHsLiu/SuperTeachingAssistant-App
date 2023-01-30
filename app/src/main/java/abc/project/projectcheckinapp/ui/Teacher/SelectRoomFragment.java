@@ -80,6 +80,13 @@ public class SelectRoomFragment extends Fragment {
                 adapter = new AdapterClassroom(db,clickListener);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                binding.btnTecSQuery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        adapter.selectRoom(binding.txtTecSName.getText().toString());
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -109,6 +116,7 @@ public class SelectRoomFragment extends Fragment {
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         executor = Executors.newSingleThreadExecutor();
         tid = preferences.getInt("tid",0);
+        recyclerView =binding.RecyclerClassroom;
         JSONObject packet = new JSONObject();
         try {
             packet.put("type",1);
@@ -127,7 +135,7 @@ public class SelectRoomFragment extends Fragment {
         executor.execute(apiCaller);
 
         db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
-        recyclerView =binding.RecyclerClassroom;
+
         clickListener = new ClickListener() {
             @Override
             public void onClickForAllStuList(int position, int sid, String stuname, String studepart, String stuid) {   }
@@ -142,15 +150,6 @@ public class SelectRoomFragment extends Fragment {
             @Override
             public void onClickForNoRcStuList(int position, int sid) {   }
         };
-
-        binding.btnTecSQuery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adapter.selectRoom(binding.txtTecSName.getText().toString());
-                adapter.notifyDataSetChanged();
-            }
-        });
-
         return binding.getRoot();
     }
 
