@@ -56,6 +56,7 @@ public class SelectRoomFragment extends Fragment {
     ClickListener clickListener;
     SharedPreferences.Editor contextEditor;
     ExecutorService executor;
+    AdapterClassroom adapter;
     Handler selectClassResultHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -67,6 +68,7 @@ public class SelectRoomFragment extends Fragment {
             // 每個跟RecyclerView有關的資料都存進裝置名為 allList 的DB中，以table名稱來區別每個list
             db.execSQL("drop table if exists allroom;");
             db.execSQL("create table allroom(cid integer,classname text, classcode text);");
+            Log.e("sqlite","create table allroom");
             try {
                 JSONArray roomInfos =new JSONArray( bundle.getString("roomList") );
                 for (int i = 0; i<roomInfos.length();i++){
@@ -75,7 +77,9 @@ public class SelectRoomFragment extends Fragment {
                             new Object[] { stuInfo.getInt("cid"),
                                     stuInfo.getString("課程名稱"),
                                     stuInfo.getString("課程代碼")}); }
-                db.close();
+                adapter = new AdapterClassroom(db,clickListener);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -128,15 +132,17 @@ public class SelectRoomFragment extends Fragment {
             @Override
             public void onClickForAllStuList(int position, int sid, String stuname, String studepart, String stuid) {   }
             @Override
-            public void onClickForClassroom(int position, int cid) {
+            public void onClickForClassroom(int position, int cid,String classname) {
                 contextEditor = preferences.edit();
                 contextEditor.putInt("cid",cid);
+                contextEditor.putString("classname",classname);
+                contextEditor.apply();
                 navController.navigate(R.id.action_selectRoomFragment_to_nav_tec_enter);
             }
             @Override
             public void onClickForNoRcStuList(int position, int sid) {   }
         };
-        AdapterClassroom adapter = new AdapterClassroom(db,clickListener);
+
         binding.btnTecSQuery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,8 +150,7 @@ public class SelectRoomFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         return binding.getRoot();
     }
 
@@ -162,12 +167,15 @@ public class SelectRoomFragment extends Fragment {
         public void run() {
             try {
                 Response response = client.newCall(request).execute();
-                JSONObject result = new JSONObject(response.body().string());
+                String res = response.body().string();
+                JSONObject result = new JSONObject(res);
+                Log.w("apicall", res);
                 Message m = selectClassResultHandler.obtainMessage();
                 Bundle bundle = new Bundle();
                 bundle.putInt("status", result.getInt("type"));
-                bundle.putInt("roomList", result.getInt("list"));
+                bundle.putString("roomList", result.getString("list"));
                 m.setData(bundle);
+                Log.w("sqlite", "呼叫 selectClassresult");
                 selectClassResultHandler.sendMessage(m);
             } catch (Exception e) {
                 throw new RuntimeException(e);

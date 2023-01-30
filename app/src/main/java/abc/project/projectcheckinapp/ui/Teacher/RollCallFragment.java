@@ -186,7 +186,7 @@ public class RollCallFragment extends Fragment {
                         @Override
                         public void onClickForAllStuList(int position, int sid, String stuname, String studepart, String stuid) {  }
                         @Override
-                        public void onClickForClassroom(int position, int cid) {  }
+                        public void onClickForClassroom(int position, int cid,String classname) {  }
                         @Override
                         public void onClickForNoRcStuList(int position, int sid) {
                             JSONObject packet1 = new JSONObject();

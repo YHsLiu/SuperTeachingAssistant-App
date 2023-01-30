@@ -207,7 +207,7 @@ public class StudentListFragment extends Fragment {
                 dialog.show();
             }
             @Override
-            public void onClickForClassroom(int position, int cid) {  }
+            public void onClickForClassroom(int position, int cid,String classname) {  }
             @Override
             public void onClickForNoRcStuList(int position, int sid) {   }
         };
