@@ -26,12 +26,12 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.ViewHolder
         this.db = db;
         this.cid = cid;
         result = new ArrayList<>();
-        Cursor cursor = db.rawQuery("select distinct rc_date from "+cid+"_record_semester;",null);
+        Cursor cursor = db.rawQuery("select distinct rc_date from record_semester_"+cid+";",null);
         if (cursor.getCount() > 0){
             cursor.moveToFirst();
             do {
                 dateR = cursor.getString(0);
-                Cursor cursor1 = db.rawQuery("select stuId,name from "+cid+"_record_semester where rc_date="+dateR+" order by stuId;", null);
+                Cursor cursor1 = db.rawQuery("select stuId,name from record_semester_"+cid+" where rc_date="+dateR+" order by stuId;", null);
                 String stuInfo = "";
                 cursor1.moveToFirst();
                 do {
@@ -50,7 +50,7 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.ViewHolder
         this.dateR = dateR;
         this.cid = cid;
         result = new ArrayList<>();
-        Cursor cursor = db.rawQuery("select * from "+cid+"_record_today order by stuId;", null);
+        Cursor cursor = db.rawQuery("select * from record_today_"+cid+" order by stuId;", null);
         if (cursor.getCount() > 0){
             cursor.moveToFirst();
             String stuInfo = "";
@@ -68,12 +68,12 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.ViewHolder
         this.cid = cid;
         this.sid = sid;
         result = new ArrayList<>();
-        Cursor cursor = db.rawQuery("select rc_date from "+cid+"_record_student where sid=0;", null);
+        Cursor cursor = db.rawQuery("select rc_date from record_student_"+cid+" where sid=0;", null);
         if (cursor.getCount() > 0){
             cursor.moveToFirst();
             do {
                 dateR = cursor.getString(0);
-                Cursor cursor1 = db.rawQuery("select count(*) from "+cid+"_record_student where sid="+sid+" and rc_date="+dateR+";", null);
+                Cursor cursor1 = db.rawQuery("select count(*) from record_student_"+cid+" where sid="+sid+" and rc_date="+dateR+";", null);
                 String isAttend = "";
                 if (cursor1.getCount()==1){
                     isAttend = "出席";
