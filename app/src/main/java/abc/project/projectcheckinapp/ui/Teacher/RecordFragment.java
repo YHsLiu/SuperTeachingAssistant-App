@@ -73,9 +73,15 @@ public class RecordFragment extends Fragment {
                         db.execSQL("insert into record_semester_"+cid+" values (?,?,?);",
                                 new Object[] { stuInfo.getInt("日期"),
                                         stuInfo.getString("學號"),
-                                        stuInfo.getString("姓名")});  }
+                                        stuInfo.getString("學生姓名")});  }
+                    db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
+                    adapter = new AdapterRecord(db,cid);
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 } catch (JSONException e) {  throw new RuntimeException(e);   }
             } else if (bundle.getInt("type") == 3) {  // 今日點名紀錄
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+                String date = formatter.format(new Date());
                 db.execSQL("drop table if exists record_today_"+cid+";");
                 db.execSQL("create table record_today_"+cid+"(stuId text,name text);");
                 try { stuInfos = new JSONArray(bundle.getString("list"));
@@ -83,13 +89,14 @@ public class RecordFragment extends Fragment {
                         JSONObject stuInfo = stuInfos.getJSONObject(i);
                         db.execSQL("insert into record_today_"+cid+" values (?,?);",
                                 new Object[] { stuInfo.getString("學號"),
-                                               stuInfo.getString("姓名")});  }
+                                               stuInfo.getString("學生姓名")});  }
                 } catch (JSONException e) {  throw new RuntimeException(e);   }
+                db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
+                adapter = new AdapterRecord(db,date,cid);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             }
-            db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
-            adapter = new AdapterRecord(db,cid);
-            recyclerView.setAdapter(adapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         }
     };
     public RecordFragment() {
@@ -148,11 +155,7 @@ public class RecordFragment extends Fragment {
                         .build();
                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
                 executor.execute(apiCaller);
-                db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
-                adapter = new AdapterRecord(db,date,cid);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                db.close();
+
             }
         });
         return binding.getRoot();
