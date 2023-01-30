@@ -50,16 +50,17 @@ public class LoginActivity extends AppCompatActivity {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
-            contextEditor = LoginActivity.this.getSharedPreferences("userInfo",MODE_PRIVATE).edit(); // 所有Activity共用
+            preferences = getSharedPreferences("userInfo",MODE_PRIVATE);
+            contextEditor = LoginActivity.this.preferences.edit(); // 所有Activity共用
             if (bundle.getInt("status" )==11) // 登入成功
             {   contextEditor.putBoolean("isStudent",binding.radioLoginStudent.isChecked()); // 判別師/生
                 contextEditor.putBoolean("isLogin",true); // 已登入
                 // 跳轉到 老師 /學生 頁面
                 if (binding.radioLoginStudent.isChecked()){
-                    /*intent = new Intent(LoginActivity.this, 學生Activity.class );
+                    intent = new Intent(LoginActivity.this, StudentActivity.class );
                     contextEditor.putInt("sid",bundle.getInt("userID"));
                     contextEditor.apply();
-                    startActivity(intent);*/
+                    startActivity(intent);
                 } else {
                     intent = new Intent(LoginActivity.this, TeacherActivity.class );
                     contextEditor.putInt("tid",bundle.getInt("userID"));
@@ -151,12 +152,12 @@ public class LoginActivity extends AppCompatActivity {
                 Request request;
                 if (binding.radioLoginStudent.isChecked()){
                     request = new Request.Builder()
-                            .url("http://192.168.1.162:8864/api/member/login/student")
+                            .url("http://192.168.255.67:8864/api/member/login/student")
                             .post(body)
                             .build();
                 } else {
                     request = new Request.Builder()
-                            .url("http://192.168.1.162:8864/api/member/login/teacher")
+                            .url("http://192.168.255.67:8864/api/member/login/teacher")
                             .post(body)
                             .build();
                 }

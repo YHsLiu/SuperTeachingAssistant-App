@@ -15,7 +15,7 @@
             app:destination="@id/nav_tec_newclass" />
         <action
             android:id="@+id/action_nav_tec_main_to_selectRoomFragment"
-            app:destination="@id/selectRoomFragment" />
+            app:destination="@id/nav_selectRoom" />
         <action
             android:id="@+id/action_nav_tec_main_to_reviseTchDataFragment"
             app:destination="@id/nav_reviseTchData" />
@@ -63,7 +63,7 @@
         android:label="fragment_roll_call"
         tools:layout="@layout/fragment_roll_call" />
     <fragment
-        android:id="@+id/selectRoomFragment"
+        android:id="@+id/nav_selectRoom"
         android:name="abc.project.projectcheckinapp.ui.Teacher.SelectRoomFragment"
         android:label="fragment_select_room"
         tools:layout="@layout/fragment_select_room" >

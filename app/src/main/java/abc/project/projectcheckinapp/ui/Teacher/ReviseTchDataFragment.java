@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentReviseStdDataBinding;
@@ -41,16 +42,25 @@ public class ReviseTchDataFragment extends Fragment {
     SharedPreferences preferences;
     ExecutorService executor;
     JSONObject packet, data ;
+    int tid;
 
     Handler GetTchDataHandler = new Handler(Looper.getMainLooper()){
             @Override
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
                 Bundle bundle = msg.getData();
-                binding.txtTCHreviseTCHacc.setText(bundle.getString("acc"));
-                binding.txtTCHreviseName.setText(bundle.getString("name"));
-                binding.txtTCHrevisePwd.setText(bundle.getString("pwd"));
-                binding.txtTCHreviseMail.setText(bundle.getString("email"));
+                try {
+
+                    JSONObject tchData = new JSONObject(bundle.getString("Tchdata"));
+                    Log.e("api:",bundle.getString("Tchdata"));
+                    binding.txtTCHreviseTCHacc.setText(tchData.getString("教師編號"));
+                    binding.txtTCHreviseName.setText(tchData.getString("教師姓名"));
+                    binding.txtTCHrevisePwd.setText(tchData.getString("密碼"));
+                    binding.txtTCHreviseMail.setText(tchData.getString("信箱"));
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
 
             }
         };
@@ -91,8 +101,10 @@ public class ReviseTchDataFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentReviseTchDataBinding.inflate(inflater, container, false);
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        int tid = preferences.getInt("tid",0);
+        executor = Executors.newSingleThreadExecutor();
+        tid = preferences.getInt("tid",0);
         packet = new JSONObject();
+        data = new JSONObject();
         try {
             packet.put("type",1);
             packet.put("status",10);
@@ -108,10 +120,12 @@ public class ReviseTchDataFragment extends Fragment {
                 .build();
         GetTchDataAPI getTchDataAPI = new GetTchDataAPI(request);
         executor.execute(getTchDataAPI);
+
         //處理修改資料按鈕事件
         binding.btnUpdateTChData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                tid = preferences.getInt("tid",0);
                 JSONObject revPacket = new JSONObject();
                 JSONObject revData = new JSONObject();
                 try {
@@ -166,14 +180,9 @@ public class ReviseTchDataFragment extends Fragment {
                 String responseBody = response.body().string();
                 Log.w("api回應",responseBody);
                 JSONObject objectFromAPI = new JSONObject(responseBody);
-                JSONObject data = objectFromAPI.getJSONObject("data");
                 Message m = GetTchDataHandler.obtainMessage();
                 Bundle bundle = new Bundle();
-                bundle.putString("name",data.getString("教師姓名"));
-                bundle.putString("univ",data.getString("學校"));
-                bundle.putString("email",data.getString("信箱"));
-                bundle.putString("acc",data.getString("教師編號"));
-                bundle.putString("pwd",data.getString("密碼"));
+                bundle.putString("Tchdata",objectFromAPI.toString());
                 m.setData(bundle);
                 GetTchDataHandler.sendMessage(m);
 

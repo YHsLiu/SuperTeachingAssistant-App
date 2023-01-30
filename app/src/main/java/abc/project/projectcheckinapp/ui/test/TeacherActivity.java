@@ -1,12 +1,23 @@
 package abc.project.projectcheckinapp.ui.test;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -16,11 +27,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.ActivitySecondBinding;
+import abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment;
+import abc.project.projectcheckinapp.ui.Teacher.NewClassFragment;
+import abc.project.projectcheckinapp.ui.Teacher.ReviseTchDataFragment;
+import abc.project.projectcheckinapp.ui.Teacher.SelectRoomFragment;
 
-public class TeacherActivity extends AppCompatActivity {
+public class TeacherActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivitySecondBinding binding;
+    AlertDialog.Builder builder;
+    AlertDialog dialog;
+    SharedPreferences preferences;
+    SharedPreferences.Editor contextEditor;
+    Fragment fragment;
+    DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +74,7 @@ public class TeacherActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_for_teacher, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -63,4 +84,60 @@ public class TeacherActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+
+            case R.id.nav_tec_newclass:
+                fragment = new NewClassFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_tec_newclass,fragment).commit();
+                break;
+
+            case R.id.nav_selectRoom:
+                fragment = new SelectRoomFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_selectRoom,fragment).commit();
+                break;
+
+            case R.id.nav_reviseTchData:
+                fragment = new ReviseTchDataFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_reviseTchData,fragment).commit();
+                break;
+
+        }
+        return true;
+    }
+
+    /*Handler createClassResultHandler = new Handler(Looper.getMainLooper()){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                Bundle bundle = msg.getData();
+                if (bundle.getInt("status" )==12) // 新增課程成功
+                {   builder = new AlertDialog.Builder(this);
+                    builder.setTitle("新增成功");
+                    builder.setMessage("直接進入教室嗎?");
+                    builder.setPositiveButton("進教室", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            preferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                            contextEditor = preferences.edit();
+                            contextEditor.putInt("cid",bundle.getInt("cid")).apply();
+                            navController.navigate(R.id.action_nav_tec_newclass_to_nav_tec_enter);
+                        }
+                    });
+                    builder.setNegativeButton("關閉", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {    }
+                    });
+                    dialog = builder.create();
+                    dialog.show();
+                } else {
+                    Toast.makeText(this, "新增失敗,代碼已被使用", Toast.LENGTH_LONG).show();
+                }
+            }
+        };*/
 }

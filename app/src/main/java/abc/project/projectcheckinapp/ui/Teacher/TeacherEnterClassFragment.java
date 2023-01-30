@@ -1,14 +1,22 @@
 package abc.project.projectcheckinapp.ui.Teacher;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import abc.project.projectcheckinapp.R;
+import abc.project.projectcheckinapp.databinding.FragmentEnterclassBinding;
+import abc.project.projectcheckinapp.databinding.FragmentTeacherEnterClassBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,50 +25,65 @@ import abc.project.projectcheckinapp.R;
  */
 public class TeacherEnterClassFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    FragmentTeacherEnterClassBinding binding;
+    NavController navController;
+    SharedPreferences preferences;
 
     public TeacherEnterClassFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TeacherEnterClassFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static TeacherEnterClassFragment newInstance(String param1, String param2) {
         TeacherEnterClassFragment fragment = new TeacherEnterClassFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_teacher_enter_class, container, false);
+        binding = FragmentTeacherEnterClassBinding.inflate(inflater, container, false);
+        preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        String classname = preferences.getString("classname","無資料");
+        binding.txtClassName.setText(classname);
+        binding.btnLottery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_nav_tec_enter_to_nav_tec_lottery);
+            }
+        });
+        binding.btnRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_nav_tec_enter_to_recordFragment);
+            }
+        });
+        binding.btnRollcall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_nav_tec_enter_to_rollCallFragment);
+            }
+        });
+        binding.btnStuList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_nav_tec_enter_to_nav_tec_stulist);
+            }
+        });
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
     }
 }

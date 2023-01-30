@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.databinding.FragmentStudentListBinding;
 import abc.project.projectcheckinapp.rawData.AdapterAllStu;
@@ -85,21 +86,66 @@ public class StudentListFragment extends Fragment {
             Bundle bundle = msg.getData();
             JSONArray stuInfos;
             preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
-            cid = preferences.getInt("cid",0);
+            String classroom = preferences.getString("classname","無");
             db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null); // 將學生資訊存進裝置的DB
             // 每個跟RecyclerView有關的資料都存進裝置名為 allList 的DB中，以table名稱來區別每個list
-            db.execSQL("drop table if exists "+cid+"_allstu;");
-            db.execSQL("create table "+cid+"_allstu(sid integer,name text, depart text, stuId text);");
+            db.execSQL("drop table if exists allstu_"+cid+";");
+            db.execSQL("create table allstu_"+cid+"(sid integer,name text, depart text, stuId text);");
             try {
                 stuInfos =new JSONArray( bundle.getString("list") );
                 for (int i = 0; i<stuInfos.length();i++){
                     JSONObject stuInfo = stuInfos.getJSONObject(i);
-                    db.execSQL("insert into "+cid+"_allstu values (?,?,?,?);",
+                    db.execSQL("insert into allstu_"+cid+" values (?,?,?,?);",
                             new Object[] { stuInfo.getInt("sid"),
-                                           stuInfo.getString("姓名"),
+                                           stuInfo.getString("學生姓名"),
                                            stuInfo.getString("科系"),
                                            stuInfo.getString("學號")}); }
-                db.close();
+
+                clickListener = new ClickListener() {
+                    @Override
+                    public void onClickForAllStuList(int position,int sid, String stuname, String studepart, String stuid) {
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+                        String date = formatter.format(new Date());
+                        builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage("學生姓名："+stuname+"\r\n科系："+studepart+"\r\n學號："+stuid);
+                        JSONObject packet1 = new JSONObject();
+                        try {
+                            packet1.put("type",1);
+                            packet1.put("s9tatus",11);
+                            packet1.put("cid",cid);
+                            packet1.put("sid",sid);
+                            packet1.put("date",date);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                        RequestBody body1 = RequestBody.create(packet1.toString(),mediaType);
+                        Request request1 = new Request.Builder()
+                                .url("http://192.168.255.62:8864/api/rollcall/manual/check")
+                                .post(body1).build();
+                        ManualCheckAPIWorker manualAPIWorker = new ManualCheckAPIWorker(request1);
+                        executor.execute(manualAPIWorker);
+                        builder.setNegativeButton("關閉", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {        }
+                        });
+                        dialog = builder.create();
+                        dialog.show();
+                    }
+                    @Override
+                    public void onClickForClassroom(int position, int cid,String classname) {  }
+                    @Override
+                    public void onClickForNoRcStuList(int position, int sid) {   }
+                };
+                adapter = new AdapterAllStu(db,clickListener,cid);
+                binding.btnTecLSelect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        adapter.selectAllColumn(binding.txtTecL1Select.getText().toString());
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -156,8 +202,10 @@ public class StudentListFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentStudentListBinding.inflate(inflater,container,false);
         preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
+        executor = Executors.newSingleThreadExecutor();
         builder = new AlertDialog.Builder(getActivity());
         cid = preferences.getInt("cid",0);
+        recyclerView =binding.RecyclerStuAll;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
         String date = formatter.format(new Date());
 
@@ -176,51 +224,9 @@ public class StudentListFragment extends Fragment {
         SimpleAPIWorker simpleAPIWorker = new SimpleAPIWorker(request);
         executor.execute(simpleAPIWorker);
 
-        db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
-        recyclerView =binding.RecyclerStuAll;
-        clickListener = new ClickListener() {
-            @Override
-            public void onClickForAllStuList(int position,int sid, String stuname, String studepart, String stuid) {
-                builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage("學生姓名："+stuname+"\r\n科系："+studepart+"\r\n學號："+stuid);
-                JSONObject packet1 = new JSONObject();
-                try {
-                    packet1.put("type",1);
-                    packet1.put("status",11);
-                    packet1.put("cid",cid);
-                    packet1.put("sid",sid);
-                    packet1.put("date",date);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-                RequestBody body1 = RequestBody.create(packet1.toString(),mediaType);
-                Request request1 = new Request.Builder()
-                        .url("http://192.168.255.62:8864/api/rollcall/manual/check")
-                        .post(body1).build();
-                ManualCheckAPIWorker manualAPIWorker = new ManualCheckAPIWorker(request1);
-                executor.execute(manualAPIWorker);
-                builder.setNegativeButton("關閉", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {        }
-                });
-                dialog = builder.create();
-                dialog.show();
-            }
-            @Override
-            public void onClickForClassroom(int position, int cid) {  }
-            @Override
-            public void onClickForNoRcStuList(int position, int sid) {   }
-        };
-        adapter = new AdapterAllStu(db,clickListener,cid);
-        binding.btnTecLSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adapter.selectAllColumn(binding.txtTecL1Select.getText().toString());
-                adapter.notifyDataSetChanged();
-            }
-        });
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+
         return binding.getRoot();
     }
     class SimpleAPIWorker implements Runnable{
@@ -265,7 +271,7 @@ public class StudentListFragment extends Fragment {
             try {
                 Response response = client.newCall(request).execute();
                 String jsonString = response.body().string();
-                Log.w("api","API回應:"+jsonString);
+                Log.w("api","Manual API回應:"+jsonString);
                 JSONObject result = new JSONObject(jsonString);
                 Message m = ManualCheckHandler.obtainMessage();
                 Bundle bundle = new Bundle();

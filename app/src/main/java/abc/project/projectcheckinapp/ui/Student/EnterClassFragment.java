@@ -27,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentEnterclassBinding;
@@ -50,6 +51,7 @@ public class EnterClassFragment extends Fragment {
     ClickListener clickListener;
     SharedPreferences.Editor contextEditor;
     ExecutorService executor;
+    AdapterClassroom adapter;
 
     public EnterClassFragment() {
     }
@@ -73,7 +75,16 @@ public class EnterClassFragment extends Fragment {
                             new Object[] { stuInfo.getInt("cid"),
                                     stuInfo.getString("課程名稱"),
                                     stuInfo.getString("課程代碼")}); }
-                db.close();
+                AdapterClassroom adapter = new AdapterClassroom(db,clickListener);
+                binding.btnStuSQuery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        adapter.selectRoom(binding.txtStuSSelect.getText().toString());
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -92,7 +103,9 @@ public class EnterClassFragment extends Fragment {
         binding = FragmentEnterclassBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        executor = Executors.newSingleThreadExecutor();
         sid = preferences.getInt("sid",0);
+        recyclerView =binding.RecyclerStuClassroom;
         JSONObject packet = new JSONObject();
         try {
             packet.put("type",1);
@@ -110,21 +123,20 @@ public class EnterClassFragment extends Fragment {
         EnterClassAPIWorker apiCaller = new EnterClassAPIWorker(request);
         executor.execute(apiCaller);
 
-        db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
-        recyclerView =binding.RecyclerStuClassroom;
         clickListener = new ClickListener() {
             @Override
             public void onClickForAllStuList(int position, int sid, String stuname, String studepart, String stuid) {   }
             @Override
-            public void onClickForClassroom(int position, int cid) {
+            public void onClickForClassroom(int position, int cid,String classname) {
                 contextEditor = preferences.edit();
                 contextEditor.putInt("cid",cid);
+                contextEditor.putString("classname",classname);
+                contextEditor.apply();
                 navController.navigate(R.id.nav_stdRollCall);  // 你看要連哪個action
             }
             @Override
             public void onClickForNoRcStuList(int position, int sid) {   }
         };
-        AdapterClassroom adapter = new AdapterClassroom(db,clickListener);
         binding.btnStuSQuery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,8 +144,8 @@ public class EnterClassFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
 
         return root;
     }
@@ -151,11 +163,13 @@ public class EnterClassFragment extends Fragment {
         public void run() {
             try {
                 Response response = client.newCall(request).execute();
-                JSONObject result = new JSONObject(response.body().string());
+                String data = response.body().string();
+                Log.w("api","學生進教室 api回傳:"+data);
+                JSONObject result = new JSONObject(data);
                 Message m = enterClassResultHandler.obtainMessage();
                 Bundle bundle = new Bundle();
                 bundle.putInt("status", result.getInt("type"));
-                bundle.putInt("roomList", result.getInt("list"));
+                bundle.putString("roomList", result.getString("list"));
                 m.setData(bundle);
                 enterClassResultHandler.sendMessage(m);
             } catch (Exception e) {

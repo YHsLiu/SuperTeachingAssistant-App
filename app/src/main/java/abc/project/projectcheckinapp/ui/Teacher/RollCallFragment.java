@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.databinding.FragmentRollCallBinding;
 import abc.project.projectcheckinapp.rawData.AdapterNoRcStu;
@@ -90,18 +91,22 @@ public class RollCallFragment extends Fragment {
             int cid = preferences.getInt("cid",0);
             db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null); // 將學生資訊存進裝置的DB
             // 每個跟RecyclerView有關的資料都存進裝置名為 allList 的DB中，以table名稱來區別每個list
-            db.execSQL("drop table if exists "+cid+"_no_rc_stu;");
-            db.execSQL("create table "+cid+"_no_rcstu(sid integer,name text, depart text, stuId text);");
+            db.execSQL("drop table if exists no_rc_stu_"+cid+";");
+            db.execSQL("create table no_rc_stu_"+cid+"(sid integer,name text, depart text, stuId text);");
             try {
                 stuNoRCInfos =new JSONArray( bundle.getString("list") );
                 for (int i = 0; i<stuNoRCInfos.length();i++){
                     JSONObject stuInfo = stuNoRCInfos.getJSONObject(i);
-                    db.execSQL("insert into "+cid+"_allstu values (?,?,?,?);",
+                    db.execSQL("insert into no_rc_stu_"+cid+" values (?,?,?,?);",
                             new Object[] { stuInfo.getInt("sid"),
-                                    stuInfo.getString("姓名"),
+                                    stuInfo.getString("學生姓名"),
                                     stuInfo.getString("科系"),
                                     stuInfo.getString("學號")}); }
-                db.close();
+                db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
+                adapter = new AdapterNoRcStu(db,clickListener,cid);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -124,6 +129,7 @@ public class RollCallFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentRollCallBinding.inflate(inflater, container, false);
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        executor = Executors.newSingleThreadExecutor();
         int cid = preferences.getInt("cid",0);
         if (cid == 0){
             Toast.makeText(getActivity(), "請重新進入教室", Toast.LENGTH_SHORT).show();
@@ -175,6 +181,7 @@ public class RollCallFragment extends Fragment {
                         dialog.show();
                     }
                 } else {
+                    Log.e("app","app 送出資訊:" +body);
                     Request request = new Request.Builder()
                             .url("http://192.168.255.62:8864/api/rollcall/teacher/close")
                             .post(body)
@@ -186,7 +193,7 @@ public class RollCallFragment extends Fragment {
                         @Override
                         public void onClickForAllStuList(int position, int sid, String stuname, String studepart, String stuid) {  }
                         @Override
-                        public void onClickForClassroom(int position, int cid) {  }
+                        public void onClickForClassroom(int position, int cid,String classname) {  }
                         @Override
                         public void onClickForNoRcStuList(int position, int sid) {
                             JSONObject packet1 = new JSONObject();
@@ -206,10 +213,6 @@ public class RollCallFragment extends Fragment {
                             executor.execute(apiCaller);
                         }
                     };
-                    db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
-                    adapter = new AdapterNoRcStu(db,clickListener,cid);
-                    recyclerView.setAdapter(adapter);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 }
             }
         });
@@ -249,12 +252,14 @@ public class RollCallFragment extends Fragment {
         public void run() {
             try {
                 Response response = client.newCall(request).execute();
-                JSONObject result = new JSONObject(response.body().string());
+                String apidata = response.body().string();
+                Log.w("api","simple2 api回應:"+apidata);
+                JSONObject result = new JSONObject(apidata);
                 Message m = CloseResultHandler.obtainMessage();
                 Bundle bundle = new Bundle();
                 if ( result.getInt("type")==2){
-                    String stuNoRCInfo = result.getJSONArray("noRClist").toString();
-                    bundle.putString("noRClist",stuNoRCInfo);
+                    String stuNoRCInfo = result.getJSONArray("list").toString();
+                    bundle.putString("list",stuNoRCInfo);
                     m.setData(bundle);
                     CloseResultHandler.sendMessage(m);
                 } else {

@@ -29,6 +29,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentReviseStdDataBinding;
@@ -56,7 +57,7 @@ public class StdRollCallFragment extends Fragment {
     Handler StdRollCallHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            //AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             super.handleMessage(msg);
             Bundle bundle2 = msg.getData();
             if(bundle2.getInt("status")==21) {
@@ -69,6 +70,27 @@ public class StdRollCallFragment extends Fragment {
 
         }
     };
+
+    Handler EnterCheckRollCallHandler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            Bundle bundle2 = msg.getData();
+            if(bundle2.getInt("status")==12)
+                binding.btnStu1Checkin.setEnabled(true);
+
+            else if(bundle2.getInt("status")==13){
+                binding.btnStu1Checkin.setEnabled(false);
+                binding.btnStu1Checkin.setText("已點名");
+            }
+            else {
+                binding.btnStu1Checkin.setEnabled(false);
+                binding.btnStu1Checkin.setText("尚未開放點名");
+            }
+
+        }
+    };
+
 
     public StdRollCallFragment() {
 
@@ -87,18 +109,45 @@ public class StdRollCallFragment extends Fragment {
 
 
     }
-
+    //binding.btnStu1Checkin.setEnabled(true);
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentStdRollCallBinding.inflate(inflater, container, false);
-        //binding.btnStu1Checkin.setEnabled(true);
         //把課程名稱+cid+sid從sharedPreferences中取出並顯示
         preferences = getActivity().getSharedPreferences("userInfo",Context.MODE_PRIVATE);
         cid = preferences.getInt("cid",0);
         sid = preferences.getInt("sid",0);
         //classname = preferences.getString("classname","0");
         //binding.txtStu1ClassName.setText(classname);
+
+        //取得開啟時間
+        dateFormat = new SimpleDateFormat("yyyyMMdd");
+        date = new Date(System.currentTimeMillis());
+        currentDate = dateFormat.format(date);
+        executor = Executors.newSingleThreadExecutor();
+        JSONObject packet1 = new JSONObject();
+        JSONObject data1 = new JSONObject();
+        try {
+            packet1.put("type",0);
+            packet1.put("status",10);
+            data1.put("date",currentDate);
+            data1.put("cid",cid);
+            data1.put("sid",sid);
+            packet1.put("data",data1);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        MediaType mtyp = MediaType.parse("application/json");
+        RequestBody rb = RequestBody.create(packet1.toString(),mtyp);
+        Request request = new Request.Builder()
+                .url("http://192.168.255.67:8864/api/project/StdEnterRollCall")
+                .post(rb)
+                .build();
+        EnterCheckAPI enterCheckAPIAPI = new EnterCheckAPI(request);
+        executor.execute(enterCheckAPIAPI);
+
+
         //設定簽到按鈕
         binding.btnStu1Checkin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +157,7 @@ public class StdRollCallFragment extends Fragment {
                 dateFormat = new SimpleDateFormat("yyyyMMdd");
                 date = new Date(System.currentTimeMillis());
                 currentDate = dateFormat.format(date);
+                Log.e("date",currentDate);
                 binding.btnStu1Checkin.setText(currentDate+"已簽到");
                 //時間存至共用sharedPreferences
                 preferences.edit().putString("data",currentDate).apply();
@@ -174,6 +224,48 @@ public class StdRollCallFragment extends Fragment {
                 }
                 m.setData(bundle);
                 StdRollCallHandler.sendMessage(m);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+
+        }
+    }
+
+    class EnterCheckAPI implements Runnable{
+
+        OkHttpClient client;
+        Request request;
+
+        public EnterCheckAPI(Request request){
+            client = new OkHttpClient();
+            this.request = request ;
+        }
+
+        @Override
+        public void run() {
+
+            try {
+                Response response = client.newCall(request).execute();
+                String responseBody = response.body().string();
+                Log.w("api回應", responseBody);
+                JSONObject result = new JSONObject(responseBody);
+                Message m = EnterCheckRollCallHandler.obtainMessage();
+                Bundle bundle = new Bundle();
+                if(result.getInt("status")==12){                         //日期成功寫入資料庫
+                    bundle.putInt("status",result.getInt("status"));
+                    bundle.putString("mesg","未點名:點名按鈕設定可點選");
+                }
+                else if(result.getInt("status")==13){
+                    bundle.putInt("status",result.getInt("status"));
+                    bundle.putString("mesg","已點名/重複點名(btn關掉)");
+                }
+                else{
+                    bundle.putString("mesg","還沒開放點名(btn關掉)");
+                }
+                m.setData(bundle);
+                EnterCheckRollCallHandler.sendMessage(m);
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
