@@ -76,7 +76,8 @@ public class AdapterClassroom extends RecyclerView.Adapter<AdapterClassroom.View
             public void onClick(View v) {
                 final int pos = holder.getAdapterPosition();
                 int cid = result.get(pos).getCid();
-                click.onClickForClassroom(pos,cid);
+                String classname = result.get(pos).getClassname();
+                click.onClickForClassroom(pos,cid,classname);
             }
         });
     }

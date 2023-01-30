@@ -116,9 +116,11 @@ public class EnterClassFragment extends Fragment {
             @Override
             public void onClickForAllStuList(int position, int sid, String stuname, String studepart, String stuid) {   }
             @Override
-            public void onClickForClassroom(int position, int cid) {
+            public void onClickForClassroom(int position, int cid,String classname) {
                 contextEditor = preferences.edit();
                 contextEditor.putInt("cid",cid);
+                contextEditor.putString("classname",classname);
+                contextEditor.apply();
                 navController.navigate(R.id.nav_stdRollCall);  // 你看要連哪個action
             }
             @Override

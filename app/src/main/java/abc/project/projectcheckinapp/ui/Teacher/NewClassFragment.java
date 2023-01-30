@@ -31,6 +31,7 @@ import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentNewClassBinding;
+import abc.project.projectcheckinapp.ui.test.TeacherActivity;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -133,7 +134,7 @@ public class NewClassFragment extends Fragment {
                 RequestBody body = RequestBody.create(packet.toString(),mediaType);
                 Log.e("apitest",packet.toString());
                 Request request= new Request.Builder()
-                        .url("http://192.168.1.162:8864/api/createclass")
+                        .url("http://192.168.255.62:8864/api/createclass")
                         .post(body)
                         .build();
                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
