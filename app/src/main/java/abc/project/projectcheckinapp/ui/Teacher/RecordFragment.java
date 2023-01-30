@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.databinding.FragmentRecordBinding;
 import abc.project.projectcheckinapp.rawData.AdapterRecord;
@@ -64,28 +65,31 @@ public class RecordFragment extends Fragment {
             JSONArray stuInfos;
             db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
             if (bundle.getInt("type") == 2) {  // semester紀錄
-                db.execSQL("drop table if exists " + cid + "_record_semester;");
-                db.execSQL("create table " + cid + "_record_semester(rc_date text, stuId text,name text);");
+                db.execSQL("drop table if exists record_semester_"+cid+";");
+                db.execSQL("create table record_semester_"+cid+"(rc_date text, stuId text,name text);");
                 try { stuInfos = new JSONArray(bundle.getString("list"));
                       for (int i =0; i<stuInfos.length(); i++) {
                         JSONObject stuInfo = stuInfos.getJSONObject(i);
-                        db.execSQL("insert into "+cid+"_record_semester values (?,?,?);",
+                        db.execSQL("insert into record_semester_"+cid+" values (?,?,?);",
                                 new Object[] { stuInfo.getInt("日期"),
                                         stuInfo.getString("學號"),
                                         stuInfo.getString("姓名")});  }
                 } catch (JSONException e) {  throw new RuntimeException(e);   }
             } else if (bundle.getInt("type") == 3) {  // 今日點名紀錄
-                db.execSQL("drop table if exists " + cid + "_record_today;");
-                db.execSQL("create table " + cid + "_record_today(stuId text,name text);");
+                db.execSQL("drop table if exists record_today_"+cid+";");
+                db.execSQL("create table record_today_"+cid+"(stuId text,name text);");
                 try { stuInfos = new JSONArray(bundle.getString("list"));
                     for (int i =0; i<stuInfos.length(); i++) {
                         JSONObject stuInfo = stuInfos.getJSONObject(i);
-                        db.execSQL("insert into "+cid+"_record_today values (?,?);",
+                        db.execSQL("insert into record_today_"+cid+" values (?,?);",
                                 new Object[] { stuInfo.getString("學號"),
                                                stuInfo.getString("姓名")});  }
                 } catch (JSONException e) {  throw new RuntimeException(e);   }
             }
-            db.close();
+            db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
+            adapter = new AdapterRecord(db,cid);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
     };
     public RecordFragment() {
@@ -105,6 +109,7 @@ public class RecordFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentRecordBinding.inflate(inflater, container, false);
         recyclerView = binding.RecyclerRecord;
+        executor = Executors.newSingleThreadExecutor();
         preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
         cid = preferences.getInt("cid",0);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
@@ -131,11 +136,7 @@ public class RecordFragment extends Fragment {
                         .build();
                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
                 executor.execute(apiCaller);
-                db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
-                adapter = new AdapterRecord(db,cid);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                db.close();
+
             }
         });
         binding.btnTodayRecord.setOnClickListener(new View.OnClickListener() {
