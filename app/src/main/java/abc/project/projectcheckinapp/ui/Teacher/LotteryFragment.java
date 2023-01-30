@@ -73,6 +73,7 @@ public class LotteryFragment extends Fragment {
                 builder.setNegativeButton("下一位", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Log.w("api第二","123");
                         JSONObject packet = new JSONObject();
                         // 在點名的地方要設Boolean(rollCall) & date 來check有無點名與點名紀錄
                         // Boolean rollCall = preferences.getBoolean("rollCall",false);
@@ -90,7 +91,7 @@ public class LotteryFragment extends Fragment {
                         RequestBody body = RequestBody.create(packet.toString(),mediaType);
                         Request request;
                         request = new Request.Builder()
-                                .url("http://192.168.255.62:8864/api/lottery/bingo")
+                                .url("http://192.168.1.162:8864/api/lottery/bingo")
                                 .post(body)
                                 .build();
                         SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
@@ -105,7 +106,7 @@ public class LotteryFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Request request = new Request.Builder()
-                                .url("http://192.168.255.62:8864/api/lottery/clear")
+                                .url("http://192.168.1.162:8864/api/lottery/clear")
                                 .build();
                         ClearAPIWorker apiWorker = new ClearAPIWorker(request);
                         executor.execute(apiWorker);
@@ -183,7 +184,7 @@ public class LotteryFragment extends Fragment {
                 RequestBody body = RequestBody.create(packet.toString(),mediaType);
                 Request request;
                 request = new Request.Builder()
-                        .url("http://192.168.255.62:8864/api/lottery/bingo")
+                        .url("http://192.168.1.162:8864/api/lottery/bingo")
                         .post(body)
                         .build();
                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
@@ -208,10 +209,10 @@ public class LotteryFragment extends Fragment {
                 String jsonString = response.body().string();
                 Log.w("api","API回應:"+jsonString);
                 JSONObject result = new JSONObject(jsonString);
-                JSONObject stuInfo = result.getJSONObject("stuInfo");
                 Message m = lotteryResultHandler.obtainMessage();
                 Bundle bundle = new Bundle();
                 if ( result.getInt("status")==12){
+                    JSONObject stuInfo = result.getJSONObject("stuInfo");
                     bundle.putString("stuName",stuInfo.getString("學生姓名"));
                     bundle.putString("stuId",stuInfo.getString("學號"));
                     bundle.putString("stuDep",stuInfo.getString("科系"));
