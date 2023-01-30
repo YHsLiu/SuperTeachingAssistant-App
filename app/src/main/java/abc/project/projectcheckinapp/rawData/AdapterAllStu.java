@@ -29,7 +29,7 @@ public class AdapterAllStu extends RecyclerView.Adapter<AdapterAllStu.ViewHolder
         this.click = click;
         this.cid = cid;
         result = new ArrayList<>();
-        Cursor cursor = db.rawQuery("select * from "+cid+"_allstu;",null);
+        Cursor cursor = db.rawQuery("select * from allstu_"+cid+";",null);
         if (cursor.getCount() > 0){
             cursor.moveToFirst();
             do {
@@ -49,9 +49,9 @@ public class AdapterAllStu extends RecyclerView.Adapter<AdapterAllStu.ViewHolder
         result.clear();
         Cursor cursor;
         if (select.equals("")){
-            cursor = db.rawQuery("select * from "+cid+"_allstu;",null);
+            cursor = db.rawQuery("select * from allstu_"+cid+";",null);
         } else {
-            cursor = db.rawQuery("select * from "+cid+"_allstu where name=? or depart=? or stuId=?;",new String[]{select,select,select});
+            cursor = db.rawQuery("select * from allstu_"+cid+" where name=? or depart=? or stuId=?;",new String[]{select,select,select});
         }
         if (cursor.getCount()>0){
             cursor.moveToFirst();
@@ -78,7 +78,7 @@ public class AdapterAllStu extends RecyclerView.Adapter<AdapterAllStu.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.studentName.setText(result.get(position).getStuname());
         holder.department.setText(result.get(position).getStudepart());
-        holder.studentName.setText(result.get(position).getStuid());
+        holder.idNum.setText(result.get(position).getStuid());
         holder.studentName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
