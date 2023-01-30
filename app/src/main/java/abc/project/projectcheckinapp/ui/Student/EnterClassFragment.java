@@ -27,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentEnterclassBinding;
@@ -92,6 +93,7 @@ public class EnterClassFragment extends Fragment {
         binding = FragmentEnterclassBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        executor = Executors.newSingleThreadExecutor();
         sid = preferences.getInt("sid",0);
         JSONObject packet = new JSONObject();
         try {
@@ -104,7 +106,7 @@ public class EnterClassFragment extends Fragment {
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(packet.toString(),mediaType);
         Request request= new Request.Builder()
-                .url("http://192.168.255.62:8864/api/list/student/classroom")
+                .url("http://192.168.255.67:8864/api/list/student/classroom")
                 .post(body)
                 .build();
         EnterClassAPIWorker apiCaller = new EnterClassAPIWorker(request);
