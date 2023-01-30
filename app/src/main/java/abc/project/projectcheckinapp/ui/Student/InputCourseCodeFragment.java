@@ -61,7 +61,7 @@ public class InputCourseCodeFragment extends Fragment {
                 builder.setPositiveButton("進入課程", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {                          //跳轉至課程頁面
-                        navController.navigate(R.id.action_nav_stdMainPage_to_nav_EnterClass);
+                        navController.navigate(R.id.action_homeFragment_to_nav_inputCourseCode);
                     }
                 });
                 builder.setNeutralButton("關閉", new DialogInterface.OnClickListener() {
@@ -128,11 +128,7 @@ public class InputCourseCodeFragment extends Fragment {
 
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
+
 
 
 
@@ -173,4 +169,11 @@ public class InputCourseCodeFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
 }
+

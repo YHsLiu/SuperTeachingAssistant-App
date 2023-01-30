@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -25,8 +27,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.ActivitySecondBinding;
+import abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment;
+import abc.project.projectcheckinapp.ui.Teacher.NewClassFragment;
+import abc.project.projectcheckinapp.ui.Teacher.ReviseTchDataFragment;
+import abc.project.projectcheckinapp.ui.Teacher.SelectRoomFragment;
 
-public class TeacherActivity extends AppCompatActivity {
+public class TeacherActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivitySecondBinding binding;
@@ -34,6 +40,8 @@ public class TeacherActivity extends AppCompatActivity {
     AlertDialog dialog;
     SharedPreferences preferences;
     SharedPreferences.Editor contextEditor;
+    Fragment fragment;
+    DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +74,7 @@ public class TeacherActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_for_teacher, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -75,6 +83,32 @@ public class TeacherActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_second);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+
+            case R.id.nav_tec_newclass:
+                fragment = new NewClassFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_tec_newclass,fragment).commit();
+                break;
+
+            case R.id.nav_selectRoom:
+                fragment = new SelectRoomFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_selectRoom,fragment).commit();
+                break;
+
+            case R.id.nav_reviseTchData:
+                fragment = new ReviseTchDataFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_reviseTchData,fragment).commit();
+                break;
+
+        }
+        return true;
     }
 
     /*Handler createClassResultHandler = new Handler(Looper.getMainLooper()){

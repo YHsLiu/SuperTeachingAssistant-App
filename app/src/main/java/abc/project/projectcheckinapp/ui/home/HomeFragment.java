@@ -19,7 +19,7 @@ import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.RegistrationActivity;
 import abc.project.projectcheckinapp.databinding.FragmentHomeBinding;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private FragmentHomeBinding binding;
     private NavController navController;
@@ -31,32 +31,16 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        binding.btnInputclasscode.setOnClickListener(this);
+        binding.btnInputclasscode.setOnClickListener(this);
+        binding.btnGotoclass.setOnClickListener(this);
+        binding.btnClasstable.setOnClickListener(this);
+        binding.btnRevisedata.setOnClickListener(this);
 
         return root;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
 
-        binding.btnMainLogin2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    startActivity(intent);
-            }
-        });
-
-
-        binding.btnToA.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 使用 NavController 切換到 classTableFragement
-                // 請使用 Mobile_navigation 中的 Action ID
-                navController.navigate(R.id.nav_stdMainPage);
-            }
-        });
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -70,5 +54,30 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            /*case R.id.layout_stdmainpage:
+                navController.navigate(R.id.nav_EnterClass);
+                break;*/
+            case R.id.btn_home:
+                getActivity().onBackPressed();
+                break;
+            case R.id.btn_inputclasscode:
+                navController.navigate(R.id.nav_inputCourseCode);
+                break;
+            case R.id.btn_gotoclass:
+                navController.navigate(R.id.nav_EnterClass);
+                break;
+            case R.id.btn_classtable:
+                navController.navigate(R.id.nav_classTable);
+                break;
+            case R.id.btn_revisedata:
+                navController.navigate(R.id.nav_reviseStdData);
+                break;
+        }
+
     }
 }
