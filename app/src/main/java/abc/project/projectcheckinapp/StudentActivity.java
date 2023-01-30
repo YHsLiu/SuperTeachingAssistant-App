@@ -77,24 +77,28 @@ public class StudentActivity extends AppCompatActivity implements NavigationView
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.nav_inputCourseCode:
-            fragment = new InputCourseCodeFragment();
-            getSupportFragmentManager().beginTransaction()
+                fragment = new InputCourseCodeFragment();
+                getSupportFragmentManager().beginTransaction()
                         .replace(R.id.nav_inputCourseCode,fragment).commit();
+                break;
 
             case R.id.nav_EnterClass:
                 fragment = new EnterClassFragment();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.nav_EnterClass,fragment).commit();
+                break;
 
             case R.id.nav_classTable:
                 fragment = new ClassTableFragment();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.nav_classTable,fragment).commit();
+                break;
 
             case R.id.nav_reviseStdData:
                 fragment = new ReviseStdDataFragment();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.nav_reviseStdData,fragment).commit();
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);

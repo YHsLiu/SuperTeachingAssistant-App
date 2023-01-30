@@ -181,20 +181,12 @@ public class ReviseStdDataFragment extends Fragment {
                 Message m = GetDataHandler.obtainMessage();
                 Bundle bundle = new Bundle();
                 bundle.putString("data", objectFromAPI.toString());
-                /*
-                bundle.putString("name",data2.getString("學生姓名"));
-                bundle.putString("univ",data2.getString("學校"));
-                bundle.putString("department",data2.getString("科系"));
-                bundle.putString("email",data2.getString("信箱"));
-                bundle.putString("acc",data2.getString("學號"));
-                bundle.putString("pwd",data2.getString("密碼"));*/
                 m.setData(bundle);
                 GetDataHandler.sendMessage(m);
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-
 
         }
     }

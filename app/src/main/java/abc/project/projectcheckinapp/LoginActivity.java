@@ -152,12 +152,12 @@ public class LoginActivity extends AppCompatActivity {
                 Request request;
                 if (binding.radioLoginStudent.isChecked()){
                     request = new Request.Builder()
-                            .url("http://192.168.1.162:8864/api/member/login/student")
+                            .url("http://192.168.255.67:8864/api/member/login/student")
                             .post(body)
                             .build();
                 } else {
                     request = new Request.Builder()
-                            .url("http://192.168.1.162:8864/api/member/login/teacher")
+                            .url("http://192.168.255.67:8864/api/member/login/teacher")
                             .post(body)
                             .build();
                 }
