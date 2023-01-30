@@ -30,7 +30,7 @@ public class AdapterNoRcStu extends RecyclerView.Adapter<AdapterNoRcStu.ViewHold
         this.click = click;
         this.cid = cid;
         result = new ArrayList<>();
-        Cursor cursor = db.rawQuery("select * from "+cid+"_no_rcstu;",null);
+        Cursor cursor = db.rawQuery("select * from no_rc_stu_"+cid+";",null);
         if (cursor.getCount() > 0){
             cursor.moveToFirst();
             do {
@@ -56,7 +56,7 @@ public class AdapterNoRcStu extends RecyclerView.Adapter<AdapterNoRcStu.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.studentName.setText(result.get(position).getStuname());
         holder.department.setText(result.get(position).getStudepart());
-        holder.studentName.setText(result.get(position).getStuid());
+        holder.idNum.setText(result.get(position).getStuid());
         holder.RollCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
