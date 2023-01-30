@@ -1,8 +1,11 @@
 package abc.project.projectcheckinapp;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -67,6 +70,20 @@ public class StudentActivity extends AppCompatActivity implements NavigationView
     }
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.action_reportQA:
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("mailto:service@gmail.com"));
+                startActivity(intent);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
@@ -105,4 +122,6 @@ public class StudentActivity extends AppCompatActivity implements NavigationView
 
         return true;
     }
+
+
 }
