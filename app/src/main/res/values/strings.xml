@@ -39,14 +39,14 @@
     <string name="reg_btn_tch">我是老師</string>
 
     <string name="Realmain_btn_LoginOrReg">登入/註冊▸</string>
-    <string name="Realmain_subtitle">開始體驗 Student App 智慧服務</string>
+    <string name="Realmain_subtitle">開始體驗</string>
+    <string name="Realmain_subtitle2">超級助教</string>
+    <string name="Realmain_subtitle3">智慧服務</string>
     <string name="Realmain_info1">三大特色</string>
     <string name="Realmain_info2">即時手機點名</string>
     <string name="Realmain_info3">快速、省時還能查閱出席紀錄</string>
     <string name="Realmain_info4">動態課表編輯</string>
     <string name="Realmain_info5">再也不怕忘記幾點上課了</string>
-    <string name="Realmain_info6">查閱最新課堂消息</string>
-    <string name="Realmain_info7">內建布告欄 師生溝通無阻攔</string>
     <string name="title_activity_student">StudentActivity</string>
     <string name="menu_gallery">Gallery</string>
     <string name="title_activity_teacher_main">TeacherMainActivity</string>

@@ -32,7 +32,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         binding.btnInputclasscode.setOnClickListener(this);
-        binding.btnInputclasscode.setOnClickListener(this);
         binding.btnGotoclass.setOnClickListener(this);
         binding.btnClasstable.setOnClickListener(this);
         binding.btnRevisedata.setOnClickListener(this);
@@ -59,12 +58,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            /*case R.id.layout_stdmainpage:
-                navController.navigate(R.id.nav_EnterClass);
-                break;*/
-            case R.id.btn_home:
-                getActivity().onBackPressed();
-                break;
+
             case R.id.btn_inputclasscode:
                 navController.navigate(R.id.nav_inputCourseCode);
                 break;
