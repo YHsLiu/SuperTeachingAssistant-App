@@ -58,7 +58,7 @@ public class StudentMainPageFragment extends Fragment implements View.OnClickLis
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_stdMainPage, R.id.nav_classTable, R.id.nav_EnterClass, R.id.nav_reviseStdData)   //影響設定是返回建or Menu
+                 R.id.nav_classTable, R.id.nav_EnterClass, R.id.nav_reviseStdData)   //影響設定是返回建or Menu
                 .setOpenableLayout(drawerStd)
                 .build();
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);

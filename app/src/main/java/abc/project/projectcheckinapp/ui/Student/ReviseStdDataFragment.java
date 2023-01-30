@@ -19,11 +19,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentReviseStdDataBinding;
@@ -40,18 +43,26 @@ public class ReviseStdDataFragment extends Fragment {
     NavController navController;
     SharedPreferences preferences;
     ExecutorService executor;
-    JSONObject packet, data ;
+    int sid;
 
     Handler GetDataHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
-            binding.txtReviseDepart.setText(bundle.getString("department"));
-            binding.txtReviseSTDacc.setText(bundle.getString("acc"));
-            binding.txtReviseName.setText(bundle.getString("name"));
-            binding.txtRevisePwd.setText(bundle.getString("pwd"));
-            binding.txtReviseMail.setText(bundle.getString("email"));
+            try {
+
+                JSONObject stdData = new JSONObject(bundle.getString("data"));
+                Log.e("api:",bundle.getString("data"));
+                binding.txtReviseDepart.setText(stdData.getString("科系"));
+                binding.txtReviseSTDacc.setText(stdData.getString("學號"));
+                binding.txtReviseName.setText(stdData.getString("學生姓名"));
+                binding.txtRevisePwd.setText(stdData.getString("密碼"));
+                binding.txtReviseMail.setText(stdData.getString("信箱"));
+
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
 
         }
     };
@@ -93,8 +104,11 @@ public class ReviseStdDataFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentReviseStdDataBinding.inflate(inflater, container, false);
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        int sid = preferences.getInt("sid",0);
-        packet = new JSONObject();
+        executor = Executors.newSingleThreadExecutor();
+        sid = preferences.getInt("sid",0);
+        //Log.w("sid內容", String.valueOf(sid));
+        JSONObject packet = new JSONObject();
+        JSONObject data = new JSONObject();
         try {
             packet.put("type",1);
             packet.put("status",10);
@@ -103,7 +117,8 @@ public class ReviseStdDataFragment extends Fragment {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        RequestBody rb = RequestBody.create(packet.toString(),MediaType.parse("application/json"));
+        MediaType mtyp = MediaType.parse("application/json");
+        RequestBody rb = RequestBody.create(packet.toString(),mtyp);
         Request request = new Request.Builder()
                 .url("http://192.168.255.67:8864/api/project/GetData/student")
                 .post(rb)
@@ -115,6 +130,7 @@ public class ReviseStdDataFragment extends Fragment {
         binding.btnReviseAcc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sid = preferences.getInt("sid",0);
                 JSONObject revPacket = new JSONObject();
                 JSONObject revData = new JSONObject();
                 try {
@@ -144,14 +160,6 @@ public class ReviseStdDataFragment extends Fragment {
         return binding.getRoot();
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
-    }
-
-
-
 
 
      class GetDataAPI implements Runnable{
@@ -167,20 +175,21 @@ public class ReviseStdDataFragment extends Fragment {
             try {
                 Response response = client.newCall(request).execute();
                 String responseBody = response.body().string();
-                Log.w("api回應",responseBody);
+                Log.e("response:", "response:"+response);
                 JSONObject objectFromAPI = new JSONObject(responseBody);
-                JSONObject data = objectFromAPI.getJSONObject("data");
+                //JSONObject data2 = objectFromAPI.getJSONObject("data");
                 Message m = GetDataHandler.obtainMessage();
                 Bundle bundle = new Bundle();
-                bundle.putString("name",data.getString("學生姓名"));
-                bundle.putString("univ",data.getString("學校"));
-                bundle.putString("department",data.getString("科系"));
-                bundle.putString("email",data.getString("信箱"));
-                bundle.putString("acc",data.getString("學號"));
-                bundle.putString("pwd",data.getString("密碼"));
+                bundle.putString("data", objectFromAPI.toString());
+                /*
+                bundle.putString("name",data2.getString("學生姓名"));
+                bundle.putString("univ",data2.getString("學校"));
+                bundle.putString("department",data2.getString("科系"));
+                bundle.putString("email",data2.getString("信箱"));
+                bundle.putString("acc",data2.getString("學號"));
+                bundle.putString("pwd",data2.getString("密碼"));*/
                 m.setData(bundle);
                 GetDataHandler.sendMessage(m);
-
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -218,12 +227,14 @@ public class ReviseStdDataFragment extends Fragment {
                 throw new RuntimeException(e);
             }
 
-
         }
     }
 
-
-
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
+    }
 
 
 }

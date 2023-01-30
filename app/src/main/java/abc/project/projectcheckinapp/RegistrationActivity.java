@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -12,7 +13,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SimpleCursorAdapter;
@@ -41,6 +42,8 @@ public class RegistrationActivity extends AppCompatActivity {
     ExecutorService executor;
     Intent IntentR;      //註冊後跳轉頁面
     String url=null;
+    SharedPreferences preferences;
+    SharedPreferences.Editor contextEditor;
 
     Handler regResultHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -51,7 +54,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 Toast.makeText(RegistrationActivity.this, "註冊成功", Toast.LENGTH_SHORT).show();
                 //判斷是老師or學生 決定跳轉頁
                 if(bindingR.radioRegStd.isChecked()){
-                    IntentR = new Intent(RegistrationActivity.this,MainActivity.class);
+                    IntentR = new Intent(RegistrationActivity.this, StudentActivity.class);
                 }
                 if(bindingR.radioRegTch.isChecked()){
                     IntentR = new Intent(RegistrationActivity.this,TeacherActivity.class);
@@ -70,7 +73,8 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         bindingR = ActivityRegistrationBinding.inflate(getLayoutInflater());
         setContentView(bindingR.getRoot());
-
+        preferences = this.getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
         executor = Executors.newSingleThreadExecutor();
 
         // spinner 設定
@@ -78,7 +82,9 @@ public class RegistrationActivity extends AppCompatActivity {
         Spinner spinner = bindingR.spinnerRegSchool;
         UniversityArray ua = new UniversityArray();
 
+        ArrayList< String > universityArray;
         Cursor mycursor = ua.GetSpinnerFromDB(db);
+        universityArray = ua.GetSpinnerArrayFromDB(db);
         String[] univName = new String[]{"univ_name"};
         int[] adapterRowViews = new int[]{android.R.id.text1};
         SimpleCursorAdapter adapter1 = new SimpleCursorAdapter(this,android.R.layout.simple_spinner_item
@@ -86,6 +92,18 @@ public class RegistrationActivity extends AppCompatActivity {
         adapter1.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
         spinner.setAdapter(adapter1);
         db.close();
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String univer = universityArray.get(position);
+                editor.putString("univer",univer).apply();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
         // RadioGroup 的事件處理

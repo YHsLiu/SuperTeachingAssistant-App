@@ -2,38 +2,43 @@ package abc.project.projectcheckinapp;
 
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
+import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.concurrent.ExecutorService;
+import abc.project.projectcheckinapp.databinding.ActivityStudentBinding;
+import abc.project.projectcheckinapp.ui.Student.ClassTableFragment;
+import abc.project.projectcheckinapp.ui.Student.EnterClassFragment;
+import abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment;
+import abc.project.projectcheckinapp.ui.Student.ReviseStdDataFragment;
 
-
-import abc.project.projectcheckinapp.databinding.ActivityMainBinding;
-
-public class MainActivity extends AppCompatActivity {
+public class StudentActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private AppBarConfiguration mAppBarConfiguration;
-    private ActivityMainBinding binding;
+    private ActivityStudentBinding binding;
     private ExecutorService executorService;
+    Fragment fragment;
+    DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityStudentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
 
-        setSupportActionBar(binding.appBarMain.toolbar);
+        //setSupportActionBar(binding.appBarMain.toolbar);
         /*binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -41,12 +46,12 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });*/
-        DrawerLayout drawer = binding.drawerLayout;
+        drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.homeFragment, R.id.nav_stdMainPage)   //影響設定是返回建or Menu
+                R.id.homeFragment,R.id.nav_inputCourseCode,R.id.nav_EnterClass,R.id.nav_reviseStdData,R.id.nav_classTable)   //影響設定是返回建or Menu
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -66,5 +71,34 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.nav_inputCourseCode:
+            fragment = new InputCourseCodeFragment();
+            getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_inputCourseCode,fragment).commit();
+
+            case R.id.nav_EnterClass:
+                fragment = new EnterClassFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_EnterClass,fragment).commit();
+
+            case R.id.nav_classTable:
+                fragment = new ClassTableFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_classTable,fragment).commit();
+
+            case R.id.nav_reviseStdData:
+                fragment = new ReviseStdDataFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_reviseStdData,fragment).commit();
+        }
+
+        drawer.closeDrawer(GravityCompat.START);
+
+        return true;
     }
 }

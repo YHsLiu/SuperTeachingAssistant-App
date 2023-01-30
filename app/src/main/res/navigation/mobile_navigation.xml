@@ -6,25 +6,6 @@
     app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/nav_stdMainPage"
-        android:name="abc.project.projectcheckinapp.ui.Student.StudentMainPageFragment"
-        android:label="@string/menu_stdMainPage"
-        tools:layout="@layout/fragment_studentmainpage" >
-        <action
-            android:id="@+id/action_nav_stdMainPage_to_classTableFragment"
-            app:destination="@id/nav_classTable" />
-        <action
-            android:id="@+id/action_nav_stdMainPage_to_nav_EnterClass"
-            app:destination="@id/nav_EnterClass" />
-        <action
-            android:id="@+id/action_nav_stdMainPage_to_reviseStdDataFragment"
-            app:destination="@id/nav_reviseStdData" />
-        <action
-            android:id="@+id/action_nav_stdMainPage_to_inputCourseCodeFragment"
-            app:destination="@id/nav_inputCourseCode" />
-    </fragment>
-
-    <fragment
         android:id="@+id/nav_EnterClass"
         android:name="abc.project.projectcheckinapp.ui.Student.EnterClassFragment"
         android:label="@string/menu_EnterClass"
@@ -69,8 +50,17 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_nav_stdMainPage"
-            app:destination="@id/nav_stdMainPage" />
+            android:id="@+id/action_homeFragment_to_nav_classTable"
+            app:destination="@id/nav_classTable" />
+        <action
+            android:id="@+id/action_homeFragment_to_nav_EnterClass"
+            app:destination="@id/nav_EnterClass" />
+        <action
+            android:id="@+id/action_homeFragment_to_nav_reviseStdData"
+            app:destination="@id/nav_reviseStdData" />
+        <action
+            android:id="@+id/action_homeFragment_to_nav_inputCourseCode"
+            app:destination="@id/nav_inputCourseCode" />
     </fragment>
 
 </navigation>
