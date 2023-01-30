@@ -47,11 +47,9 @@
         android:id="@+id/textView20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="32dp"
         android:text="@string/Revise_name"
-        app:layout_constraintEnd_toStartOf="@+id/txt_TCHrevise_name"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textView19"
+        app:layout_constraintEnd_toEndOf="@+id/textView19"
         app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
     <TextView
@@ -99,7 +97,7 @@
         android:layout_marginTop="60dp"
         android:text="@string/Revise_TCHacc"
         app:layout_constraintEnd_toStartOf="@+id/txt_TCHrevise_TCHacc"
-        app:layout_constraintHorizontal_bias="0.564"
+        app:layout_constraintHorizontal_bias="0.23"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_TCHrevise" />
 
