@@ -29,6 +29,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.databinding.FragmentLotteryBinding;
 import okhttp3.MediaType;
@@ -153,6 +154,7 @@ public class LotteryFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentLotteryBinding.inflate(inflater,container,false);
         preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
+        executor = Executors.newSingleThreadExecutor();
         binding.btnTec3Act.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
