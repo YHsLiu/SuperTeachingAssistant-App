@@ -36,12 +36,13 @@
             android:layout_width="150dp"
             android:layout_height="230dp"
             android:layout_marginStart="32dp"
-            android:layout_marginBottom="44dp"
             android:src="@mipmap/btn_stulist"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_record"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.057"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.74" />
 
         <ImageView
             android:id="@+id/btn_record"
@@ -62,7 +63,8 @@
             app:layout_constraintBottom_toTopOf="@+id/btn_lottery"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.060000002" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

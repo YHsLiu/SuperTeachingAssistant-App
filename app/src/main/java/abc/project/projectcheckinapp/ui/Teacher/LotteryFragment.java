@@ -78,7 +78,8 @@ public class LotteryFragment extends Fragment {
                         JSONObject packet = new JSONObject();
                         // 在點名的地方要設Boolean(rollCall) & date 來check有無點名與點名紀錄
                         // Boolean rollCall = preferences.getBoolean("rollCall",false);
-                        String date = LPreferences.getString("date","");
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+                        String date = formatter.format(new Date());
                         int cid = preferences.getInt("cid",0);
                         try {
                             packet.put("type",1);
@@ -88,6 +89,7 @@ public class LotteryFragment extends Fragment {
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
+                        Log.w("api","下一位 傳送資訊:"+packet);
                         RequestBody body = RequestBody.create(packet.toString(),mediaType);
                         Request request;
                         request = new Request.Builder()
