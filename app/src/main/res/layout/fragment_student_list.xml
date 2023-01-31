@@ -18,13 +18,13 @@
             android:orientation="horizontal">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="600sp"
+                android:layout_width="550sp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
                 <EditText
                     android:id="@+id/txt_tecL1_select"
-                    android:layout_width="276dp"
+                    android:layout_width="260dp"
                     android:layout_height="46dp"
                     android:layout_weight="1"
                     android:autofillHints="@string/tecStuList_inputId"
@@ -48,6 +48,7 @@
                     android:text="@string/tecStuList_select"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>

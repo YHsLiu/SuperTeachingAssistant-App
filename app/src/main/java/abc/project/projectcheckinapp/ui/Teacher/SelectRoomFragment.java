@@ -128,7 +128,7 @@ public class SelectRoomFragment extends Fragment {
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(packet.toString(),mediaType);
         Request request= new Request.Builder()
-                .url("http://192.168.1.162:8864/api/list/classroom")
+                .url("http://20.2.232.79:8864/api/list/classroom")
                 .post(body)
                 .build();
         SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);

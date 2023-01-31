@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentStdRecordBinding;
 import abc.project.projectcheckinapp.rawData.AdapterRecord;
 import okhttp3.MediaType;
@@ -60,16 +63,18 @@ public class StdRecordFragment extends Fragment {
             JSONArray stuRrcord;
             db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
             // semester紀錄
-            db.execSQL("drop table if exists " + cid + "_record_student;");
-            db.execSQL("create table " + cid + "_record_student(sid int,rc_date text);");
+            db.execSQL("drop table if exists record_student_"+cid+";");
+            db.execSQL("create table record_student_"+cid+"(sid int,rc_date text);");
             try { stuRrcord = new JSONArray(bundle.getString("list"));
                 for (int i =0; i<stuRrcord.length(); i++) {
                     JSONObject recordInfo = stuRrcord.getJSONObject(i);
-                    db.execSQL("insert into "+cid+"_record_student values (?,?);",
+                    db.execSQL("insert into record_student_"+cid+" values (?,?);",
                             new Object[] { recordInfo.getInt("sid"),
                                     recordInfo.getString("日期")});  }
             } catch (JSONException e) {  throw new RuntimeException(e);   }
-            db.close();
+            adapter = new AdapterRecord(db,cid,sid);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
     };
     public static StdRecordFragment newInstance(String param1, String param2) {
@@ -94,8 +99,9 @@ public class StdRecordFragment extends Fragment {
         cid = preferences.getInt("cid",0);
         sid = preferences.getInt("sid",0);
         recyclerView = binding.recyclerView;
+        executor = Executors.newSingleThreadExecutor();
 
-        /*binding.btnStdRecord.setOnClickListener(new View.OnClickListener() {
+        binding.btnStdRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaType mediaType = MediaType.parse("application/json");
@@ -106,23 +112,31 @@ public class StdRecordFragment extends Fragment {
                     packet.put("status", 11);
                     data.put("cid", cid);
                     data.put("sid", sid);
+                    packet.put("data",data);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
                 RequestBody body = RequestBody.create(packet.toString(), mediaType);
                 Request request = new Request.Builder()
-                        .url("http://192.168.255.67:8864/api/record/student")
+                        .url("http://20.2.232.79:8864/api/record/student")
                         .post(body)
                         .build();
                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
                 executor.execute(apiCaller);
-                db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
-                adapter = new AdapterRecord(db,cid,sid);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                db.close();
             }
-        });*/
+        });
+
+        binding.imageRecoRollcall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                navController.navigate(R.id.action_nav_stdRecord_to_nav_stdRollCall);
+
+            }
+        });
+
+
+
         return binding.getRoot();
     }
     class SimpleAPIWorker implements Runnable {
@@ -136,10 +150,11 @@ public class StdRecordFragment extends Fragment {
         public void run() {
             try {
                 Response response = client.newCall(request).execute();
-                JSONObject result = new JSONObject(response.body().string());
+                String fromAPI = response.body().string();
+                Log.e("fromapi","fromapi:"+fromAPI);
+                JSONObject result = new JSONObject(fromAPI);
                 Message m = RecordHandler.obtainMessage();
                 Bundle bundle = new Bundle();
-                bundle.putInt("type", result.getInt("type"));
                 bundle.putString("list", result.getString("list"));
                 m.setData(bundle);
                 RecordHandler.sendMessage(m);

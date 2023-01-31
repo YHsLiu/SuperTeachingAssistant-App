@@ -2,6 +2,7 @@ package abc.project.projectcheckinapp.rawData;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.ViewHolder
         this.cid = cid;
         result = new ArrayList<>();
         Cursor cursor = db.rawQuery("select distinct rc_date from record_semester_"+cid+";",null);
+        Log.w("adapter","cursor:"+cursor);
         if (cursor.getCount() > 0){
             cursor.moveToFirst();
             do {

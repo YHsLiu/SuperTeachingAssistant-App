@@ -2,7 +2,10 @@ package abc.project.projectcheckinapp.ui.test;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -26,6 +29,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import abc.project.projectcheckinapp.R;
+import abc.project.projectcheckinapp.StudentActivity;
+import abc.project.projectcheckinapp.WelcomeActivity;
 import abc.project.projectcheckinapp.databinding.ActivitySecondBinding;
 import abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment;
 import abc.project.projectcheckinapp.ui.Teacher.NewClassFragment;
@@ -51,13 +56,13 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         setContentView(binding.getRoot());
 
         //setSupportActionBar(binding.appBarSecond.toolbar);
-        binding.appBarSecond.fab.setOnClickListener(new View.OnClickListener() {
+        /*binding.appBarSecond.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
@@ -76,6 +81,35 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.action_reportQA:
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("mailto:service@gmail.com"));
+                startActivity(intent);
+                break;
+
+            case R.id.action_logout:
+                Intent intent2 = new Intent(TeacherActivity.this, WelcomeActivity.class);
+                preferences = getSharedPreferences("userInfo",MODE_PRIVATE);
+                contextEditor = preferences.edit();
+                contextEditor.putInt("sid",0);
+                contextEditor.putInt("tid",0);
+                contextEditor.putInt("cid",0);
+                contextEditor.putBoolean("isRollCall",false);
+                contextEditor.putBoolean("isLogin",false);
+                contextEditor.apply();
+                SQLiteDatabase db = openOrCreateDatabase("allList",MODE_PRIVATE,null);
+                db.close();
+                startActivity(intent2);
+
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

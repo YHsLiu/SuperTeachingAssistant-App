@@ -71,7 +71,7 @@ public class RecordFragment extends Fragment {
                       for (int i =0; i<stuInfos.length(); i++) {
                         JSONObject stuInfo = stuInfos.getJSONObject(i);
                         db.execSQL("insert into record_semester_"+cid+" values (?,?,?);",
-                                new Object[] { stuInfo.getInt("日期"),
+                                new Object[] { stuInfo.getString("日期"),
                                         stuInfo.getString("學號"),
                                         stuInfo.getString("學生姓名")});  }
                     db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
@@ -138,7 +138,7 @@ public class RecordFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Request request = new Request.Builder()
-                        .url("http://192.168.255.62:8864/api/record/semester")
+                        .url("http://20.2.232.79:8864/api/record/semester")
                         .post(body)
                         .build();
                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
@@ -150,7 +150,7 @@ public class RecordFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Request request = new Request.Builder()
-                        .url("http://192.168.255.62:8864/api/record/today")
+                        .url("http://20.2.232.79:8864/api/record/today")
                         .post(body)
                         .build();
                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);

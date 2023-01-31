@@ -66,6 +66,7 @@ public class NewClassFragment extends Fragment {
                         preferences = getActivity().getSharedPreferences("userInfo",Context.MODE_PRIVATE);
                         contextEditor = preferences.edit();
                         contextEditor.putInt("cid",bundle.getInt("cid")).apply();
+                        contextEditor.putString("classname",binding.txtTecNName.getText().toString()).apply();
                         navController.navigate(R.id.action_nav_tec_newclass_to_nav_tec_enter);
                     }
                 });
@@ -134,7 +135,7 @@ public class NewClassFragment extends Fragment {
                 RequestBody body = RequestBody.create(packet.toString(),mediaType);
                 Log.e("apitest",packet.toString());
                 Request request= new Request.Builder()
-                        .url("http://192.168.255.62:8864/api/createclass")
+                        .url("http://20.2.232.79:8864/api/createclass")
                         .post(body)
                         .build();
                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);

@@ -154,7 +154,7 @@ public class RollCallFragment extends Fragment {
             public void onClick(View v) {
                 if (flag == 0) {
                     Request request = new Request.Builder()
-                            .url("http://192.168.255.62:8864/api/rollcall/teacher/open")
+                            .url("http://20.2.232.79:8864/api/rollcall/teacher/open")
                             .post(body)
                             .build();
                     SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
@@ -166,7 +166,7 @@ public class RollCallFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Request request = new Request.Builder()
-                                        .url("http://192.168.255.62:8864/api/rollcall/teacher/open/again")
+                                        .url("http://20.2.232.79:8864/api/rollcall/teacher/open/again")
                                         .post(body)
                                         .build();
                                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
@@ -183,39 +183,40 @@ public class RollCallFragment extends Fragment {
                 } else {
                     Log.e("app","app 送出資訊:" +body);
                     Request request = new Request.Builder()
-                            .url("http://192.168.255.62:8864/api/rollcall/teacher/close")
+                            .url("http://20.2.232.79:8864/api/rollcall/teacher/close")
                             .post(body)
                             .build();
                     SimpleAPIWorker2 apiCaller2 = new SimpleAPIWorker2(request);
                     executor.execute(apiCaller2);
                     recyclerView = binding.RecyclerStuAbsence;
-                    clickListener = new ClickListener() {
-                        @Override
-                        public void onClickForAllStuList(int position, int sid, String stuname, String studepart, String stuid) {  }
-                        @Override
-                        public void onClickForClassroom(int position, int cid,String classname) {  }
-                        @Override
-                        public void onClickForNoRcStuList(int position, int sid) {
-                            JSONObject packet1 = new JSONObject();
-                            JSONObject data1 = new JSONObject();
-                            try {
-                                data1.put("cid", cid);
-                                data1.put("sid",sid);
-                                data1.put("date", date);
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-                            Request request = new Request.Builder()
-                                .url("http://192.168.255.62:8864/api/rollcall/manual/call")
-                                .post(RequestBody.create(packet1.toString(), mediaType))
-                                .build();
-                            SimpleAPIWorker3 apiCaller = new SimpleAPIWorker3(request);
-                            executor.execute(apiCaller);
-                        }
-                    };
+
                 }
             }
         });
+        clickListener = new ClickListener() {
+            @Override
+            public void onClickForAllStuList(int position, int sid, String stuname, String studepart, String stuid) {  }
+            @Override
+            public void onClickForClassroom(int position, int cid,String classname) {  }
+            @Override
+            public void onClickForNoRcStuList(int position, int sid) {
+                JSONObject data1 = new JSONObject();
+                try {
+                    data1.put("cid", cid);
+                    data1.put("sid",sid);
+                    data1.put("date", date);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                Log.w("api","onClickForNoRcStuList  送出資訊:"+data1);
+                Request request = new Request.Builder()
+                        .url("http://20.2.232.79:8864/api/rollcall/manual/call")
+                        .post(RequestBody.create(data1.toString(), mediaType))
+                        .build();
+                SimpleAPIWorker3 apiCaller = new SimpleAPIWorker3(request);
+                executor.execute(apiCaller);
+            }
+        };
         return binding.getRoot();
     }
 

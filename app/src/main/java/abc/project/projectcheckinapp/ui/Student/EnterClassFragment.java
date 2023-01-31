@@ -117,7 +117,7 @@ public class EnterClassFragment extends Fragment {
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(packet.toString(),mediaType);
         Request request= new Request.Builder()
-                .url("http://192.168.255.62:8864/api/list/student/classroom")
+                .url("http://20.2.232.79:8864/api/list/student/classroom")
                 .post(body)
                 .build();
         EnterClassAPIWorker apiCaller = new EnterClassAPIWorker(request);
@@ -132,7 +132,7 @@ public class EnterClassFragment extends Fragment {
                 contextEditor.putInt("cid",cid);
                 contextEditor.putString("classname",classname);
                 contextEditor.apply();
-                navController.navigate(R.id.nav_stdRollCall);  // 你看要連哪個action
+                navController.navigate(R.id.nav_stdRollCall);
             }
             @Override
             public void onClickForNoRcStuList(int position, int sid) {   }

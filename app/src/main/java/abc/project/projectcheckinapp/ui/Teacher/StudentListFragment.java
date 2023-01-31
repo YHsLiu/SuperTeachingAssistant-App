@@ -120,7 +120,7 @@ public class StudentListFragment extends Fragment {
                         }
                         RequestBody body1 = RequestBody.create(packet1.toString(),mediaType);
                         Request request1 = new Request.Builder()
-                                .url("http://192.168.255.62:8864/api/rollcall/manual/check")
+                                .url("http://20.2.232.79:8864/api/rollcall/manual/check")
                                 .post(body1).build();
                         ManualCheckAPIWorker manualAPIWorker = new ManualCheckAPIWorker(request1);
                         executor.execute(manualAPIWorker);
@@ -175,7 +175,7 @@ public class StudentListFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         // 設定click後的動作
                         Request request = new Request.Builder()
-                                .url("http://192.168.255.62:8864/api/rollcall/manual/call")
+                                .url("http://20.2.232.79:8864/api/rollcall/manual/call")
                                 .post(body2).build();
                         ManualRollCallAPIWorker manualAPIWorker = new ManualRollCallAPIWorker(request);
                         executor.execute(manualAPIWorker);
@@ -187,7 +187,7 @@ public class StudentListFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         // 設定click後的動作
                         Request request = new Request.Builder()
-                                .url("http://192.168.255.62:8864/api/rollcall/manual/cancel")
+                                .url("http://20.2.232.79:8864/api/rollcall/manual/cancel")
                                 .post(body2).build();
                         ManualRollCallAPIWorker manualAPIWorker = new ManualRollCallAPIWorker(request);
                         executor.execute(manualAPIWorker);
@@ -219,7 +219,7 @@ public class StudentListFragment extends Fragment {
         mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(packet.toString(),mediaType);
         Request request = new Request.Builder()
-                .url("http://192.168.255.62:8864/api/list/allStu")
+                .url("http://20.2.232.79:8864/api/list/allStu")
                 .post(body).build();
         SimpleAPIWorker simpleAPIWorker = new SimpleAPIWorker(request);
         executor.execute(simpleAPIWorker);

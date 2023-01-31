@@ -3,7 +3,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">Check In App</string>
+    <string name="nav_header_subtitle">超級助教 App</string>
     <string name="nav_header_desc">歡迎回來!</string>
     <string name="action_settings">Settings</string>
 
@@ -105,8 +105,9 @@
     <string name="stdInputCode_continue">Continue</string>
     <string name="stdInputCode_errorMesg">查無此課程</string>
 
-    <string name="stdrollcall_text1">*請先確認老師是否已開放點名*</string>
+    <string name="stdrollcall_text1">請先確認老師是否已開放點名</string>
     <string name="stdrollcall_check">簽到</string>
+    <string name="stdrecord_update">更新</string>
 
     <string name="Revise_STDtitle">修改學生資料</string>
     <string name="Revise_TCHtitle">修改教師資料</string>
@@ -123,5 +124,6 @@
     <string name="Std_mainpage_inputcode">輸入課程代碼</string>
     <string name="Std_mainpage_classtable">我的課表</string>
     <string name="Std_mainpage_revisedata">修改個人設定</string>
+    <string name="Std_input_code">新增失敗 請確認代碼是否正確</string>
 
 </resources>

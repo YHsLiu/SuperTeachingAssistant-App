@@ -1,6 +1,8 @@
 package abc.project.projectcheckinapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,8 +20,11 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.concurrent.ExecutorService;
 import abc.project.projectcheckinapp.databinding.ActivityStudentBinding;
+import abc.project.projectcheckinapp.rawData.ClickListener;
 import abc.project.projectcheckinapp.ui.Student.ClassTableFragment;
 import abc.project.projectcheckinapp.ui.Student.EnterClassFragment;
 import abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment;
@@ -32,6 +37,8 @@ public class StudentActivity extends AppCompatActivity implements NavigationView
     private ExecutorService executorService;
     Fragment fragment;
     DrawerLayout drawer;
+    SharedPreferences preferences;
+    SharedPreferences.Editor contextEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +46,7 @@ public class StudentActivity extends AppCompatActivity implements NavigationView
 
         binding = ActivityStudentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-
-        //setSupportActionBar(binding.appBarMain.toolbar);
+              //setSupportActionBar(binding.appBarMain.toolbar);
         /*binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,6 +82,22 @@ public class StudentActivity extends AppCompatActivity implements NavigationView
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse("mailto:service@gmail.com"));
                 startActivity(intent);
+                break;
+
+            case R.id.action_logout:
+                Intent intent2 = new Intent(StudentActivity.this,WelcomeActivity.class);
+                preferences = getSharedPreferences("userInfo",MODE_PRIVATE);
+                contextEditor = preferences.edit();
+                contextEditor.putInt("sid",0);
+                contextEditor.putInt("tid",0);
+                contextEditor.putInt("cid",0);
+                contextEditor.putBoolean("isRollCall",false);
+                contextEditor.putBoolean("isLogin",false);
+                contextEditor.apply();
+                SQLiteDatabase db = openOrCreateDatabase("allList",MODE_PRIVATE,null);
+                db.close();
+                startActivity(intent2);
+
                 break;
         }
 

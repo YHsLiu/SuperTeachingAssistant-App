@@ -26,13 +26,13 @@
 
             <TextView
                 android:id="@+id/textView39"
-                android:layout_width="40sp"
+                android:layout_width="20sp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <EditText
                 android:id="@+id/txt_stuS_select"
-                android:layout_width="300sp"
+                android:layout_width="280sp"
                 android:layout_height="wrap_content"
                 android:autofillHints="@string/tecSelectRoom_txt_select" />
 
