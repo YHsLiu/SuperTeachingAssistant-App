@@ -74,7 +74,7 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.ViewHolder
         if (cursor.getCount() > 0){
             cursor.moveToFirst();
             do {
-                dateR = cursor.getString(0);
+                dateR = cursor.getString(1);
                 Cursor cursor1 = db.rawQuery("select count(*) from record_student_"+cid+" where sid="+sid+" and rc_date="+dateR+";", null);
                 String isAttend = "";
                 if (cursor1.getCount()==1){
