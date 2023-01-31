@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.util.concurrent.ExecutorService;
 
+import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentStdRecordBinding;
 import abc.project.projectcheckinapp.rawData.AdapterRecord;
 import okhttp3.MediaType;
@@ -123,6 +124,18 @@ public class StdRecordFragment extends Fragment {
                 db.close();
             }
         });
+
+        binding.imageRecoRollcall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                navController.navigate(R.id.action_nav_stdRecord_to_nav_stdRollCall);
+
+            }
+        });
+
+
+
         return binding.getRoot();
     }
     class SimpleAPIWorker implements Runnable {

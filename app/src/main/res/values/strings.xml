@@ -123,5 +123,6 @@
     <string name="Std_mainpage_inputcode">輸入課程代碼</string>
     <string name="Std_mainpage_classtable">我的課表</string>
     <string name="Std_mainpage_revisedata">修改個人設定</string>
+    <string name="Std_input_code">新增失敗 請確認代碼是否正確</string>
 
 </resources>

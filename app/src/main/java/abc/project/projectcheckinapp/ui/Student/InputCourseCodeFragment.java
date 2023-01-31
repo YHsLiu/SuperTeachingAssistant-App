@@ -27,7 +27,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentInputcoursecodeBinding;
@@ -61,7 +63,7 @@ public class InputCourseCodeFragment extends Fragment {
                 builder.setPositiveButton("進入課程", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {                          //跳轉至課程頁面
-                        navController.navigate(R.id.action_homeFragment_to_nav_inputCourseCode);
+                        navController.navigate(R.id.action_nav_inputCourseCode_to_nav_EnterClass);
                     }
                 });
                 builder.setNeutralButton("關閉", new DialogInterface.OnClickListener() {
@@ -86,7 +88,7 @@ public class InputCourseCodeFragment extends Fragment {
         binding = FragmentInputcoursecodeBinding.inflate(inflater, container, false);
         //View root = binding.getRoot();
         preferences = getActivity().getSharedPreferences("userInfo",Context.MODE_PRIVATE);
-
+        executor = Executors.newSingleThreadExecutor();
         //處理Continue按鈕
         binding.btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,12 +101,13 @@ public class InputCourseCodeFragment extends Fragment {
                     packet.put("status",15);
                     packet.put("mesg","課程代碼封包傳送中");
                     data.put("code",binding.txtStuACord.getText().toString());
+                    data.put("sid", preferences.getInt("sid",0));
                     packet.put("data",data);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-                MediaType mediaType = MediaType.parse("application/json");
-                RequestBody rb = RequestBody.create(packet.toString(),mediaType);
+                MediaType mtyp = MediaType.parse("application/json");
+                RequestBody rb = RequestBody.create(packet.toString(),mtyp);
                 Request request = new Request.Builder()
                         .url("http://192.168.255.67:8864/api/project/InputClassCode")
                         .post(rb)

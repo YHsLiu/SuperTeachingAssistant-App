@@ -3,6 +3,7 @@ package abc.project.projectcheckinapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -38,11 +39,11 @@ import okhttp3.Response;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    ActivityRegistrationBinding bindingR;
+    private ActivityRegistrationBinding bindingR;
     ExecutorService executor;
     Intent IntentR;      //註冊後跳轉頁面
     String url=null;
-    SharedPreferences preferences;
+    SharedPreferences preferences, preferences2;
     SharedPreferences.Editor contextEditor;
 
     Handler regResultHandler = new Handler(Looper.getMainLooper()) {
@@ -53,12 +54,21 @@ public class RegistrationActivity extends AppCompatActivity {
             if( bundle.getInt("status")== 11) {
                 Toast.makeText(RegistrationActivity.this, "註冊成功", Toast.LENGTH_SHORT).show();
                 //判斷是老師or學生 決定跳轉頁
-                if(bindingR.radioRegStd.isChecked()){
+                IntentR = new Intent(RegistrationActivity.this, LoginActivity.class);
+                startActivity(IntentR);
+
+
+                //*****需要寫sharepreference 後再判斷身分跳轉*****
+                /*if(bindingR.radioRegStd.isChecked()){
                     IntentR = new Intent(RegistrationActivity.this, StudentActivity.class);
+                    startActivity(IntentR);
                 }
                 if(bindingR.radioRegTch.isChecked()){
                     IntentR = new Intent(RegistrationActivity.this,TeacherActivity.class);
-                }
+                    startActivity(IntentR);
+                }*/
+
+
 
             } else {
                 Toast.makeText(RegistrationActivity.this, bundle.getString("mesg"), Toast.LENGTH_LONG).show();
@@ -75,10 +85,12 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(bindingR.getRoot());
         preferences = this.getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
+        // = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        //contextEditor = preferences2.edit();
         executor = Executors.newSingleThreadExecutor();
 
         // spinner 設定
-        SQLiteDatabase db = openOrCreateDatabase("UniversityInfo",MODE_PRIVATE,null);
+        SQLiteDatabase db = openOrCreateDatabase("UniversityInfo2",MODE_PRIVATE,null);
         Spinner spinner = bindingR.spinnerRegSchool;
         UniversityArray ua = new UniversityArray();
 
@@ -112,7 +124,7 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton StdOrTch = (RadioButton)  findViewById(checkedId);
-                Toast.makeText(RegistrationActivity.this, "你選取的身分是: " + StdOrTch.getText() , Toast.LENGTH_SHORT).show();
+                //Toast.makeText(RegistrationActivity.this, "你選取的身分是: " + StdOrTch.getText() , Toast.LENGTH_SHORT).show();
 
             }
         });

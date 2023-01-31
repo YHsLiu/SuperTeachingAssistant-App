@@ -187,6 +187,15 @@ public class StdRollCallFragment extends Fragment {
             }
         });
 
+        binding.imageRcllRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                navController.navigate(R.id.action_nav_stdRollCall_to_nav_stdRecord);
+            }
+        });
+
+
         return binding.getRoot();
     }
 

@@ -33,17 +33,29 @@
         android:id="@+id/nav_inputCourseCode"
         android:name="abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment"
         android:label="InputCourseCodeFragment"
-        tools:layout="@layout/fragment_inputcoursecode"/>
+        tools:layout="@layout/fragment_inputcoursecode">
+        <action
+            android:id="@+id/action_nav_inputCourseCode_to_nav_EnterClass"
+            app:destination="@id/nav_EnterClass" />
+    </fragment>
     <fragment
         android:id="@+id/nav_stdRollCall"
         android:name="abc.project.projectcheckinapp.ui.Student.StdRollCallFragment"
         android:label="fragment_std_roll_call"
-        tools:layout="@layout/fragment_std_roll_call" />
+        tools:layout="@layout/fragment_std_roll_call" >
+        <action
+            android:id="@+id/action_nav_stdRollCall_to_nav_stdRecord"
+            app:destination="@id/nav_stdRecord" />
+    </fragment>
     <fragment
         android:id="@+id/nav_stdRecord"
         android:name="abc.project.projectcheckinapp.ui.Student.StdRecordFragment"
         android:label="fragment_std_record"
-        tools:layout="@layout/fragment_std_record" />
+        tools:layout="@layout/fragment_std_record" >
+        <action
+            android:id="@+id/action_nav_stdRecord_to_nav_stdRollCall"
+            app:destination="@id/nav_stdRollCall" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="abc.project.projectcheckinapp.ui.home.HomeFragment"

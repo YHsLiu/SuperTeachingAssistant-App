@@ -9,8 +9,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="413dp"
+        android:layout_height="721dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,9 +30,10 @@
             android:layout_height="198dp">
 
             <ImageView
-                android:id="@+id/image_rcll_rollcall"
-                android:layout_width="204dp"
-                android:layout_height="84dp"
+                android:id="@+id/image_reco_rollcall"
+                android:layout_width="205dp"
+                android:layout_height="97dp"
+                android:layout_marginBottom="48dp"
                 android:foregroundGravity="center"
                 android:padding="0dp"
                 android:paddingStart="0dp"
@@ -41,21 +42,22 @@
                 android:scaleType="centerInside"
                 android:src="@drawable/rollcall"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/image_rcll_record"
+                app:layout_constraintEnd_toStartOf="@+id/image_reco_record"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
-                android:id="@+id/image_rcll_record"
-                android:layout_width="184dp"
-                android:layout_height="85dp"
+                android:id="@+id/image_reco_record"
+                android:layout_width="199dp"
+                android:layout_height="99dp"
                 android:padding="0dp"
                 android:src="@drawable/record"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/image_rcll_rollcall" />
+                app:layout_constraintTop_toTopOf="@+id/image_reco_rollcall"
+                app:layout_constraintVertical_bias="0.0" />
 
             <Button
                 android:id="@+id/btnStdRecord"
