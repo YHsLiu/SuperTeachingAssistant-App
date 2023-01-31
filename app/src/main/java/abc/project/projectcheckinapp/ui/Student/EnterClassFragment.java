@@ -117,7 +117,7 @@ public class EnterClassFragment extends Fragment {
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(packet.toString(),mediaType);
         Request request= new Request.Builder()
-                .url("http://192.168.255.62:8864/api/list/student/classroom")
+                .url("http://20.2.232.79:8864/api/list/student/classroom")
                 .post(body)
                 .build();
         EnterClassAPIWorker apiCaller = new EnterClassAPIWorker(request);

@@ -73,6 +73,7 @@ public class StdRollCallFragment extends Fragment {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle2 = msg.getData();
+            Log.w("EnterCheckRollCallHandler","EnterCheckRollCallHandler status: "+bundle2.getInt("status"));
             if(bundle2.getInt("status")==12) {
                 binding.btnStu1Checkin.setEnabled(true);
                 binding.btnStu1Checkin.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +106,7 @@ public class StdRollCallFragment extends Fragment {
                         RequestBody rb = RequestBody.create(packet.toString(),mediaType);
                         Log.e("packet", String.valueOf(packet));
                         Request request = new Request.Builder()
-                                .url("http://192.168.255.67:8864/api/project/StdRollCall")
+                                .url("http://20.2.232.79:8864/api/project/StdRollCall")
                                 .post(rb)
                                 .build();
                         simpleAPIworker api = new simpleAPIworker(request);
@@ -177,7 +178,7 @@ public class StdRollCallFragment extends Fragment {
         MediaType mtyp = MediaType.parse("application/json");
         RequestBody rb = RequestBody.create(packet1.toString(),mtyp);
         Request request = new Request.Builder()
-                .url("http://192.168.255.67:8864/api/project/StdEnterRollCall")
+                .url("http://20.2.232.79:8864/api/project/StdEnterRollCall")
                 .post(rb)
                 .build();
         EnterCheckAPI enterCheckAPIAPI = new EnterCheckAPI(request);

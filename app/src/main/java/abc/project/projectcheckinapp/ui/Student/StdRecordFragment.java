@@ -118,7 +118,7 @@ public class StdRecordFragment extends Fragment {
                 }
                 RequestBody body = RequestBody.create(packet.toString(), mediaType);
                 Request request = new Request.Builder()
-                        .url("http://192.168.255.67:8864/api/record/student")
+                        .url("http://20.2.232.79:8864/api/record/student")
                         .post(body)
                         .build();
                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);

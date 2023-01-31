@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             } else {
-                Toast.makeText(LoginActivity.this, ""+bundle.getInt("status"), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(LoginActivity.this, ""+bundle.getInt("status"), Toast.LENGTH_SHORT).show();
                 Toast.makeText(LoginActivity.this, "無此帳號，請確認資料是否正確或建立帳號", Toast.LENGTH_LONG).show();
             }
         }
@@ -152,12 +152,12 @@ public class LoginActivity extends AppCompatActivity {
                 Request request;
                 if (binding.radioLoginStudent.isChecked()){
                     request = new Request.Builder()
-                            .url("http://192.168.255.62:8864/api/member/login/student")
+                            .url("http://20.2.232.79:8864/api/member/login/student")
                             .post(body)
                             .build();
                 } else {
                     request = new Request.Builder()
-                            .url("http://192.168.255.62:8864/api/member/login/teacher")
+                            .url("http://20.2.232.79:8864/api/member/login/teacher")
                             .post(body)
                             .build();
                 }

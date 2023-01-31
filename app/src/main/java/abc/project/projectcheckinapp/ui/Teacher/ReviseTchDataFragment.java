@@ -115,7 +115,7 @@ public class ReviseTchDataFragment extends Fragment {
         }
         RequestBody rb = RequestBody.create(packet.toString(), MediaType.parse("application/json"));
         Request request = new Request.Builder()
-                .url("http://192.168.255.67:8864/api/project/GetData/teacher")
+                .url("http://20.2.232.79:8864/api/project/GetData/teacher")
                 .post(rb)
                 .build();
         GetTchDataAPI getTchDataAPI = new GetTchDataAPI(request);
@@ -143,7 +143,7 @@ public class ReviseTchDataFragment extends Fragment {
 
                 RequestBody rb = RequestBody.create(revPacket.toString(),MediaType.parse("application/json"));
                 Request request = new Request.Builder()
-                        .url("http://192.168.255.67:8864/api/project/UpdataData/teacher")
+                        .url("http://20.2.232.79:8864/api/project/UpdataData/teacher")
                         .post(rb)
                         .build();
                 UpdateTchDataAPI updateTchDataAPI = new UpdateTchDataAPI(request);

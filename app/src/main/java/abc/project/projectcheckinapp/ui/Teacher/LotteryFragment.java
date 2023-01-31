@@ -93,7 +93,7 @@ public class LotteryFragment extends Fragment {
                         RequestBody body = RequestBody.create(packet.toString(),mediaType);
                         Request request;
                         request = new Request.Builder()
-                                .url("http://192.168.255.62:8864/api/lottery/bingo")
+                                .url("http://20.2.232.79:8864/api/lottery/bingo")
                                 .post(body)
                                 .build();
                         SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
@@ -109,7 +109,7 @@ public class LotteryFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Request request = new Request.Builder()
-                                .url("http://192.168.255.62:8864/api/lottery/clear")
+                                .url("http://20.2.232.79:8864/api/lottery/clear")
                                 .post(body)
                                 .build();
                         ClearAPIWorker apiWorker = new ClearAPIWorker(request);
@@ -188,7 +188,7 @@ public class LotteryFragment extends Fragment {
                 RequestBody body = RequestBody.create(packet.toString(),mediaType);
                 Request request;
                 request = new Request.Builder()
-                        .url("http://192.168.255.62:8864/api/lottery/bingo")
+                        .url("http://20.2.232.79:8864/api/lottery/bingo")
                         .post(body)
                         .build();
                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);

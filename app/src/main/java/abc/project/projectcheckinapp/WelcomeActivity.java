@@ -30,14 +30,6 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-
-        binding.btnWelcomeToSTD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intent = new Intent(WelcomeActivity.this, StudentActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
 }

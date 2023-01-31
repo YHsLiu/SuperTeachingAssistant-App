@@ -58,11 +58,12 @@ public class InputCourseCodeFragment extends Fragment {
             editor = preferences.edit();
             if(bundle2.getInt("status")==16){
                 editor.putString("classname",bundle2.getString("mesg")).commit();           //課程名稱共用給其他Activity
-                editor.putString("cid",binding.txtStuACord.getText().toString());              //課程代碼cid共用
+
                 builder.setTitle("成功新增課程");
                 builder.setPositiveButton("進入課程", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {                          //跳轉至課程頁面
+                    public void onClick(DialogInterface dialog, int which) {//跳轉至課程頁面
+                        editor.putInt("cid",bundle2.getInt("cid",0)).apply();              //課程代碼cid共用
                         navController.navigate(R.id.action_nav_inputCourseCode_to_nav_EnterClass);
                     }
                 });
@@ -109,7 +110,7 @@ public class InputCourseCodeFragment extends Fragment {
                 MediaType mtyp = MediaType.parse("application/json");
                 RequestBody rb = RequestBody.create(packet.toString(),mtyp);
                 Request request = new Request.Builder()
-                        .url("http://192.168.255.67:8864/api/project/InputClassCode")
+                        .url("http://20.2.232.79:8864/api/project/InputClassCode")
                         .post(rb)
                         .build();
                 simpleAPIworker api = new simpleAPIworker(request);
@@ -156,6 +157,7 @@ public class InputCourseCodeFragment extends Fragment {
                 if(result.getInt("status")==16){                         //成功加入課程
                     bundle.putString("mesg",result.getString("mesg"));   //會抓出課程名稱
                     bundle.putInt("status",result.getInt("status"));
+                    bundle.putInt("cid",result.getInt("cid"));
                 }
                 else {
                     bundle.putString("mesg","查無此課程");

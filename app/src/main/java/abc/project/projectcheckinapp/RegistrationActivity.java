@@ -134,7 +134,7 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 JSONObject packet = new JSONObject();
-                String univer = spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString();  //spinner 選的大學內容
+                String univer = preferences.getString("univer","");  //spinner 選的大學內容
                 try {
                     packet.put("type", 1);
                     packet.put("status", 10);
@@ -147,10 +147,10 @@ public class RegistrationActivity extends AppCompatActivity {
                     data.put("email", bindingR.txtRegMail.getText().toString());
                     if(bindingR.radioRegStd.isChecked()){
                         data.put("department", bindingR.txtRegDepart.getText().toString());
-                        url = "http://192.168.255.67:8864/api/project/registration/student";
+                        url = "http://20.2.232.79:8864/api/project/registration/student";
                     }
                     if(bindingR.radioRegTch.isChecked()){
-                        url = "http://192.168.255.67:8864/api/project/registration/teacher";
+                        url = "http://20.2.232.79/api/project/registration/teacher";
                     }
                     packet.put("data", data);
                     Log.w("API格式", packet.toString(4));

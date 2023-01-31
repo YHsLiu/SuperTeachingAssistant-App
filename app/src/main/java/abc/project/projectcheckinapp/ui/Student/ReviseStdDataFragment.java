@@ -120,7 +120,7 @@ public class ReviseStdDataFragment extends Fragment {
         MediaType mtyp = MediaType.parse("application/json");
         RequestBody rb = RequestBody.create(packet.toString(),mtyp);
         Request request = new Request.Builder()
-                .url("http://192.168.255.67:8864/api/project/GetData/student")
+                .url("http://20.2.232.79:8864/api/project/GetData/student")
                 .post(rb)
                 .build();
         GetDataAPI getDataAPI = new GetDataAPI(request);
@@ -149,7 +149,7 @@ public class ReviseStdDataFragment extends Fragment {
 
                 RequestBody rb = RequestBody.create(revPacket.toString(),MediaType.parse("application/json"));
                 Request request = new Request.Builder()
-                        .url("http://192.168.255.67:8864/api/project/UpdataData/student")
+                        .url("http://20.2.232.79:8864/api/project/UpdataData/student")
                         .post(rb)
                         .build();
                 UpdateDataAPI updateDataAPI = new UpdateDataAPI(request);
