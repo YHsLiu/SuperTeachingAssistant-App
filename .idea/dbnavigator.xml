@@ -13,7 +13,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="9f7a7bc3-ed8a-4f84-837a-d0af38ad149b">
-      <console name="Connection" type="STANDARD" schema="" session="Main"><![CDATA[select * from allstu_5;]]></console>
+      <console name="Connection" type="STANDARD" schema="" session="Main" />
     </connection>
     <connection id="2348aaa6-3842-49d5-be13-1c4a248854b3">
       <console name="Connection 1" type="STANDARD" schema="" session="Main" />

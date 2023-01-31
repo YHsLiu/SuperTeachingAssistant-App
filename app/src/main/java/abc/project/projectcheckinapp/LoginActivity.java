@@ -157,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
                             .build();
                 } else {
                     request = new Request.Builder()
-                            .url("http://192.168.255.67:8864/api/member/login/teacher")
+                            .url("http://192.168.1.162:8864/api/member/login/teacher")
                             .post(body)
                             .build();
                 }

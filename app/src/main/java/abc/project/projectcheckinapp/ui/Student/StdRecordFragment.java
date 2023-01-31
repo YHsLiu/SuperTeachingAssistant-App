@@ -95,7 +95,7 @@ public class StdRecordFragment extends Fragment {
         sid = preferences.getInt("sid",0);
         recyclerView = binding.recyclerView;
 
-        binding.btnStdRecord.setOnClickListener(new View.OnClickListener() {
+        /*binding.btnStdRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaType mediaType = MediaType.parse("application/json");
@@ -122,7 +122,7 @@ public class StdRecordFragment extends Fragment {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 db.close();
             }
-        });
+        });*/
         return binding.getRoot();
     }
     class SimpleAPIWorker implements Runnable {
