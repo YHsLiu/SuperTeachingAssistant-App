@@ -85,11 +85,11 @@ public class LoginActivity extends AppCompatActivity {
 
         // spinner 設定
         spinner = binding.spinnerLoginSchool;
-        Boolean FirstTime = preferences.getBoolean("isFirstTime",true);
+        preferences.edit().putBoolean("isFirstTime",true).apply();
         UniversityArray ua = new UniversityArray();
         ArrayList< String > universityArray;
         SQLiteDatabase db = openOrCreateDatabase("UniversityInfo2",MODE_PRIVATE,null); //
-        if ( FirstTime ) {
+        if ( preferences.getBoolean("isFirstTime",true) ) {
             universityArray = ua.FirstTimeGetSpinner(getResources().openRawResource(R.raw.university),db);
             preferences.edit().putBoolean("isFirstTime",false).apply();
             db.close();
@@ -152,12 +152,12 @@ public class LoginActivity extends AppCompatActivity {
                 Request request;
                 if (binding.radioLoginStudent.isChecked()){
                     request = new Request.Builder()
-                            .url("http://192.168.255.67:8864/api/member/login/student")
+                            .url("http://192.168.255.62:8864/api/member/login/student")
                             .post(body)
                             .build();
                 } else {
                     request = new Request.Builder()
-                            .url("http://192.168.255.67:8864/api/member/login/teacher")
+                            .url("http://192.168.255.62:8864/api/member/login/teacher")
                             .post(body)
                             .build();
                 }

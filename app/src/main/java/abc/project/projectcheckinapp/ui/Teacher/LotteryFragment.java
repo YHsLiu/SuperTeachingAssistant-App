@@ -60,6 +60,7 @@ public class LotteryFragment extends Fragment {
             Bundle bundle = msg.getData();
             preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
             LPreferences = getActivity().getPreferences(MODE_PRIVATE);
+            MediaType mediaType = MediaType.parse("application/json");
             if (bundle.getInt("status" )==12){
                 String name = bundle.getString("stuName");
                 String id = bundle.getString("stuId");
@@ -87,11 +88,10 @@ public class LotteryFragment extends Fragment {
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
-                        MediaType mediaType = MediaType.parse("application/json");
                         RequestBody body = RequestBody.create(packet.toString(),mediaType);
                         Request request;
                         request = new Request.Builder()
-                                .url("http://192.168.1.162:8864/api/lottery/bingo")
+                                .url("http://192.168.255.62:8864/api/lottery/bingo")
                                 .post(body)
                                 .build();
                         SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
@@ -102,11 +102,13 @@ public class LotteryFragment extends Fragment {
                 builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("抽籤結果");
                 builder.setMessage("學生都抽過囉!");
+                RequestBody body = RequestBody.create("",mediaType);
                 builder.setPositiveButton("重新抽籤", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Request request = new Request.Builder()
-                                .url("http://192.168.1.162:8864/api/lottery/clear")
+                                .url("http://192.168.255.62:8864/api/lottery/clear")
+                                .post(body)
                                 .build();
                         ClearAPIWorker apiWorker = new ClearAPIWorker(request);
                         executor.execute(apiWorker);
@@ -184,7 +186,7 @@ public class LotteryFragment extends Fragment {
                 RequestBody body = RequestBody.create(packet.toString(),mediaType);
                 Request request;
                 request = new Request.Builder()
-                        .url("http://192.168.1.162:8864/api/lottery/bingo")
+                        .url("http://192.168.255.62:8864/api/lottery/bingo")
                         .post(body)
                         .build();
                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
