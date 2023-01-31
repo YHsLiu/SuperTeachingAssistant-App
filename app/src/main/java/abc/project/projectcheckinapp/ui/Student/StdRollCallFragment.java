@@ -60,13 +60,10 @@ public class StdRollCallFragment extends Fragment {
             //AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             super.handleMessage(msg);
             Bundle bundle2 = msg.getData();
-            if(bundle2.getInt("status")==21) {
+
                 //關閉按鈕
                 binding.btnStu1Checkin.setEnabled(false);
-            }
-            else{
-                Toast.makeText(getActivity(), "重複簽到了喔", Toast.LENGTH_SHORT).show();
-            }
+
 
         }
     };
@@ -76,10 +73,48 @@ public class StdRollCallFragment extends Fragment {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle2 = msg.getData();
-            if(bundle2.getInt("status")==12)
+            if(bundle2.getInt("status")==12) {
                 binding.btnStu1Checkin.setEnabled(true);
+                binding.btnStu1Checkin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-            else if(bundle2.getInt("status")==13){
+                        //取得簽到時間
+                        dateFormat = new SimpleDateFormat("yyyyMMdd");
+                        date = new Date(System.currentTimeMillis());
+                        currentDate = dateFormat.format(date);
+                        Log.e("date",currentDate);
+                        binding.btnStu1Checkin.setText(currentDate+"已簽到");
+                        //時間存至共用sharedPreferences
+                        preferences.edit().putString("data",currentDate).apply();
+
+                        //時間存至DB
+                        JSONObject packet = new JSONObject();
+                        JSONObject data = new JSONObject();
+                        try {
+                            packet.put("type",1);
+                            packet.put("status",20);
+                            data.put("date",currentDate);
+                            data.put("cid",cid);
+                            data.put("sid",sid);
+                            packet.put("data",data);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                        MediaType mediaType = MediaType.parse("application/json");
+                        RequestBody rb = RequestBody.create(packet.toString(),mediaType);
+                        Log.e("packet", String.valueOf(packet));
+                        Request request = new Request.Builder()
+                                .url("http://192.168.255.67:8864/api/project/StdRollCall")
+                                .post(rb)
+                                .build();
+                        simpleAPIworker api = new simpleAPIworker(request);
+                        executor = Executors.newSingleThreadExecutor();
+                        executor.execute(api);
+
+                    }
+                });
+            }else if(bundle2.getInt("status")==13){
                 binding.btnStu1Checkin.setEnabled(false);
                 binding.btnStu1Checkin.setText("已點名");
             }
@@ -87,6 +122,7 @@ public class StdRollCallFragment extends Fragment {
                 binding.btnStu1Checkin.setEnabled(false);
                 binding.btnStu1Checkin.setText("尚未開放點名");
             }
+//設定簽到按鈕
 
         }
     };
@@ -148,44 +184,7 @@ public class StdRollCallFragment extends Fragment {
         executor.execute(enterCheckAPIAPI);
 
 
-        //設定簽到按鈕
-        binding.btnStu1Checkin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                //取得簽到時間
-                dateFormat = new SimpleDateFormat("yyyyMMdd");
-                date = new Date(System.currentTimeMillis());
-                currentDate = dateFormat.format(date);
-                Log.e("date",currentDate);
-                binding.btnStu1Checkin.setText(currentDate+"已簽到");
-                //時間存至共用sharedPreferences
-                preferences.edit().putString("data",currentDate).apply();
-
-                //時間存至DB
-                JSONObject packet = new JSONObject();
-                JSONObject data = new JSONObject();
-                try {
-                    packet.put("type",1);
-                    packet.put("status",20);
-                    data.put("date",currentDate);
-                    data.put("cid",cid);
-                    data.put("sid",sid);
-                    packet.put("data",data);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                MediaType mediaType = MediaType.parse("application/json");
-                RequestBody rb = RequestBody.create(packet.toString(),mediaType);
-                Request request = new Request.Builder()
-                        .url("http://192.168.255.67:8864/api/project/StdRollCall")
-                        .post(rb)
-                        .build();
-                StdRollCallFragment.simpleAPIworker api = new StdRollCallFragment.simpleAPIworker(request);
-                executor.execute(api);
-
-            }
-        });
 
         binding.imageRcllRecord.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,15 +221,9 @@ public class StdRollCallFragment extends Fragment {
                 Response response = client.newCall(request).execute();
                 String responseBody = response.body().string();
                 Log.w("api回應", responseBody);
-                JSONObject result = new JSONObject(responseBody);
                 Message m = StdRollCallHandler.obtainMessage();
                 Bundle bundle = new Bundle();
-                if(result.getInt("status")==21){                         //日期成功寫入資料庫
-                    bundle.putInt("status",result.getInt("status"));
-                }
-                else {
-                    bundle.putInt("status",result.getInt("status"));
-                }
+                bundle.putString("123","開始你的動作");
                 m.setData(bundle);
                 StdRollCallHandler.sendMessage(m);
 

@@ -132,7 +132,7 @@ public class EnterClassFragment extends Fragment {
                 contextEditor.putInt("cid",cid);
                 contextEditor.putString("classname",classname);
                 contextEditor.apply();
-                navController.navigate(R.id.nav_stdRollCall);  // 你看要連哪個action
+                navController.navigate(R.id.nav_stdRollCall);
             }
             @Override
             public void onClickForNoRcStuList(int position, int sid) {   }

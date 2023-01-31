@@ -6,4 +6,10 @@
         android:orderInCategory="100"
         android:title="回報問題"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="100"
+        android:title="登出"
+        app:showAsAction="never" />
+
 </menu>
