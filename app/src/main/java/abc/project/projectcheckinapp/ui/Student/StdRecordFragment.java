@@ -112,6 +112,7 @@ public class StdRecordFragment extends Fragment {
                     packet.put("status", 11);
                     data.put("cid", cid);
                     data.put("sid", sid);
+                    Log.w("sid","學生id:"+sid);
                     packet.put("data",data);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);

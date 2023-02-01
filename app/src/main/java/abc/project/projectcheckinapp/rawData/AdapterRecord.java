@@ -70,16 +70,22 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.ViewHolder
         this.cid = cid;
         this.sid = sid;
         result = new ArrayList<>();
-        Cursor cursor = db.rawQuery("select rc_date from record_student_"+cid+" where sid=0;", null);
+        Cursor cursor = db.rawQuery("select * from record_student_"+cid+" where sid=0;", null);
+
         if (cursor.getCount() > 0){
             cursor.moveToFirst();
             do {
                 dateR = cursor.getString(1);
-                Cursor cursor1 = db.rawQuery("select count(*) from record_student_"+cid+" where sid="+sid+" and rc_date="+dateR+";", null);
+                Log.w("adapter","data:"+dateR+"  "+cursor.getString(0));
+                Cursor cursor1 = db.rawQuery("select count(*)  from record_student_"+cid+" where sid="+sid+" and rc_date="+dateR+";", null);
+                Log.w("adapter","sql:"+"select count(*) from record_student_"+cid+" where sid="+sid+" and rc_date="+dateR);
                 String isAttend = "";
-                if (cursor1.getCount()==1){
+                cursor1.moveToFirst();
+                int count = cursor1.getInt(0);
+                Log.w("adapter","判斷出缺席:"+count);
+                if (count==1){
                     isAttend = "出席";
-                } else if (cursor1.getCount()==0) {
+                } else if (count==0) {
                     isAttend = "缺席";
                 }
                 RecordModel recordModel = new RecordModel(dateR, isAttend);
