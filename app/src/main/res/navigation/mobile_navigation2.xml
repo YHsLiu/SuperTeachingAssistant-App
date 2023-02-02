@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/nav_tec_main"
         android:name="abc.project.projectcheckinapp.ui.Teacher.TeacherMainFragment"
-        android:label="fragment_teacher_main"
+        android:label="老師主頁"
         tools:layout="@layout/fragment_teacher_main" >
         <action
             android:id="@+id/action_nav_tec_main_to_nav_tec_newclass"
@@ -23,7 +23,7 @@
     <fragment
         android:id="@+id/nav_tec_newclass"
         android:name="abc.project.projectcheckinapp.ui.Teacher.NewClassFragment"
-        android:label="fragment_new_class"
+        android:label="新增課程"
         tools:layout="@layout/fragment_new_class" >
         <action
             android:id="@+id/action_nav_tec_newclass_to_nav_tec_enter"
@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/nav_tec_enter"
         android:name="abc.project.projectcheckinapp.ui.Teacher.TeacherEnterClassFragment"
-        android:label="fragment_teacher_enter_class"
+        android:label="進入教室"
         tools:layout="@layout/fragment_teacher_enter_class" >
         <action
             android:id="@+id/action_nav_tec_enter_to_nav_tec_stulist"
@@ -50,22 +50,22 @@
     <fragment
         android:id="@+id/nav_tec_lottery"
         android:name="abc.project.projectcheckinapp.ui.Teacher.LotteryFragment"
-        android:label="fragment_lottery"
+        android:label="抽籤"
         tools:layout="@layout/fragment_lottery" />
     <fragment
         android:id="@+id/nav_tec_stulist"
         android:name="abc.project.projectcheckinapp.ui.Teacher.StudentListFragment"
-        android:label="fragment_student_list"
+        android:label="學生名單"
         tools:layout="@layout/fragment_student_list" />
     <fragment
         android:id="@+id/rollCallFragment"
         android:name="abc.project.projectcheckinapp.ui.Teacher.RollCallFragment"
-        android:label="fragment_roll_call"
+        android:label="點名"
         tools:layout="@layout/fragment_roll_call" />
     <fragment
         android:id="@+id/nav_selectRoom"
         android:name="abc.project.projectcheckinapp.ui.Teacher.SelectRoomFragment"
-        android:label="fragment_select_room"
+        android:label="教室選擇"
         tools:layout="@layout/fragment_select_room" >
         <action
             android:id="@+id/action_selectRoomFragment_to_nav_tec_enter"
@@ -74,10 +74,10 @@
     <fragment
         android:id="@+id/recordFragment"
         android:name="abc.project.projectcheckinapp.ui.Teacher.RecordFragment"
-        android:label="fragment_record"
+        android:label="點名紀錄"
         tools:layout="@layout/fragment_record" />
     <fragment
-        android:id="@+id/nav_reviseTchData"
+        android:id="@+id/nav_個人設定"
         android:name="abc.project.projectcheckinapp.ui.Teacher.ReviseTchDataFragment"
         android:label="ReviseTchDataFragment"
         tools:layout="@layout/fragment_revise_tch_data" />

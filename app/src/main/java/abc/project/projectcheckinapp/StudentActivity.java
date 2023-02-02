@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toolbar;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.concurrent.ExecutorService;
 import abc.project.projectcheckinapp.databinding.ActivityStudentBinding;
+import abc.project.projectcheckinapp.databinding.AppBarMainBinding;
 import abc.project.projectcheckinapp.rawData.ClickListener;
 import abc.project.projectcheckinapp.ui.Student.ClassTableFragment;
 import abc.project.projectcheckinapp.ui.Student.EnterClassFragment;
@@ -40,13 +42,16 @@ public class StudentActivity extends AppCompatActivity implements NavigationView
     SharedPreferences preferences;
     SharedPreferences.Editor contextEditor;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityStudentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-              //setSupportActionBar(binding.appBarMain.toolbar);
+
+        //setSupportActionBar(binding.appBarMain.toolbar);
+
         /*binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

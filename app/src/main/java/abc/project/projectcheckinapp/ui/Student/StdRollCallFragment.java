@@ -155,8 +155,8 @@ public class StdRollCallFragment extends Fragment {
         preferences = getActivity().getSharedPreferences("userInfo",Context.MODE_PRIVATE);
         cid = preferences.getInt("cid",0);
         sid = preferences.getInt("sid",0);
-        //classname = preferences.getString("classname","0");
-        //binding.txtStu1ClassName.setText(classname);
+        classname = preferences.getString("classname","0");
+        binding.txtStdClassname.setText(classname);
 
         //取得開啟時間
         dateFormat = new SimpleDateFormat("yyyyMMdd");

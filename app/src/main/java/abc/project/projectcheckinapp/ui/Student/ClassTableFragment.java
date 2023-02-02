@@ -28,7 +28,6 @@ public class ClassTableFragment extends Fragment implements View.OnClickListener
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     FragmentClasstableBinding binding;
-    String name;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
