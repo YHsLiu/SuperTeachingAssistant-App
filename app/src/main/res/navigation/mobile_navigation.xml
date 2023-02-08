@@ -22,17 +22,17 @@
     <fragment
         android:id="@+id/nav_classTable"
         android:name="abc.project.projectcheckinapp.ui.Student.ClassTableFragment"
-        android:label="ClassTableFragment"
+        android:label="課表"
         tools:layout="@layout/fragment_classtable"/>
     <fragment
         android:id="@+id/nav_reviseStdData"
         android:name="abc.project.projectcheckinapp.ui.Student.ReviseStdDataFragment"
-        android:label="fragment_revise_std_data"
+        android:label="資料修改"
         tools:layout="@layout/fragment_revise_std_data" />
     <fragment
         android:id="@+id/nav_inputCourseCode"
         android:name="abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment"
-        android:label="InputCourseCodeFragment"
+        android:label="課程代碼輸入"
         tools:layout="@layout/fragment_inputcoursecode">
         <action
             android:id="@+id/action_nav_inputCourseCode_to_nav_EnterClass"
@@ -59,7 +59,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="abc.project.projectcheckinapp.ui.home.HomeFragment"
-        android:label="fragment_home"
+        android:label="學生主頁"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_nav_classTable"

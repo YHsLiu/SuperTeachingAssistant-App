@@ -1,21 +1,13 @@
 package abc.project.projectcheckinapp.ui.test;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Menu;
-import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -29,15 +21,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import abc.project.projectcheckinapp.R;
-import abc.project.projectcheckinapp.StudentActivity;
 import abc.project.projectcheckinapp.WelcomeActivity;
 import abc.project.projectcheckinapp.databinding.ActivitySecondBinding;
-import abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment;
+import abc.project.projectcheckinapp.rawData.ActionBarTitleSetter;
 import abc.project.projectcheckinapp.ui.Teacher.NewClassFragment;
 import abc.project.projectcheckinapp.ui.Teacher.ReviseTchDataFragment;
 import abc.project.projectcheckinapp.ui.Teacher.SelectRoomFragment;
 
-public class TeacherActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class TeacherActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener , ActionBarTitleSetter {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivitySecondBinding binding;
@@ -46,7 +37,6 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
     SharedPreferences preferences;
     SharedPreferences.Editor contextEditor;
     Fragment fragment;
-    DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,33 +135,8 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         return true;
     }
 
-    /*Handler createClassResultHandler = new Handler(Looper.getMainLooper()){
-            @Override
-            public void handleMessage(@NonNull Message msg) {
-                super.handleMessage(msg);
-                Bundle bundle = msg.getData();
-                if (bundle.getInt("status" )==12) // 新增課程成功
-                {   builder = new AlertDialog.Builder(this);
-                    builder.setTitle("新增成功");
-                    builder.setMessage("直接進入教室嗎?");
-                    builder.setPositiveButton("進教室", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            preferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-                            contextEditor = preferences.edit();
-                            contextEditor.putInt("cid",bundle.getInt("cid")).apply();
-                            navController.navigate(R.id.action_nav_tec_newclass_to_nav_tec_enter);
-                        }
-                    });
-                    builder.setNegativeButton("關閉", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {    }
-                    });
-                    dialog = builder.create();
-                    dialog.show();
-                } else {
-                    Toast.makeText(this, "新增失敗,代碼已被使用", Toast.LENGTH_LONG).show();
-                }
-            }
-        };*/
+    @Override
+    public void setTitle(String title) {
+         getSupportActionBar().setTitle(title) ;
+    }
 }

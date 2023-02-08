@@ -31,6 +31,7 @@ import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentStdRecordBinding;
+import abc.project.projectcheckinapp.rawData.ActionBarTitleSetter;
 import abc.project.projectcheckinapp.rawData.AdapterRecord;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -98,6 +99,8 @@ public class StdRecordFragment extends Fragment {
         preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
         cid = preferences.getInt("cid",0);
         sid = preferences.getInt("sid",0);
+        String classname = preferences.getString("classname","0");
+        ((ActionBarTitleSetter)getActivity()).setTitle(classname);
         recyclerView = binding.recyclerView;
         executor = Executors.newSingleThreadExecutor();
 

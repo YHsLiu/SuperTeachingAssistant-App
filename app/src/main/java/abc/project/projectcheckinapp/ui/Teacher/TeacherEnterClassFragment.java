@@ -1,5 +1,6 @@
 package abc.project.projectcheckinapp.ui.Teacher;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -17,6 +19,8 @@ import android.view.ViewGroup;
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentEnterclassBinding;
 import abc.project.projectcheckinapp.databinding.FragmentTeacherEnterClassBinding;
+import abc.project.projectcheckinapp.rawData.ActionBarTitleSetter;
+import abc.project.projectcheckinapp.ui.test.TeacherActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,11 +32,11 @@ public class TeacherEnterClassFragment extends Fragment {
     FragmentTeacherEnterClassBinding binding;
     NavController navController;
     SharedPreferences preferences;
+    Bundle bundle;
 
     public TeacherEnterClassFragment() {
         // Required empty public constructor
     }
-
 
     public static TeacherEnterClassFragment newInstance(String param1, String param2) {
         TeacherEnterClassFragment fragment = new TeacherEnterClassFragment();
@@ -43,7 +47,6 @@ public class TeacherEnterClassFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -53,7 +56,7 @@ public class TeacherEnterClassFragment extends Fragment {
         binding = FragmentTeacherEnterClassBinding.inflate(inflater, container, false);
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String classname = preferences.getString("classname","無資料");
-        binding.txtClassName.setText(classname);
+        ((ActionBarTitleSetter)getActivity()).setTitle(classname);
         binding.btnLottery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

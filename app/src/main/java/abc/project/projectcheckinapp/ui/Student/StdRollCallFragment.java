@@ -34,6 +34,7 @@ import java.util.concurrent.Executors;
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentReviseStdDataBinding;
 import abc.project.projectcheckinapp.databinding.FragmentStdRollCallBinding;
+import abc.project.projectcheckinapp.rawData.ActionBarTitleSetter;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -155,7 +156,8 @@ public class StdRollCallFragment extends Fragment {
         preferences = getActivity().getSharedPreferences("userInfo",Context.MODE_PRIVATE);
         cid = preferences.getInt("cid",0);
         sid = preferences.getInt("sid",0);
-        //classname = preferences.getString("classname","0");
+        classname = preferences.getString("classname","0");
+        ((ActionBarTitleSetter)getActivity()).setTitle(classname);
         //binding.txtStu1ClassName.setText(classname);
 
         //取得開啟時間

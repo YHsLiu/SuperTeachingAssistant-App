@@ -24,13 +24,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.concurrent.ExecutorService;
 import abc.project.projectcheckinapp.databinding.ActivityStudentBinding;
+import abc.project.projectcheckinapp.rawData.ActionBarTitleSetter;
 import abc.project.projectcheckinapp.rawData.ClickListener;
 import abc.project.projectcheckinapp.ui.Student.ClassTableFragment;
 import abc.project.projectcheckinapp.ui.Student.EnterClassFragment;
 import abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment;
 import abc.project.projectcheckinapp.ui.Student.ReviseStdDataFragment;
 
-public class StudentActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class StudentActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ActionBarTitleSetter {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityStudentBinding binding;
@@ -145,4 +146,8 @@ public class StudentActivity extends AppCompatActivity implements NavigationView
     }
 
 
+    @Override
+    public void setTitle(String title) {
+        getSupportActionBar().setTitle(title) ;
+    }
 }
