@@ -49,7 +49,7 @@
             android:id="@+id/Recycler_record"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#D7CCC8"
+            android:background="#FFFFFF"
             tools:listitem="@layout/record_row_item" />
 
     </LinearLayout>

@@ -1,4 +1,4 @@
-package abc.project.projectcheckinapp.ui.test;
+package abc.project.projectcheckinapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,13 +27,12 @@ import abc.project.projectcheckinapp.rawData.ActionBarTitleSetter;
 import abc.project.projectcheckinapp.ui.Teacher.NewClassFragment;
 import abc.project.projectcheckinapp.ui.Teacher.ReviseTchDataFragment;
 import abc.project.projectcheckinapp.ui.Teacher.SelectRoomFragment;
+import abc.project.projectcheckinapp.ui.Teacher.TeacherMainFragment;
 
 public class TeacherActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener , ActionBarTitleSetter {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivitySecondBinding binding;
-    AlertDialog.Builder builder;
-    AlertDialog dialog;
     SharedPreferences preferences;
     SharedPreferences.Editor contextEditor;
     Fragment fragment;
@@ -58,9 +57,9 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_tec_main, R.id.nav_tec_newclass, R.id.nav_tec_enter)
+                R.id.nav_tec_main, R.id.nav_tec_newclass, R.id.nav_tec_enter, R.id.nav_reviseTchData)
                 .setOpenableLayout(drawer)
-                .build(); // 缺個人設定
+                .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_second);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -112,6 +111,12 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
+
+            case R.id.nav_tec_main:
+                fragment = new TeacherMainFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_tec_main,fragment).commit();
+                break;
 
             case R.id.nav_tec_newclass:
                 fragment = new NewClassFragment();

@@ -15,7 +15,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="300sp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
@@ -29,21 +29,21 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/droid_sans_fallback_full"
                     android:text="日期"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.175"
+                    app:layout_constraintHorizontal_bias="0.122"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.508" />
+                    app:layout_constraintVertical_bias="0.542" />
 
                 <TextView
                     android:id="@+id/txt_std_card_attend"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:layout_marginStart="24dp"
                     android:text="出席or缺席"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/txt_std_card_date"

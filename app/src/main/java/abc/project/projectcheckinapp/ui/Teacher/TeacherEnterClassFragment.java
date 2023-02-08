@@ -17,10 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import abc.project.projectcheckinapp.R;
-import abc.project.projectcheckinapp.databinding.FragmentEnterclassBinding;
 import abc.project.projectcheckinapp.databinding.FragmentTeacherEnterClassBinding;
 import abc.project.projectcheckinapp.rawData.ActionBarTitleSetter;
-import abc.project.projectcheckinapp.ui.test.TeacherActivity;
 
 /**
  * A simple {@link Fragment} subclass.

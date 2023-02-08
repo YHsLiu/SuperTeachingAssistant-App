@@ -54,9 +54,15 @@ public class RollCallFragment extends Fragment {
     FragmentRollCallBinding binding;
     NavController navController;
     SharedPreferences preferences;
+    int cid;
     SharedPreferences.Editor contextEditor;
     ExecutorService executor;
     SQLiteDatabase db;
+    String date;
+    JSONObject packet,data;
+    MediaType mediaType;
+    RequestBody body;
+    Request request;
     RecyclerView recyclerView;
     ClickListener clickListener;
     AdapterNoRcStu adapter;
@@ -74,6 +80,26 @@ public class RollCallFragment extends Fragment {
             if (bundle.getInt("status")==12){
                 binding.btnTec2Start.setText("結束點名");
                 flag = 1;
+            } else if(bundle.getInt("status")==13) {
+                builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("今日已點名，是否刪除紀錄後重新點名?");
+                builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        request = new Request.Builder()
+                                .url("http://20.2.232.79:8864/api/rollcall/teacher/open/again")
+                                .post(body)
+                                .build();
+                        OpenRCAPIWorker apiCaller = new OpenRCAPIWorker(request);
+                        executor.execute(apiCaller);
+                    }
+                });
+                builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {  flag = 0;  }
+                });
+                dialog = builder.create();
+                dialog.show();
             }
         }
     };
@@ -88,7 +114,6 @@ public class RollCallFragment extends Fragment {
 
             JSONArray stuNoRCInfos;
             preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
-            int cid = preferences.getInt("cid",0);
             db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null); // 將學生資訊存進裝置的DB
             // 每個跟RecyclerView有關的資料都存進裝置名為 allList 的DB中，以table名稱來區別每個list
             db.execSQL("drop table if exists no_rc_stu_"+cid+";");
@@ -130,15 +155,14 @@ public class RollCallFragment extends Fragment {
         binding = FragmentRollCallBinding.inflate(inflater, container, false);
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         executor = Executors.newSingleThreadExecutor();
-        int cid = preferences.getInt("cid",0);
+        cid = preferences.getInt("cid",0);
         if (cid == 0){
             Toast.makeText(getActivity(), "請重新進入教室", Toast.LENGTH_SHORT).show();
         }
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-        String date = formatter.format(new Date());
-        MediaType mediaType = MediaType.parse("application/json");
-        JSONObject packet = new JSONObject();
-        JSONObject data = new JSONObject();
+        date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        mediaType = MediaType.parse("application/json");
+        packet = new JSONObject();
+        data = new JSONObject();
         try {
             packet.put("type", 1);
             packet.put("status", 11);
@@ -148,48 +172,26 @@ public class RollCallFragment extends Fragment {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        RequestBody body = RequestBody.create(packet.toString(), mediaType);
+        body = RequestBody.create(packet.toString(), mediaType);
         binding.btnTec2Start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (flag == 0) {
-                    Request request = new Request.Builder()
+                    request = new Request.Builder()
                             .url("http://20.2.232.79:8864/api/rollcall/teacher/open")
                             .post(body)
                             .build();
-                    SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
+                    OpenRCAPIWorker apiCaller = new OpenRCAPIWorker(request);
                     executor.execute(apiCaller);
-                    if (flag == 0){
-                        builder = new AlertDialog.Builder(getActivity());
-                        builder.setMessage("今日已點名，是否刪除紀錄後重新點名?");
-                        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Request request = new Request.Builder()
-                                        .url("http://20.2.232.79:8864/api/rollcall/teacher/open/again")
-                                        .post(body)
-                                        .build();
-                                SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
-                                executor.execute(apiCaller);
-                            }
-                        });
-                        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {  flag = 0;  }
-                        });
-                        dialog = builder.create();
-                        dialog.show();
-                    }
                 } else {
                     Log.e("app","app 送出資訊:" +body);
-                    Request request = new Request.Builder()
+                    request = new Request.Builder()
                             .url("http://20.2.232.79:8864/api/rollcall/teacher/close")
                             .post(body)
                             .build();
                     SimpleAPIWorker2 apiCaller2 = new SimpleAPIWorker2(request);
                     executor.execute(apiCaller2);
                     recyclerView = binding.RecyclerStuAbsence;
-
                 }
             }
         });
@@ -209,7 +211,7 @@ public class RollCallFragment extends Fragment {
                     throw new RuntimeException(e);
                 }
                 Log.w("api","onClickForNoRcStuList  送出資訊:"+data1);
-                Request request = new Request.Builder()
+                request = new Request.Builder()
                         .url("http://20.2.232.79:8864/api/rollcall/manual/call")
                         .post(RequestBody.create(data1.toString(), mediaType))
                         .build();
@@ -220,10 +222,10 @@ public class RollCallFragment extends Fragment {
         return binding.getRoot();
     }
 
-    class SimpleAPIWorker implements Runnable {
+    class OpenRCAPIWorker implements Runnable {
         OkHttpClient client;
         Request request;
-        public SimpleAPIWorker(Request request) {
+        public OpenRCAPIWorker(Request request) {
             this.request = request;
             client = new OkHttpClient();
         }

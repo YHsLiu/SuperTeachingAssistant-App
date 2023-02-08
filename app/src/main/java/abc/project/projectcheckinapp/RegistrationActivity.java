@@ -30,7 +30,6 @@ import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.databinding.ActivityRegistrationBinding;
 import abc.project.projectcheckinapp.rawData.UniversityArray;
-import abc.project.projectcheckinapp.ui.test.TeacherActivity;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

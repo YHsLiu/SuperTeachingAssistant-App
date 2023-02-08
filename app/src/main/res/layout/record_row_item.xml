@@ -8,7 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#D7CCC8">
+        android:background="#FFFFFF">
 
         <TextView
             android:id="@+id/textView42"
@@ -27,7 +27,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/droid_sans_fallback_full"
             android:text="點名紀錄"
-            android:textSize="16sp"
+            android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@+id/txt_tec4_recordCard_date"
             app:layout_constraintTop_toBottomOf="@+id/txt_tec4_recordCard_date" />
 
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/droid_sans_fallback_full"
             android:text="點名日期"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.17"

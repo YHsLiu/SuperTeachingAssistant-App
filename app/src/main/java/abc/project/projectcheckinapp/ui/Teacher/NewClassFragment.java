@@ -31,7 +31,6 @@ import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentNewClassBinding;
-import abc.project.projectcheckinapp.ui.test.TeacherActivity;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

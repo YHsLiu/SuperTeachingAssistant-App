@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class AdapterAllStu extends RecyclerView.Adapter<AdapterAllStu.ViewHolder
         holder.studentName.setText(result.get(position).getStuname());
         holder.department.setText(result.get(position).getStudepart());
         holder.idNum.setText(result.get(position).getStuid());
-        holder.studentName.setOnClickListener(new View.OnClickListener() {
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final int pos = holder.getAdapterPosition();
@@ -99,11 +100,13 @@ public class AdapterAllStu extends RecyclerView.Adapter<AdapterAllStu.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder{
         TextView studentName, department, idNum;
+        CardView cardView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             studentName = itemView.findViewById(R.id.txt_tec1_stuCard_name);
             department = itemView.findViewById(R.id.txt_tec1_stuCard_depart);
             idNum = itemView.findViewById(R.id.txt_tec1_stuCard_id);
+            cardView = itemView.findViewById(R.id.Card_tec1);
         }
     }
 }

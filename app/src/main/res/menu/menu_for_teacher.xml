@@ -5,12 +5,16 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_tec_main"
+            android:icon="@drawable/school_icon"
+            android:title="@string/menu_tecMainPage" />
+        <item
             android:id="@+id/nav_tec_newclass"
-            android:icon="@drawable/ic_menu_inputcoursecode"
+            android:icon="@drawable/plus"
             android:title="@string/menu_tecNewClass" />
         <item
             android:id="@+id/nav_selectRoom"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/intoclass"
             android:title="@string/menu_tecEnterClass" />
         <item
             android:id="@+id/nav_reviseTchData"
