@@ -98,6 +98,7 @@ public class StudentActivity extends AppCompatActivity implements NavigationView
                 contextEditor.putInt("cid",0);
                 contextEditor.putBoolean("isRollCall",false);
                 contextEditor.putBoolean("isLogin",false);
+                contextEditor.putString("t01","");
                 contextEditor.apply();
                 SQLiteDatabase db = openOrCreateDatabase("allList",MODE_PRIVATE,null);
                 db.close();
