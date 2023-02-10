@@ -5,15 +5,18 @@ import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,108 +27,87 @@ import abc.project.projectcheckinapp.databinding.FragmentClasstableBinding;
 
 public class ClassTableFragment extends Fragment implements View.OnClickListener{
 
-    //SQLiteDatabase db;
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
+    SQLiteDatabase db;
+    SharedPreferences preferences2;
     FragmentClasstableBinding binding;
-    String name;
+    Cursor C, c;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentClasstableBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        preferences = getActivity().getPreferences(MODE_PRIVATE);
-        editor = preferences.edit();
+        //app共用(抓SID)
+        preferences2 = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        int sid = preferences2.getInt("sid",0);
 
         //開資料庫
-        //db = getActivity().openOrCreateDatabase("ClassTableDB",MODE_PRIVATE,null);
-        //String drop_sql = "drop table if exists ClassTable;";
-        //String create_sql = "create table if not exists ClassTable (_id text,Form_Name text);";
-        //db.execSQL(drop_sql);
-        //db.execSQL(create_sql);
+        db = getActivity().openOrCreateDatabase("ClassTableDB",MODE_PRIVATE,null);
+        String create_sql = "create table if not exists ClassTable (_id integer PRIMARY KEY AUTOINCREMENT,Num Integer, Name text, Sid Integer);";
+        db.execSQL(create_sql);
+
+
         binding.t01.setOnClickListener(this);
-        binding.t01.setText(preferences.getString("t01",""));
+        binding.t01.setText(getName (1));
         binding.t02.setOnClickListener(this);
-        binding.t02.setText(preferences.getString("t02",""));
+        binding.t02.setText(getName (2));
         binding.t03.setOnClickListener(this);
-        binding.t03.setText(preferences.getString("t03",""));
+        binding.t03.setText(getName (3));
         binding.t04.setOnClickListener(this);
-        binding.t04.setText(preferences.getString("t04",""));
+        binding.t04.setText(getName (4));
         binding.t05.setOnClickListener(this);
-        binding.t05.setText(preferences.getString("t05",""));
+        binding.t05.setText(getName (5));
         binding.t06.setOnClickListener(this);
-        binding.t06.setText(preferences.getString("t06",""));
+        binding.t06.setText(getName (6));
         binding.t07.setOnClickListener(this);
-        binding.t07.setText(preferences.getString("t07",""));
+        binding.t07.setText(getName (7));
         binding.t08.setOnClickListener(this);
-        binding.t08.setText(preferences.getString("t08",""));
+        binding.t08.setText(getName (8));
         binding.t09.setOnClickListener(this);
-        binding.t09.setText(preferences.getString("t09",""));
+        binding.t09.setText(getName (9));
         binding.t10.setOnClickListener(this);
-        binding.t10.setText(preferences.getString("t10",""));
+        binding.t10.setText(getName (10));
         binding.t11.setOnClickListener(this);
-        binding.t11.setText(preferences.getString("t11",""));
+        binding.t11.setText(getName (11));
         binding.t12.setOnClickListener(this);
-        binding.t12.setText(preferences.getString("t12",""));
+        binding.t12.setText(getName (12));
         binding.t13.setOnClickListener(this);
-        binding.t13.setText(preferences.getString("t13",""));
+        binding.t13.setText(getName (13));
         binding.t14.setOnClickListener(this);
-        binding.t14.setText(preferences.getString("t14",""));
+        binding.t14.setText(getName (14));
         binding.t15.setOnClickListener(this);
-        binding.t15.setText(preferences.getString("t15",""));
+        binding.t15.setText(getName (15));
         binding.t16.setOnClickListener(this);
-        binding.t16.setText(preferences.getString("t16",""));
+        binding.t16.setText(getName (16));
         binding.t17.setOnClickListener(this);
-        binding.t17.setText(preferences.getString("t17",""));
+        binding.t17.setText(getName (17));
         binding.t18.setOnClickListener(this);
-        binding.t18.setText(preferences.getString("t18",""));
+        binding.t18.setText(getName (18));
         binding.t19.setOnClickListener(this);
-        binding.t19.setText(preferences.getString("t19",""));
+        binding.t19.setText(getName (19));
         binding.t20.setOnClickListener(this);
-        binding.t20.setText(preferences.getString("t20",""));
-
-        /*Cursor cursor = db.rawQuery("select * from ClassTable",null);
-        if(cursor.getCount()>0){
-            cursor.moveToFirst();
-            String[] i = new String[20] ;
-            int x = 0 ;
-            do{
-                name = cursor.getString(1);
-                i[x]=name;
-                x++;
-
-            }while(cursor.moveToNext());
-            binding.t01.setText(i[0]);
-            binding.t02.setText(i[1]);
-            binding.t03.setText(i[2]);
-            binding.t04.setText(i[3]);
-            binding.t05.setText(i[4]);
-            binding.t06.setText(i[5]);
-            binding.t07.setText(i[6]);
-            binding.t08.setText(i[7]);
-            binding.t09.setText(i[8]);
-            binding.t10.setText(i[9]);
-            binding.t11.setText(i[10]);
-            binding.t12.setText(i[11]);
-            binding.t13.setText(i[12]);
-            binding.t14.setText(i[13]);
-            binding.t15.setText(i[14]);
-            binding.t16.setText(i[15]);
-            binding.t17.setText(i[16]);
-            binding.t18.setText(i[17]);
-            binding.t19.setText(i[18]);
-            binding.t20.setText(i[19]);
-
-
-        }*/
+        binding.t20.setText(getName (20));
 
         return root;
+    }
+
+    private String getName (int num){
+        String Name = null;
+        int sid = preferences2.getInt("sid",0);
+        C = db.rawQuery("select * from ClassTable where Num=" +num+ " AND Sid="+sid,null);
+        C.moveToFirst();
+        if(C != null && C.isFirst()) {
+            Name = C.getString(2);
+            Log.w("cursor方法:",C.getString(2));
+        }
+
+        return Name;
     }
 
 
 
     @Override
     public void onClick(View v) {
+        int sid = preferences2.getInt("sid",0);
         int id = v.getId();
         final EditText editText = new EditText(getActivity());
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -137,89 +119,86 @@ public class ClassTableFragment extends Fragment implements View.OnClickListener
                 //改變課名
                 switch (id) {
                     case R.id.t01:
-                        binding.t01.setText(editText.getText());
-                        editor.putString("t01",editText.getText().toString()).apply();
+                        binding.t01.setText(editText.getText().toString());
+                        saveChange(1,sid,editText.getText().toString());
                         break;
                     case R.id.t02:
                         binding.t02.setText(editText.getText());
-                        editor.putString("t02",editText.getText().toString()).apply();
+                        saveChange(2,sid,editText.getText().toString());
                         break;
                     case R.id.t03:
                         binding.t03.setText(editText.getText());
-                        editor.putString("t03",editText.getText().toString()).apply();
+                        saveChange(3,sid,editText.getText().toString());
                         break;
                     case R.id.t04:
                         binding.t04.setText(editText.getText());
-                        editor.putString("t04",editText.getText().toString()).apply();
+                        saveChange(4,sid,editText.getText().toString());
                         break;
                     case R.id.t05:
                         binding.t05.setText(editText.getText());
-                        editor.putString("t05",editText.getText().toString()).apply();
+                        saveChange(5,sid,editText.getText().toString());
                         break;
                     case R.id.t06:
                         binding.t06.setText(editText.getText());
-                        editor.putString("t06",editText.getText().toString()).apply();
+                        saveChange(6,sid,editText.getText().toString());
                         break;
                     case R.id.t07:
                         binding.t07.setText(editText.getText());
-                        editor.putString("t07",editText.getText().toString()).apply();
+                        saveChange(7,sid,editText.getText().toString());
                         break;
                     case R.id.t08:
                         binding.t08.setText(editText.getText());
-                        editor.putString("t08",editText.getText().toString()).apply();
+                        saveChange(8,sid,editText.getText().toString());
                         break;
                     case R.id.t09:
                         binding.t09.setText(editText.getText());
-                        editor.putString("t09",editText.getText().toString()).apply();
+                        saveChange(9,sid,editText.getText().toString());
                         break;
                     case R.id.t10:
                         binding.t10.setText(editText.getText());
-                        editor.putString("t10",editText.getText().toString()).apply();
+                        saveChange(10,sid,editText.getText().toString());
                         break;
                     case R.id.t11:
                         binding.t11.setText(editText.getText());
-                        editor.putString("t11",editText.getText().toString()).apply();
+                        saveChange(11,sid,editText.getText().toString());
                         break;
                     case R.id.t12:
                         binding.t12.setText(editText.getText());
-                        editor.putString("t12",editText.getText().toString()).apply();
+                        saveChange(12,sid,editText.getText().toString());
                         break;
                     case R.id.t13:
                         binding.t13.setText(editText.getText());
-                        editor.putString("t13",editText.getText().toString()).apply();
+                        saveChange(13,sid,editText.getText().toString());
                         break;
                     case R.id.t14:
                         binding.t14.setText(editText.getText());
-                        editor.putString("t14",editText.getText().toString()).apply();
+                        saveChange(14,sid,editText.getText().toString());
                         break;
                     case R.id.t15:
                         binding.t15.setText(editText.getText());
-                        editor.putString("t15",editText.getText().toString()).apply();
+                        saveChange(15,sid,editText.getText().toString());
                         break;
                     case R.id.t16:
                         binding.t16.setText(editText.getText());
-                        editor.putString("t16",editText.getText().toString()).apply();
+                        saveChange(16,sid,editText.getText().toString());
                         break;
                     case R.id.t17:
                         binding.t17.setText(editText.getText());
-                        editor.putString("t17",editText.getText().toString()).apply();
+                        saveChange(17,sid,editText.getText().toString());
                         break;
                     case R.id.t18:
                         binding.t18.setText(editText.getText());
-                        editor.putString("t18",editText.getText().toString()).apply();
+                        saveChange(18,sid,editText.getText().toString());
                         break;
                     case R.id.t19:
                         binding.t19.setText(editText.getText());
-                        editor.putString("t19",editText.getText().toString()).apply();
+                        saveChange(19,sid,editText.getText().toString());
                         break;
                     case R.id.t20:
                         binding.t20.setText(editText.getText());
-                        editor.putString("t20",editText.getText().toString()).apply();
+                        saveChange(20,sid,editText.getText().toString());
                         break;
-
                 }
-                //String insert_sql = "insert into ClassTable values (?,?)";
-                //db.execSQL(insert_sql,new String[]{String.valueOf(v.getId()),editText.getText().toString()});
             }
 
         });
@@ -230,6 +209,23 @@ public class ClassTableFragment extends Fragment implements View.OnClickListener
             }
         });
         builder.show();
+    }
+
+    private void saveChange(int num, int sid, String newName){
+
+        String insert_sql=null;
+        c = db.rawQuery("select * from ClassTable where Num=" +num+ " AND Sid="+sid,null);
+        c.moveToFirst();
+        if(c.getCount() != 0 && c.isFirst()) {
+            insert_sql ="UPDATE ClassTable SET " + "Name='" + newName+"' "+ "WHERE Num='" + num + "'"+"AND Sid='" + sid+"'";
+            Log.e("更新資料庫:",insert_sql);
+        }
+        else {
+            insert_sql = "INSERT INTO ClassTable (Num,Name,sid) values " + "('"+num+"','" +newName+"','"+sid+"')" ;
+            Log.e("新寫進資料庫:",insert_sql);
+        }
+
+        db.execSQL(insert_sql);
 
     }
 
@@ -238,7 +234,7 @@ public class ClassTableFragment extends Fragment implements View.OnClickListener
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        //db.close();
+        db.close();
     }
 
 

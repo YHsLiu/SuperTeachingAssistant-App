@@ -102,6 +102,7 @@ public class EnterClassFragment extends Fragment {
 
         binding = FragmentEnterclassBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         executor = Executors.newSingleThreadExecutor();
         sid = preferences.getInt("sid",0);

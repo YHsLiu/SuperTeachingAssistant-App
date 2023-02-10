@@ -22,17 +22,17 @@
     <fragment
         android:id="@+id/nav_classTable"
         android:name="abc.project.projectcheckinapp.ui.Student.ClassTableFragment"
-        android:label="課表"
+        android:label="我的課表"
         tools:layout="@layout/fragment_classtable"/>
     <fragment
         android:id="@+id/nav_reviseStdData"
         android:name="abc.project.projectcheckinapp.ui.Student.ReviseStdDataFragment"
-        android:label="資料修改"
+        android:label="修改個人資料"
         tools:layout="@layout/fragment_revise_std_data" />
     <fragment
         android:id="@+id/nav_inputCourseCode"
         android:name="abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment"
-        android:label="課程代碼輸入"
+        android:label="輸入課程代碼"
         tools:layout="@layout/fragment_inputcoursecode">
         <action
             android:id="@+id/action_nav_inputCourseCode_to_nav_EnterClass"
@@ -41,7 +41,7 @@
     <fragment
         android:id="@+id/nav_stdRollCall"
         android:name="abc.project.projectcheckinapp.ui.Student.StdRollCallFragment"
-        android:label="fragment_std_roll_call"
+        android:label="點名"
         tools:layout="@layout/fragment_std_roll_call" >
         <action
             android:id="@+id/action_nav_stdRollCall_to_nav_stdRecord"
@@ -50,7 +50,7 @@
     <fragment
         android:id="@+id/nav_stdRecord"
         android:name="abc.project.projectcheckinapp.ui.Student.StdRecordFragment"
-        android:label="fragment_std_record"
+        android:label="點名紀錄"
         tools:layout="@layout/fragment_std_record" >
         <action
             android:id="@+id/action_nav_stdRecord_to_nav_stdRollCall"
@@ -59,7 +59,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="abc.project.projectcheckinapp.ui.home.HomeFragment"
-        android:label="學生主頁"
+        android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_nav_classTable"
