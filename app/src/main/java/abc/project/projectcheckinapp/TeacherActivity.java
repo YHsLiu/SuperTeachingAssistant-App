@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -91,6 +92,7 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
                 contextEditor.putInt("cid",0);
                 contextEditor.putBoolean("isRollCall",false);
                 contextEditor.putBoolean("isLogin",false);
+                contextEditor.putBoolean("mesToEnter",false);
                 contextEditor.apply();
                 SQLiteDatabase db = openOrCreateDatabase("allList",MODE_PRIVATE,null);
                 db.close();
@@ -142,6 +144,20 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public void setTitle(String title) {
-         getSupportActionBar().setTitle(title) ;
+        getSupportActionBar().setTitle(title);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        preferences = getSharedPreferences("userInfo",MODE_PRIVATE);
+        contextEditor = preferences.edit();
+        contextEditor.putInt("sid",0);
+        contextEditor.putInt("tid",0);
+        contextEditor.putInt("cid",0);
+        contextEditor.putBoolean("isRollCall",false);
+        contextEditor.putBoolean("isLogin",false);
+        contextEditor.putBoolean("mesToEnter",false);
+        contextEditor.apply();
     }
 }

@@ -8,10 +8,12 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +23,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +38,9 @@ import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentRollCallBinding;
+import abc.project.projectcheckinapp.rawData.ActionBarTitleSetter;
 import abc.project.projectcheckinapp.rawData.AdapterNoRcStu;
 import abc.project.projectcheckinapp.rawData.ClickListener;
 import okhttp3.MediaType;
@@ -51,11 +56,10 @@ import okhttp3.Response;
  */
 public class RollCallFragment extends Fragment {
     static int flag = 0; // 點名開關
-    FragmentRollCallBinding binding;
     NavController navController;
+    FragmentRollCallBinding binding;
     SharedPreferences preferences;
     int cid;
-    SharedPreferences.Editor contextEditor;
     ExecutorService executor;
     SQLiteDatabase db;
     String date;
@@ -68,6 +72,7 @@ public class RollCallFragment extends Fragment {
     AdapterNoRcStu adapter;
     AlertDialog.Builder builder;
     AlertDialog dialog;
+    Boolean leave;
     public RollCallFragment() {
         // Required empty public constructor
     }
@@ -113,7 +118,6 @@ public class RollCallFragment extends Fragment {
             flag = 0;
 
             JSONArray stuNoRCInfos;
-            preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
             db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null); // 將學生資訊存進裝置的DB
             // 每個跟RecyclerView有關的資料都存進裝置名為 allList 的DB中，以table名稱來區別每個list
             db.execSQL("drop table if exists no_rc_stu_"+cid+";");
@@ -137,6 +141,7 @@ public class RollCallFragment extends Fragment {
             }
         }
     };
+
     public static RollCallFragment newInstance(String param1, String param2) {
         RollCallFragment fragment = new RollCallFragment();
         return fragment;
@@ -145,7 +150,6 @@ public class RollCallFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -154,8 +158,10 @@ public class RollCallFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentRollCallBinding.inflate(inflater, container, false);
         preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        preferences.edit().putBoolean("mesToEnter",false).apply();
         executor = Executors.newSingleThreadExecutor();
         cid = preferences.getInt("cid",0);
+        recyclerView = binding.RecyclerStuAbsence;
         if (cid == 0){
             Toast.makeText(getActivity(), "請重新進入教室", Toast.LENGTH_SHORT).show();
         }
@@ -184,14 +190,14 @@ public class RollCallFragment extends Fragment {
                     OpenRCAPIWorker apiCaller = new OpenRCAPIWorker(request);
                     executor.execute(apiCaller);
                 } else {
+                    preferences.edit().putBoolean("mesToEnter",false).apply();
                     Log.e("app","app 送出資訊:" +body);
                     request = new Request.Builder()
                             .url("http://20.2.232.79:8864/api/rollcall/teacher/close")
                             .post(body)
                             .build();
-                    SimpleAPIWorker2 apiCaller2 = new SimpleAPIWorker2(request);
+                    CloseAPIWorker apiCaller2 = new CloseAPIWorker(request);
                     executor.execute(apiCaller2);
-                    recyclerView = binding.RecyclerStuAbsence;
                 }
             }
         });
@@ -215,7 +221,7 @@ public class RollCallFragment extends Fragment {
                         .url("http://20.2.232.79:8864/api/rollcall/manual/call")
                         .post(RequestBody.create(data1.toString(), mediaType))
                         .build();
-                SimpleAPIWorker3 apiCaller = new SimpleAPIWorker3(request);
+                ListManualAPIWorker apiCaller = new ListManualAPIWorker(request);
                 executor.execute(apiCaller);
             }
         };
@@ -233,6 +239,7 @@ public class RollCallFragment extends Fragment {
         public void run() {
             try {
                 Response response = client.newCall(request).execute();
+                preferences.edit().putBoolean("mesToEnter",true).apply();
                 JSONObject result = new JSONObject(response.body().string());
                 Message m = OpenResultHandler.obtainMessage();
                 Bundle bundle = new Bundle();
@@ -244,10 +251,10 @@ public class RollCallFragment extends Fragment {
             }
         }
     }
-    class SimpleAPIWorker2 implements Runnable {
+    class CloseAPIWorker implements Runnable {
         OkHttpClient client;
         Request request;
-        public SimpleAPIWorker2(Request request) {
+        public CloseAPIWorker (Request request) {
             this.request = request;
             client = new OkHttpClient();
         }
@@ -256,7 +263,7 @@ public class RollCallFragment extends Fragment {
             try {
                 Response response = client.newCall(request).execute();
                 String apidata = response.body().string();
-                Log.w("api","simple2 api回應:"+apidata);
+                Log.w("api","Close api回應:"+apidata);
                 JSONObject result = new JSONObject(apidata);
                 Message m = CloseResultHandler.obtainMessage();
                 Bundle bundle = new Bundle();
@@ -273,10 +280,26 @@ public class RollCallFragment extends Fragment {
             }
         }
     }
-    class SimpleAPIWorker3 implements Runnable {
+    class BackCheckAPIWorker implements Runnable {
         OkHttpClient client;
         Request request;
-        public SimpleAPIWorker3(Request request) {
+        public BackCheckAPIWorker (Request request) {
+            this.request = request;
+            client = new OkHttpClient();
+        }
+        @Override
+        public void run() {
+            try {
+                client.newCall(request).execute();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    class ListManualAPIWorker implements Runnable {
+        OkHttpClient client;
+        Request request;
+        public ListManualAPIWorker (Request request) {
             this.request = request;
             client = new OkHttpClient();
         }
@@ -293,6 +316,59 @@ public class RollCallFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN){
+                    // back & home 鍵的ClickListener事件設定
+                    if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME){
+                        if (flag == 1){
+                            builder = new AlertDialog.Builder(getActivity());
+                            builder.setMessage("點名中無法離開此頁面，是否結束點名?");
+                            builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    flag = 0;
+                                    leave = false;
+                                    request = new Request.Builder()
+                                            .url("http://20.2.232.79:8864/api/rollcall/teacher/close")
+                                            .post(body)
+                                            .build();
+                                    CloseAPIWorker apiCaller2 = new CloseAPIWorker(request);
+                                    executor.execute(apiCaller2);
+                                }
+                            });
+                            builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {    } });
+                            dialog = builder.create();
+                            dialog.show();
+                        } else {
+                            preferences.edit().putBoolean("mesToEnter",false).apply();
+                            return false;
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+        getParentFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                if (flag == 1) {
+                    Log.w("press","onBackStackChanged");
+                    flag = 0;
+                    request = new Request.Builder()
+                            .url("http://20.2.232.79:8864/api/rollcall/teacher/close")
+                            .post(body)
+                            .build();
+                    BackCheckAPIWorker apiCaller2 = new BackCheckAPIWorker(request);
+                    executor.execute(apiCaller2);
+                }
+            }
+        });
     }
 }

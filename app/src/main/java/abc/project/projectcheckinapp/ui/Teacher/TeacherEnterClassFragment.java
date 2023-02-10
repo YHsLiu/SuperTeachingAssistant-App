@@ -15,6 +15,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentTeacherEnterClassBinding;
@@ -79,6 +80,10 @@ public class TeacherEnterClassFragment extends Fragment {
                 navController.navigate(R.id.action_nav_tec_enter_to_nav_tec_stulist);
             }
         });
+        if (preferences.getBoolean("mesToEnter",false)) {
+            Toast.makeText(getActivity(), "已關閉點名", Toast.LENGTH_SHORT).show();
+            preferences.edit().putBoolean("mesToEnter",false);
+        }
         return binding.getRoot();
     }
 

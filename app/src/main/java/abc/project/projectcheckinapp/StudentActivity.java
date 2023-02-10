@@ -150,4 +150,5 @@ public class StudentActivity extends AppCompatActivity implements NavigationView
     public void setTitle(String title) {
         getSupportActionBar().setTitle(title) ;
     }
+
 }

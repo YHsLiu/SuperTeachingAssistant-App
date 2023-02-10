@@ -19,7 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
+        android:fitsSystemWindows="false"
         app:headerLayout="@layout/nav_header_teacher_main"
         app:menu="@menu/menu_for_teacher" />
+
 </androidx.drawerlayout.widget.DrawerLayout>
