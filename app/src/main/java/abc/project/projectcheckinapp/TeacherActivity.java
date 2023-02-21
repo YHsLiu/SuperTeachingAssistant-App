@@ -7,12 +7,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Menu;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -21,19 +19,17 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
-import abc.project.projectcheckinapp.R;
-import abc.project.projectcheckinapp.WelcomeActivity;
-import abc.project.projectcheckinapp.databinding.ActivitySecondBinding;
-import abc.project.projectcheckinapp.rawData.ActionBarTitleSetter;
-import abc.project.projectcheckinapp.ui.Teacher.NewClassFragment;
-import abc.project.projectcheckinapp.ui.Teacher.ReviseTchDataFragment;
-import abc.project.projectcheckinapp.ui.Teacher.SelectRoomFragment;
-import abc.project.projectcheckinapp.ui.Teacher.TeacherMainFragment;
+import abc.project.projectcheckinapp.databinding.ActivityTeacherBinding;
+import abc.project.projectcheckinapp.Other.ActionBarTitleSetter;
+import abc.project.projectcheckinapp.Fragment.Teacher.NewClassFragment;
+import abc.project.projectcheckinapp.Fragment.Teacher.ReviseTchDataFragment;
+import abc.project.projectcheckinapp.Fragment.Teacher.SelectRoomFragment;
+import abc.project.projectcheckinapp.Fragment.Teacher.TeacherMainFragment;
 
 public class TeacherActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener , ActionBarTitleSetter {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private ActivitySecondBinding binding;
+    private ActivityTeacherBinding binding;
     SharedPreferences preferences;
     SharedPreferences.Editor contextEditor;
     Fragment fragment;
@@ -42,7 +38,7 @@ public class TeacherActivity extends AppCompatActivity implements NavigationView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivitySecondBinding.inflate(getLayoutInflater());
+        binding = ActivityTeacherBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         //setSupportActionBar(binding.appBarSecond.toolbar);

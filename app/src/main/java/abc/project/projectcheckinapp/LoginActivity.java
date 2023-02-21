@@ -28,7 +28,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import abc.project.projectcheckinapp.databinding.ActivityLoginBinding;
-import abc.project.projectcheckinapp.rawData.UniversityArray;
+import abc.project.projectcheckinapp.Other.UniversityArray;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -67,7 +67,6 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             } else {
-                //Toast.makeText(LoginActivity.this, ""+bundle.getInt("status"), Toast.LENGTH_SHORT).show();
                 Toast.makeText(LoginActivity.this, "無此帳號，請確認資料是否正確或建立帳號", Toast.LENGTH_LONG).show();
             }
         }
@@ -119,6 +118,19 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+        // checkbox
+        Boolean Remember = preferences.getBoolean("isRemember",false);
+        if (Remember){
+            binding.txtLoginAcc.setText(preferences.getString("account",""));
+            binding.txtLoginPwd.setText(preferences.getString("password",""));
+            spinner.setSelection(preferences.getInt("university",0));
+            binding.checkLoginRemenber.setChecked(true);
+        } else {
+            binding.txtLoginAcc.setText("");
+            binding.txtLoginPwd.setText("");
+            spinner.setSelection(0);
+            binding.checkLoginRemenber.setChecked(false);
+        }
 
         binding.btnLoginCreat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,12 +149,10 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     packet.put("type",1);
                     packet.put("status" , 10);
-                    packet.put("msg","登錄資料打包中");
                     data.put("acc",binding.txtLoginAcc.getText().toString());
                     data.put("pwd",binding.txtLoginPwd.getText().toString());
                     data.put("univ",univer);
                     packet.put("data",data);
-                    // Toast.makeText(LoginActivity.this, data.toString(), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     Log.w("api","請檢查click的cord");
                 }
@@ -162,20 +172,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
                 executor.execute(apiCaller);
-            }
-        });
-        // checkbox
-        Boolean Remember = preferences.getBoolean("isRemember",false);
-        if (Remember){
-            binding.txtLoginAcc.setText(preferences.getString("account",""));
-            binding.txtLoginPwd.setText(preferences.getString("password",""));
-            spinner.setSelection(preferences.getInt("university",0));
-            binding.checkLoginRemenber.setChecked(true);
-        }
-        binding.checkLoginRemenber.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+
+                if (binding.checkLoginRemenber.isChecked()){
                     editor.putString("account",binding.txtLoginAcc.getText().toString());
                     editor.putString("password",binding.txtLoginPwd.getText().toString());
                     editor.putInt("university",spinner.getSelectedItemPosition());

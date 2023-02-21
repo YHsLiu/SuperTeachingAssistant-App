@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Student.StdRollCallFragment">
+    tools:context=".Fragment.Student.StdRollCallFragment">
 
     <ImageView
         android:id="@+id/image_rcll_record"

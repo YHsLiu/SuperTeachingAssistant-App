@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_EnterClass"
-        android:name="abc.project.projectcheckinapp.ui.Student.EnterClassFragment"
+        android:name="abc.project.projectcheckinapp.Fragment.Student.EnterClassFragment"
         android:label="@string/menu_EnterClass"
         tools:layout="@layout/fragment_enterclass" >
         <action
@@ -21,17 +21,17 @@
 
     <fragment
         android:id="@+id/nav_classTable"
-        android:name="abc.project.projectcheckinapp.ui.Student.ClassTableFragment"
+        android:name="abc.project.projectcheckinapp.Fragment.Student.ClassTableFragment"
         android:label="我的課表"
         tools:layout="@layout/fragment_classtable"/>
     <fragment
         android:id="@+id/nav_reviseStdData"
-        android:name="abc.project.projectcheckinapp.ui.Student.ReviseStdDataFragment"
+        android:name="abc.project.projectcheckinapp.Fragment.Student.ReviseStdDataFragment"
         android:label="修改個人資料"
         tools:layout="@layout/fragment_revise_std_data" />
     <fragment
         android:id="@+id/nav_inputCourseCode"
-        android:name="abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment"
+        android:name="abc.project.projectcheckinapp.Fragment.Student.InputCourseCodeFragment"
         android:label="輸入課程代碼"
         tools:layout="@layout/fragment_inputcoursecode">
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_stdRollCall"
-        android:name="abc.project.projectcheckinapp.ui.Student.StdRollCallFragment"
+        android:name="abc.project.projectcheckinapp.Fragment.Student.StdRollCallFragment"
         android:label="點名"
         tools:layout="@layout/fragment_std_roll_call" >
         <action
@@ -49,7 +49,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_stdRecord"
-        android:name="abc.project.projectcheckinapp.ui.Student.StdRecordFragment"
+        android:name="abc.project.projectcheckinapp.Fragment.Student.StdRecordFragment"
         android:label="點名紀錄"
         tools:layout="@layout/fragment_std_record" >
         <action
@@ -58,9 +58,9 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="abc.project.projectcheckinapp.ui.home.HomeFragment"
+        android:name="abc.project.projectcheckinapp.Fragment.Student.StdHomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_std_home" >
         <action
             android:id="@+id/action_homeFragment_to_nav_classTable"
             app:destination="@id/nav_classTable" />

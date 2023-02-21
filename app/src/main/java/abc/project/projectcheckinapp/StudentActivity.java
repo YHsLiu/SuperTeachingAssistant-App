@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -20,16 +19,15 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.concurrent.ExecutorService;
+
+import abc.project.projectcheckinapp.Other.ActionBarTitleSetter;
+import abc.project.projectcheckinapp.Fragment.Student.ClassTableFragment;
+import abc.project.projectcheckinapp.Fragment.Student.EnterClassFragment;
+import abc.project.projectcheckinapp.Fragment.Student.InputCourseCodeFragment;
+import abc.project.projectcheckinapp.Fragment.Student.ReviseStdDataFragment;
 import abc.project.projectcheckinapp.databinding.ActivityStudentBinding;
-import abc.project.projectcheckinapp.rawData.ActionBarTitleSetter;
-import abc.project.projectcheckinapp.rawData.ClickListener;
-import abc.project.projectcheckinapp.ui.Student.ClassTableFragment;
-import abc.project.projectcheckinapp.ui.Student.EnterClassFragment;
-import abc.project.projectcheckinapp.ui.Student.InputCourseCodeFragment;
-import abc.project.projectcheckinapp.ui.Student.ReviseStdDataFragment;
 
 public class StudentActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ActionBarTitleSetter {
 

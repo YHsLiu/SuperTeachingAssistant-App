@@ -6,7 +6,7 @@
     android:id="@+id/Recycler_class"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Teacher.SelectRoomFragment">
+    tools:context=".Fragment.Teacher.SelectRoomFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
