@@ -19,17 +19,11 @@ import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentTeacherEnterClassBinding;
 import abc.project.projectcheckinapp.Other.ActionBarTitleSetter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TeacherEnterClassFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class TeacherEnterClassFragment extends Fragment {
 
     FragmentTeacherEnterClassBinding binding;
     NavController navController;
-    SharedPreferences preferences;
-    Bundle bundle;
+    SharedPreferences sharedPreferences;
 
     public TeacherEnterClassFragment() {
         // Required empty public constructor
@@ -37,7 +31,6 @@ public class TeacherEnterClassFragment extends Fragment {
 
     public static TeacherEnterClassFragment newInstance(String param1, String param2) {
         TeacherEnterClassFragment fragment = new TeacherEnterClassFragment();
-
         return fragment;
     }
 
@@ -47,13 +40,12 @@ public class TeacherEnterClassFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         binding = FragmentTeacherEnterClassBinding.inflate(inflater, container, false);
-        preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        String classname = preferences.getString("classname","無資料");
+        sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        String classname = sharedPreferences.getString("classname","無資料");
         ((ActionBarTitleSetter)getActivity()).setTitle(classname);
+
         binding.btnLottery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,9 +70,10 @@ public class TeacherEnterClassFragment extends Fragment {
                 navController.navigate(R.id.action_nav_tec_enter_to_nav_tec_stulist);
             }
         });
-        if (preferences.getBoolean("mesToEnter",false)) {
+
+        if (sharedPreferences.getBoolean("RollCalling",false)) {
             Toast.makeText(getActivity(), "已關閉點名", Toast.LENGTH_SHORT).show();
-            preferences.edit().putBoolean("mesToEnter",false);
+            sharedPreferences.edit().putBoolean("RollCalling",false);
         }
         return binding.getRoot();
     }

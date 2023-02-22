@@ -38,28 +38,25 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RecordFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RecordFragment extends Fragment {
 
     FragmentRecordBinding binding;
     NavController navController;
-    SharedPreferences preferences;
+    SharedPreferences sharedPreferences;
+    MediaType mediaType;
     ExecutorService executor;
     RecyclerView recyclerView;
     AdapterTeacherRecord adapter;
     SQLiteDatabase db;
+    SimpleDateFormat formatter;
     int cid;
+    String date;
+    JSONObject packet , data;
     Handler RecordHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
-            preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
-            int cid = preferences.getInt("cid",0);
             JSONArray stuInfos;
             db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
             if (bundle.getInt("type") == 2) {  // semester紀錄
@@ -76,10 +73,9 @@ public class RecordFragment extends Fragment {
                     adapter = new AdapterTeacherRecord(db,cid);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                } catch (JSONException e) {  throw new RuntimeException(e);   }
+                } catch (JSONException e)
+                {  throw new RuntimeException(e);   }
             } else if (bundle.getInt("type") == 3) {  // 今日點名紀錄
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-                String date = formatter.format(new Date());
                 db.execSQL("drop table if exists record_today_"+cid+";");
                 db.execSQL("create table record_today_"+cid+"(stuId text,name text);");
                 try { stuInfos = new JSONArray(bundle.getString("list"));
@@ -88,13 +84,13 @@ public class RecordFragment extends Fragment {
                         db.execSQL("insert into record_today_"+cid+" values (?,?);",
                                 new Object[] { stuInfo.getString("學號"),
                                                stuInfo.getString("學生姓名")});  }
-                } catch (JSONException e) {  throw new RuntimeException(e);   }
+                } catch (JSONException e)
+                {  throw new RuntimeException(e);   }
                 db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
                 adapter = new AdapterTeacherRecord(db,date,cid);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             }
-
         }
     };
     public RecordFragment() {
@@ -115,53 +111,61 @@ public class RecordFragment extends Fragment {
         binding = FragmentRecordBinding.inflate(inflater, container, false);
         recyclerView = binding.RecyclerRecord;
         executor = Executors.newSingleThreadExecutor();
-        preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
-        cid = preferences.getInt("cid",0);
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-        String date = formatter.format(new Date());
-        MediaType mediaType = MediaType.parse("application/json");
-        JSONObject packet = new JSONObject();
-        JSONObject data = new JSONObject();
-        try {
-            packet.put("type", 1);
-            packet.put("status", 11);
-            data.put("cid", cid);
-            data.put("date", date);
-            packet.put("data", data);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-        RequestBody body = RequestBody.create(packet.toString(), mediaType);
+        sharedPreferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
+        cid = sharedPreferences.getInt("cid",0);
+
+        mediaType = MediaType.parse("application/json");
+        packet = new JSONObject();
+        data = new JSONObject();
+        formatter = new SimpleDateFormat("yyyyMMdd");
         binding.btnSemeseterRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
+                    packet.put("type", 1);
+                    packet.put("status", 11);
+                    data.put("cid", cid);
+                    packet.put("data", data);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
                 Request request = new Request.Builder()
                         .url("http://20.2.232.79:8864/api/record/semester")
-                        .post(body)
+                        .post(RequestBody.create(packet.toString(), mediaType))
                         .build();
-                SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
+                RecordAPIWorker apiCaller = new RecordAPIWorker(request);
                 executor.execute(apiCaller);
-
             }
         });
+
         binding.btnTodayRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                date = formatter.format(new Date());
+                try {
+                    packet.put("type", 1);
+                    packet.put("status", 11);
+                    data.put("cid", cid);
+                    data.put("date",date);
+                    packet.put("data", data);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
                 Request request = new Request.Builder()
                         .url("http://20.2.232.79:8864/api/record/today")
-                        .post(body)
+                        .post(RequestBody.create(packet.toString(), mediaType))
                         .build();
-                SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
+                RecordAPIWorker apiCaller = new RecordAPIWorker(request);
                 executor.execute(apiCaller);
 
             }
         });
         return binding.getRoot();
     }
-    class SimpleAPIWorker implements Runnable {
+    class RecordAPIWorker implements Runnable {
         OkHttpClient client;
         Request request;
-        public SimpleAPIWorker(Request request) {
+        public RecordAPIWorker(Request request) {
             this.request = request;
             client = new OkHttpClient();
         }

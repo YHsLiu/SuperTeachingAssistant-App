@@ -45,16 +45,10 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RollCallFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RollCallFragment extends Fragment {
-    static int flag = 0; // 點名開關
-    NavController navController;
+    static int RollCallSwitch = 0; // 點名開關
     FragmentRollCallBinding binding;
-    SharedPreferences preferences;
+    SharedPreferences sharedPreferences;
     int cid;
     ExecutorService executor;
     SQLiteDatabase db;
@@ -79,8 +73,9 @@ public class RollCallFragment extends Fragment {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
             if (bundle.getInt("status")==12){
-                binding.btnTec2Start.setText("結束點名");
-                flag = 1;
+                sharedPreferences.edit().putBoolean("RollCalling",true).apply();
+                binding.btnRollCallSwitch.setText("結束點名");
+                RollCallSwitch = 1;
             } else if(bundle.getInt("status")==13) {
                 builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage("今日已點名，是否刪除紀錄後重新點名?");
@@ -91,13 +86,13 @@ public class RollCallFragment extends Fragment {
                                 .url("http://20.2.232.79:8864/api/rollcall/teacher/open/again")
                                 .post(body)
                                 .build();
-                        OpenRCAPIWorker apiCaller = new OpenRCAPIWorker(request);
+                        OpenRollCallAPIWorker apiCaller = new OpenRollCallAPIWorker(request);
                         executor.execute(apiCaller);
                     }
                 });
                 builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {  flag = 0;  }
+                    public void onClick(DialogInterface dialog, int which) {  RollCallSwitch = 0;  }
                 });
                 dialog = builder.create();
                 dialog.show();
@@ -109,13 +104,12 @@ public class RollCallFragment extends Fragment {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
-            binding.btnTec2Start.setText("已點名");
-            binding.btnTec2Start.setEnabled(false);
-            flag = 0;
+            binding.btnRollCallSwitch.setText("已點名");
+            binding.btnRollCallSwitch.setEnabled(false);
+            RollCallSwitch = 0;
 
             JSONArray stuNoRCInfos;
-            db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null); // 將學生資訊存進裝置的DB
-            // 每個跟RecyclerView有關的資料都存進裝置名為 allList 的DB中，以table名稱來區別每個list
+            db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
             db.execSQL("drop table if exists no_rc_stu_"+cid+";");
             db.execSQL("create table no_rc_stu_"+cid+"(sid integer,name text, depart text, stuId text);");
             try {
@@ -127,13 +121,11 @@ public class RollCallFragment extends Fragment {
                                     stuInfo.getString("學生姓名"),
                                     stuInfo.getString("科系"),
                                     stuInfo.getString("學號")}); }
-                db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
                 adapter = new AdapterNoRollCallStudent(db,clickListener,cid);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                Log.e("sqlite","The process of putting data into sqlite is wrong.");
             }
         }
     };
@@ -149,18 +141,17 @@ public class RollCallFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentRollCallBinding.inflate(inflater, container, false);
-        preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        preferences.edit().putBoolean("mesToEnter",false).apply();
+        sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        sharedPreferences.edit().putBoolean("RollCalling",false).apply();
         executor = Executors.newSingleThreadExecutor();
-        cid = preferences.getInt("cid",0);
+        cid = sharedPreferences.getInt("cid",0);
         recyclerView = binding.RecyclerStuAbsence;
         if (cid == 0){
             Toast.makeText(getActivity(), "請重新進入教室", Toast.LENGTH_SHORT).show();
         }
+
         date = new SimpleDateFormat("yyyyMMdd").format(new Date());
         mediaType = MediaType.parse("application/json");
         packet = new JSONObject();
@@ -172,27 +163,26 @@ public class RollCallFragment extends Fragment {
             data.put("date", date);
             packet.put("data", data);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            Log.e("JSON","There is an error in the process of packaging the JSON file, packet:"+packet);
         }
         body = RequestBody.create(packet.toString(), mediaType);
-        binding.btnTec2Start.setOnClickListener(new View.OnClickListener() {
+        binding.btnRollCallSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (flag == 0) {
+                if (RollCallSwitch == 0) {
                     request = new Request.Builder()
                             .url("http://20.2.232.79:8864/api/rollcall/teacher/open")
                             .post(body)
                             .build();
-                    OpenRCAPIWorker apiCaller = new OpenRCAPIWorker(request);
+                    OpenRollCallAPIWorker apiCaller = new OpenRollCallAPIWorker(request);
                     executor.execute(apiCaller);
                 } else {
-                    preferences.edit().putBoolean("mesToEnter",false).apply();
-                    Log.e("app","app 送出資訊:" +body);
+                    sharedPreferences.edit().putBoolean("RollCalling",false).apply();
                     request = new Request.Builder()
                             .url("http://20.2.232.79:8864/api/rollcall/teacher/close")
                             .post(body)
                             .build();
-                    CloseAPIWorker apiCaller2 = new CloseAPIWorker(request);
+                    CloseRollCallAPIWorker apiCaller2 = new CloseRollCallAPIWorker(request);
                     executor.execute(apiCaller2);
                 }
             }
@@ -204,30 +194,29 @@ public class RollCallFragment extends Fragment {
             public void onClickForClassroom(int position, int cid,String classname) {  }
             @Override
             public void onClickForNoRcStuList(int position, int sid) {
-                JSONObject data1 = new JSONObject();
+                JSONObject ManualRollCallInfo = new JSONObject();
                 try {
-                    data1.put("cid", cid);
-                    data1.put("sid",sid);
-                    data1.put("date", date);
+                    ManualRollCallInfo.put("cid", cid);
+                    ManualRollCallInfo.put("sid",sid);
+                    ManualRollCallInfo.put("date", date);
                 } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                    Log.e("JSON","There is an error in the process of packaging the JSON file, ManualRollCallInfo:"+ManualRollCallInfo);
                 }
-                Log.w("api","onClickForNoRcStuList  送出資訊:"+data1);
                 request = new Request.Builder()
                         .url("http://20.2.232.79:8864/api/rollcall/manual/call")
-                        .post(RequestBody.create(data1.toString(), mediaType))
+                        .post(RequestBody.create(ManualRollCallInfo.toString(), mediaType))
                         .build();
-                ListManualAPIWorker apiCaller = new ListManualAPIWorker(request);
+                ManualRollCallAPIWorker apiCaller = new ManualRollCallAPIWorker(request);
                 executor.execute(apiCaller);
             }
         };
         return binding.getRoot();
     }
 
-    class OpenRCAPIWorker implements Runnable {
+    class OpenRollCallAPIWorker implements Runnable {
         OkHttpClient client;
         Request request;
-        public OpenRCAPIWorker(Request request) {
+        public OpenRollCallAPIWorker(Request request) {
             this.request = request;
             client = new OkHttpClient();
         }
@@ -235,7 +224,6 @@ public class RollCallFragment extends Fragment {
         public void run() {
             try {
                 Response response = client.newCall(request).execute();
-                preferences.edit().putBoolean("mesToEnter",true).apply();
                 JSONObject result = new JSONObject(response.body().string());
                 Message m = OpenResultHandler.obtainMessage();
                 Bundle bundle = new Bundle();
@@ -247,10 +235,10 @@ public class RollCallFragment extends Fragment {
             }
         }
     }
-    class CloseAPIWorker implements Runnable {
+    class CloseRollCallAPIWorker implements Runnable {
         OkHttpClient client;
         Request request;
-        public CloseAPIWorker (Request request) {
+        public CloseRollCallAPIWorker (Request request) {
             this.request = request;
             client = new OkHttpClient();
         }
@@ -292,10 +280,10 @@ public class RollCallFragment extends Fragment {
             }
         }
     }
-    class ListManualAPIWorker implements Runnable {
+    class ManualRollCallAPIWorker implements Runnable {
         OkHttpClient client;
         Request request;
-        public ListManualAPIWorker (Request request) {
+        public ManualRollCallAPIWorker (Request request) {
             this.request = request;
             client = new OkHttpClient();
         }
@@ -320,19 +308,19 @@ public class RollCallFragment extends Fragment {
                 if (event.getAction() == KeyEvent.ACTION_DOWN){
                     // back & home 鍵的ClickListener事件設定
                     if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME){
-                        if (flag == 1){
+                        if (RollCallSwitch == 1){
                             builder = new AlertDialog.Builder(getActivity());
                             builder.setMessage("點名中無法離開此頁面，是否結束點名?");
                             builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    flag = 0;
+                                    RollCallSwitch = 0;
                                     leave = false;
                                     request = new Request.Builder()
                                             .url("http://20.2.232.79:8864/api/rollcall/teacher/close")
                                             .post(body)
                                             .build();
-                                    CloseAPIWorker apiCaller2 = new CloseAPIWorker(request);
+                                    CloseRollCallAPIWorker apiCaller2 = new CloseRollCallAPIWorker(request);
                                     executor.execute(apiCaller2);
                                 }
                             });
@@ -342,7 +330,7 @@ public class RollCallFragment extends Fragment {
                             dialog = builder.create();
                             dialog.show();
                         } else {
-                            preferences.edit().putBoolean("mesToEnter",false).apply();
+                            sharedPreferences.edit().putBoolean("RollCalling",false).apply();
                             return false;
                         }
                         return true;
@@ -354,9 +342,8 @@ public class RollCallFragment extends Fragment {
         getParentFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
-                if (flag == 1) {
-                    Log.w("press","onBackStackChanged");
-                    flag = 0;
+                if (RollCallSwitch == 1) {
+                    RollCallSwitch = 0;
                     request = new Request.Builder()
                             .url("http://20.2.232.79:8864/api/rollcall/teacher/close")
                             .post(body)

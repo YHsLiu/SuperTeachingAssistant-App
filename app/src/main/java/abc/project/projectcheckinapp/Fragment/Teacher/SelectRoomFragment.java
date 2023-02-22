@@ -40,21 +40,16 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SelectRoomFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SelectRoomFragment extends Fragment {
 
     FragmentSelectRoomBinding binding;
     NavController navController;
     int tid;
     SQLiteDatabase db;
-    SharedPreferences preferences;
+    SharedPreferences sharedPreferences;
     RecyclerView recyclerView;
     ClickListener clickListener;
-    SharedPreferences.Editor contextEditor;
+    SharedPreferences.Editor sharedEditor;
     ExecutorService executor;
     AdapterClassroom adapter;
     Handler selectClassResultHandler = new Handler(Looper.getMainLooper()){
@@ -62,9 +57,9 @@ public class SelectRoomFragment extends Fragment {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
-            preferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
-            tid = preferences.getInt("tid",0);
-            db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null); // 將學生資訊存進裝置的DB
+            sharedPreferences = getActivity().getSharedPreferences("userInfo",MODE_PRIVATE);
+            tid = sharedPreferences.getInt("tid",0);
+            db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
             // 每個跟RecyclerView有關的資料都存進裝置名為 allList 的DB中，以table名稱來區別每個list
             db.execSQL("drop table if exists allroom;");
             db.execSQL("create table allroom(cid integer,classname text, classcode text);");
@@ -113,9 +108,9 @@ public class SelectRoomFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentSelectRoomBinding.inflate(inflater,container,false);
-        preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         executor = Executors.newSingleThreadExecutor();
-        tid = preferences.getInt("tid",0);
+        tid = sharedPreferences.getInt("tid",0);
         recyclerView =binding.RecyclerClassroom;
         JSONObject packet = new JSONObject();
         try {
@@ -131,20 +126,18 @@ public class SelectRoomFragment extends Fragment {
                 .url("http://20.2.232.79:8864/api/list/classroom")
                 .post(body)
                 .build();
-        SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
+        SelectRoomAPIWorker apiCaller = new SelectRoomAPIWorker(request);
         executor.execute(apiCaller);
-
-        db = getActivity().openOrCreateDatabase("allList",MODE_PRIVATE,null);
 
         clickListener = new ClickListener() {
             @Override
             public void onClickForAllStuList(int position, int sid, String stuname, String studepart, String stuid) {   }
             @Override
             public void onClickForClassroom(int position, int cid,String classname) {
-                contextEditor = preferences.edit();
-                contextEditor.putInt("cid",cid);
-                contextEditor.putString("classname",classname);
-                contextEditor.apply();
+                sharedEditor = sharedPreferences.edit();
+                sharedEditor.putInt("cid",cid);
+                sharedEditor.putString("classname",classname);
+                sharedEditor.apply();
                 navController.navigate(R.id.action_selectRoomFragment_to_nav_tec_enter);
             }
             @Override
@@ -153,11 +146,11 @@ public class SelectRoomFragment extends Fragment {
         return binding.getRoot();
     }
 
-    class SimpleAPIWorker implements Runnable {
+    class SelectRoomAPIWorker implements Runnable {
         OkHttpClient client;
         Request request;
 
-        public SimpleAPIWorker(Request request) {
+        public SelectRoomAPIWorker(Request request) {
             this.request = request;
             client = new OkHttpClient();
         }
@@ -168,16 +161,14 @@ public class SelectRoomFragment extends Fragment {
                 Response response = client.newCall(request).execute();
                 String res = response.body().string();
                 JSONObject result = new JSONObject(res);
-                Log.w("apicall", res);
                 Message m = selectClassResultHandler.obtainMessage();
                 Bundle bundle = new Bundle();
                 bundle.putInt("status", result.getInt("type"));
                 bundle.putString("roomList", result.getString("list"));
                 m.setData(bundle);
-                Log.w("sqlite", "呼叫 selectClassresult");
                 selectClassResultHandler.sendMessage(m);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                Log.e("api", "API responds with problems");
             }
         }
     }

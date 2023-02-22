@@ -15,30 +15,21 @@ import android.view.ViewGroup;
 import abc.project.projectcheckinapp.R;
 import abc.project.projectcheckinapp.databinding.FragmentTeacherMainBinding;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TeacherMainFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class TeacherMainFragment extends Fragment {
     FragmentTeacherMainBinding binding;
     NavController navController;
 
     public TeacherMainFragment() {
-        // Required empty public constructor
     }
-
 
     public static TeacherMainFragment newInstance(String param1, String param2) {
         TeacherMainFragment fragment = new TeacherMainFragment();
-
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override

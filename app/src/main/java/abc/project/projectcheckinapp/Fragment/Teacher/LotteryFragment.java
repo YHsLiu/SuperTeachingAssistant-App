@@ -37,11 +37,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LotteryFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class LotteryFragment extends Fragment {
     FragmentLotteryBinding binding;
     NavController navController;

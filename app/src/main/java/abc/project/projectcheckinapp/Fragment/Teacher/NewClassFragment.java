@@ -45,8 +45,8 @@ import okhttp3.Response;
 public class NewClassFragment extends Fragment {
     FragmentNewClassBinding binding;
     NavController navController;
-    SharedPreferences preferences;
-    SharedPreferences.Editor contextEditor;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor sharedEditor;
     ExecutorService executor;
     AlertDialog.Builder builder;
     AlertDialog dialog;
@@ -62,10 +62,9 @@ public class NewClassFragment extends Fragment {
                 builder.setPositiveButton("進教室", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        preferences = getActivity().getSharedPreferences("userInfo",Context.MODE_PRIVATE);
-                        contextEditor = preferences.edit();
-                        contextEditor.putInt("cid",bundle.getInt("cid")).apply();
-                        contextEditor.putString("classname",binding.txtTecNName.getText().toString()).apply();
+                        sharedEditor = getActivity().getSharedPreferences("userInfo",Context.MODE_PRIVATE).edit();
+                        sharedEditor.putInt("cid",bundle.getInt("cid")).apply();
+                        sharedEditor.putString("classname",binding.txtTecNName.getText().toString()).apply();
                         navController.navigate(R.id.action_nav_tec_newclass_to_nav_tec_enter);
                     }
                 });
@@ -92,7 +91,6 @@ public class NewClassFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -100,9 +98,9 @@ public class NewClassFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentNewClassBinding.inflate(inflater,container,false);
-        preferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         executor = Executors.newSingleThreadExecutor();
-        int tid = preferences.getInt("tid",0);
+        int tid = sharedPreferences.getInt("tid",0);
         if (tid == 0){
             Toast.makeText(getActivity(), "請重新登入", Toast.LENGTH_SHORT).show();
             return binding.getRoot();
@@ -128,26 +126,25 @@ public class NewClassFragment extends Fragment {
                     data.put("semester",semester);
                     packet.put("classInfo",data);
                 } catch (JSONException e) {
-                    Log.e("error","packet");
+                    Log.e("JSON","The JSON file is packaged incorrectly, packet:"+packet);
                 }
                 MediaType mediaType = MediaType.parse("application/json");
                 RequestBody body = RequestBody.create(packet.toString(),mediaType);
-                Log.e("apitest",packet.toString());
                 Request request= new Request.Builder()
                         .url("http://20.2.232.79:8864/api/createclass")
                         .post(body)
                         .build();
-                SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
+                CreateClassAPIWorker apiCaller = new CreateClassAPIWorker(request);
                 executor.execute(apiCaller);
             }
         });
 
         return binding.getRoot();
     }
-    class SimpleAPIWorker implements Runnable{
+    class CreateClassAPIWorker implements Runnable{
         OkHttpClient client;
         Request request;
-        public SimpleAPIWorker(Request request) {
+        public CreateClassAPIWorker(Request request) {
             this.request = request;
             client = new OkHttpClient();
         }
