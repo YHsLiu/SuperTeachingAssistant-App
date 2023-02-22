@@ -57,17 +57,17 @@ public class LoginActivity extends AppCompatActivity {
                 // 跳轉到 老師 /學生 頁面
                 if (binding.radioLoginStudent.isChecked()){
                     intent = new Intent(LoginActivity.this, StudentActivity.class );
-                    sharedEditor.putInt("sid",bundle.getInt("userID"));
-                    sharedEditor.apply();
+                    sharedEditor.putInt("sid",bundle.getInt("userID")).apply();
                     startActivity(intent);
                 } else {
                     intent = new Intent(LoginActivity.this, TeacherActivity.class );
-                    sharedEditor.putInt("tid",bundle.getInt("userID"));
-                    sharedEditor.apply();
+                    sharedEditor.putInt("tid",bundle.getInt("userID")).apply();
                     startActivity(intent);
                 }
+            } else if (bundle.getInt("status" )==12){
+                Toast.makeText(LoginActivity.this, "無此帳號，請確認資料是否正確或建立帳號", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(LoginActivity.this, "無此帳號，請確認資料是否正確或建立帳號", Toast.LENGTH_LONG).show();
+                Log.e("DB","The data in DB is incorrect.");
             }
         }
     };
@@ -121,11 +121,13 @@ public class LoginActivity extends AppCompatActivity {
             binding.txtLoginAcc.setText(preferences.getString("account",""));
             binding.txtLoginPwd.setText(preferences.getString("password",""));
             spinner.setSelection(preferences.getInt("university",0));
+            binding.radioIdentity.check(preferences.getInt("Identity",R.id.radio_login_student));
             binding.checkLoginRemenber.setChecked(true);
         } else {
             binding.txtLoginAcc.setText("");
             binding.txtLoginPwd.setText("");
             spinner.setSelection(0);
+            binding.radioIdentity.check(R.id.radio_login_student);
             binding.checkLoginRemenber.setChecked(false);
         }
 
@@ -150,7 +152,7 @@ public class LoginActivity extends AppCompatActivity {
                     data.put("univ",univer);
                     packet.put("data",data);
                 } catch (JSONException e) {
-                    Log.w("api","請檢查click的cord");
+                    Log.e("JSON","The JSON file is packaged incorrectly, packet:"+packet);
                 }
                 MediaType mediaType = MediaType.parse("application/json");
                 RequestBody body = RequestBody.create(packet.toString(),mediaType);
@@ -166,20 +168,20 @@ public class LoginActivity extends AppCompatActivity {
                             .post(body)
                             .build();
                 }
-                SimpleAPIWorker apiCaller = new SimpleAPIWorker(request);
+                LoginAPIWorker apiCaller = new LoginAPIWorker(request);
                 executor.execute(apiCaller);
 
                 if (binding.checkLoginRemenber.isChecked()){
                     editor.putString("account",binding.txtLoginAcc.getText().toString());
                     editor.putString("password",binding.txtLoginPwd.getText().toString());
                     editor.putInt("university",spinner.getSelectedItemPosition());
-                    editor.putBoolean("isStudent",binding.radioLoginStudent.isChecked());
+                    editor.putInt("Identity",binding.radioIdentity.getCheckedRadioButtonId());
                     editor.putBoolean("Remember",true);
                 } else {
                     editor.putString("account","");
                     editor.putString("password","");
                     editor.putInt("university",0);
-                    editor.putBoolean("isStudent",true);
+                    editor.putInt("Identity",R.id.radio_login_student);
                     editor.putBoolean("Remember",false);
                 }
                 editor.apply();
@@ -187,10 +189,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    class SimpleAPIWorker implements Runnable{
+    class LoginAPIWorker implements Runnable{
         OkHttpClient client;
         Request request;
-        public SimpleAPIWorker(Request request) {
+        public LoginAPIWorker(Request request) {
             this.request = request;
             client = new OkHttpClient();
         }
@@ -199,17 +201,14 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 Response response = client.newCall(request).execute();
                 String jsonString = response.body().string();
-                Log.w("api","API回應:"+jsonString);
+                Log.w("api","API:"+jsonString);
                 JSONObject result = new JSONObject(jsonString);
                 Message m = loginResultHandler.obtainMessage();
                 Bundle bundle = new Bundle();
+                bundle.putString("mes",result.getString("mes"));
+                bundle.putInt("status",result.getInt("status") );
                 if ( result.getInt("status")==11){
-                    bundle.putString("mes",result.getString("mes"));
-                    bundle.putInt("status",result.getInt("status") );
                     bundle.putInt("userID",result.getInt("userId"));
-                } else {
-                    bundle.putString("mes", "登入失敗");
-                    bundle.putInt("status",result.getInt("status") );
                 }
                 m.setData(bundle);
                 loginResultHandler.sendMessage(m);
