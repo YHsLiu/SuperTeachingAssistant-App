@@ -24,7 +24,7 @@ public class UniversityArray {
         this.db = db;
     }
 
-    public ArrayList<String> FirstTimeGetSpinner(InputStream inputStream, SQLiteDatabase db)  {
+    public ArrayList<String> InitializeSpinner(InputStream inputStream, SQLiteDatabase db)  {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder sb =new StringBuilder();
         String line;
@@ -51,23 +51,22 @@ public class UniversityArray {
         return universityArray;
     }
 
-    public Cursor GetSpinnerFromDB(SQLiteDatabase db){
+    public Cursor SpinnerFromDB(SQLiteDatabase db){
         String sql = "select _id , univ_name from University;";
         Cursor cursor = db.rawQuery(sql,null);
-        //String queryCols =cursor.getString(0);
         return cursor;
     }
-    public ArrayList< String > GetSpinnerArrayFromDB(SQLiteDatabase db){
+
+    public ArrayList< String > SpinnerArrayFromDB(SQLiteDatabase db){
         String sql = "select _id , univ_name from University;";
         Cursor cursor = db.rawQuery(sql,null);
         ArrayList< String > universityArray =new ArrayList<>();
         cursor.moveToFirst();
-        String info;
+        String universityName;
         do{
-            info = cursor.getString(1);
-            universityArray.add(info);
+            universityName = cursor.getString(1);
+            universityArray.add(universityName);
         }while (cursor.moveToNext());
-        //String queryCols =cursor.getString(0);
         return universityArray;
     }
 }

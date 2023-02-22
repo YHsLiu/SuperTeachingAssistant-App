@@ -39,31 +39,31 @@ public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding binding;
     ExecutorService executor;
-    SharedPreferences preferences;
     Intent intent;
-    SharedPreferences.Editor contextEditor;
+    SharedPreferences preferences, sharedPreferences;
+    SharedPreferences.Editor editor, sharedEditor;
     Spinner spinner;
+    ArrayList< String > universityArray;
 
     Handler loginResultHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
-            preferences = getSharedPreferences("userInfo",MODE_PRIVATE);
-            contextEditor = LoginActivity.this.preferences.edit(); // 所有Activity共用
+            sharedPreferences = getSharedPreferences("userInfo",MODE_PRIVATE);
+            sharedEditor = sharedPreferences.edit();
             if (bundle.getInt("status" )==11) // 登入成功
-            {   contextEditor.putBoolean("isStudent",binding.radioLoginStudent.isChecked()); // 判別師/生
-                contextEditor.putBoolean("isLogin",true); // 已登入
+            {   sharedEditor.putBoolean("Login",true);
                 // 跳轉到 老師 /學生 頁面
                 if (binding.radioLoginStudent.isChecked()){
                     intent = new Intent(LoginActivity.this, StudentActivity.class );
-                    contextEditor.putInt("sid",bundle.getInt("userID"));
-                    contextEditor.apply();
+                    sharedEditor.putInt("sid",bundle.getInt("userID"));
+                    sharedEditor.apply();
                     startActivity(intent);
                 } else {
                     intent = new Intent(LoginActivity.this, TeacherActivity.class );
-                    contextEditor.putInt("tid",bundle.getInt("userID"));
-                    contextEditor.apply();
+                    sharedEditor.putInt("tid",bundle.getInt("userID"));
+                    sharedEditor.apply();
                     startActivity(intent);
                 }
             } else {
@@ -79,31 +79,30 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         executor = Executors.newSingleThreadExecutor();
         preferences = this.getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
+        editor = preferences.edit();
 
         // spinner 設定
         spinner = binding.spinnerLoginSchool;
-        preferences.edit().putBoolean("isFirstTime",true).apply();
+        editor.putBoolean("InitialSpinner",true).apply();
         UniversityArray ua = new UniversityArray();
-        ArrayList< String > universityArray;
-        SQLiteDatabase db = openOrCreateDatabase("UniversityInfo2",MODE_PRIVATE,null); //
-        if ( preferences.getBoolean("isFirstTime",true) ) {
-            universityArray = ua.FirstTimeGetSpinner(getResources().openRawResource(R.raw.university),db);
-            preferences.edit().putBoolean("isFirstTime",false).apply();
+        SQLiteDatabase db = openOrCreateDatabase("UniversitySpinner",MODE_PRIVATE,null); //
+        if ( preferences.getBoolean("InitialSpinner",true) ) {
+            universityArray = ua.InitializeSpinner(getResources().openRawResource(R.raw.university),db);
+            editor.putBoolean("InitialSpinner",false).apply();
             db.close();
-            ArrayAdapter adapter = new ArrayAdapter(LoginActivity.this
+            ArrayAdapter InitialSpinnerAdapter = new ArrayAdapter(LoginActivity.this
                     , android.R.layout.simple_spinner_item, universityArray);
-            adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
-            spinner.setAdapter(adapter);
+            InitialSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
+            spinner.setAdapter(InitialSpinnerAdapter);
         } else {
-            Cursor mycursor = ua.GetSpinnerFromDB(db);
-            universityArray = ua.GetSpinnerArrayFromDB(db);
+            Cursor UniversityCursor = ua.SpinnerFromDB(db);
+            universityArray = ua.SpinnerArrayFromDB(db);
             String[] univName = new String[]{"univ_name"};
             int[] adapterRowViews = new int[]{android.R.id.text1};
-            SimpleCursorAdapter adapter1 = new SimpleCursorAdapter(this,android.R.layout.simple_spinner_item
-                    ,mycursor,univName,adapterRowViews,0);
-            adapter1.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
-            spinner.setAdapter(adapter1);
+            SimpleCursorAdapter SpinnerAdapter = new SimpleCursorAdapter(this,android.R.layout.simple_spinner_item
+                    ,UniversityCursor,univName,adapterRowViews,0);
+            SpinnerAdapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
+            spinner.setAdapter(SpinnerAdapter);
             db.close();
         }
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -112,14 +111,12 @@ public class LoginActivity extends AppCompatActivity {
                 String univer = universityArray.get(position);
                 editor.putString("univer",univer).apply();
             }
-
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) {  }
         });
+
         // checkbox
-        Boolean Remember = preferences.getBoolean("isRemember",false);
+        Boolean Remember = preferences.getBoolean("Remember",false);
         if (Remember){
             binding.txtLoginAcc.setText(preferences.getString("account",""));
             binding.txtLoginPwd.setText(preferences.getString("password",""));
@@ -135,7 +132,6 @@ public class LoginActivity extends AppCompatActivity {
         binding.btnLoginCreat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 跳轉道註冊畫面
                 intent = new Intent(LoginActivity.this,RegistrationActivity.class);
                 startActivity(intent);
             }
@@ -178,13 +174,13 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("password",binding.txtLoginPwd.getText().toString());
                     editor.putInt("university",spinner.getSelectedItemPosition());
                     editor.putBoolean("isStudent",binding.radioLoginStudent.isChecked());
-                    editor.putBoolean("isRemember",true);
+                    editor.putBoolean("Remember",true);
                 } else {
                     editor.putString("account","");
                     editor.putString("password","");
                     editor.putInt("university",0);
                     editor.putBoolean("isStudent",true);
-                    editor.putBoolean("isRemember",false);
+                    editor.putBoolean("Remember",false);
                 }
                 editor.apply();
             }

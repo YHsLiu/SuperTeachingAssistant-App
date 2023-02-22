@@ -111,8 +111,8 @@ public class RegistrationActivity extends AppCompatActivity {
         UniversityArray ua = new UniversityArray();
 
         ArrayList< String > universityArray;
-        Cursor mycursor = ua.GetSpinnerFromDB(db);
-        universityArray = ua.GetSpinnerArrayFromDB(db);
+        Cursor mycursor = ua.SpinnerFromDB(db);
+        universityArray = ua.SpinnerArrayFromDB(db);
         String[] univName = new String[]{"univ_name"};
         int[] adapterRowViews = new int[]{android.R.id.text1};
         SimpleCursorAdapter adapter1 = new SimpleCursorAdapter(this,android.R.layout.simple_spinner_item
