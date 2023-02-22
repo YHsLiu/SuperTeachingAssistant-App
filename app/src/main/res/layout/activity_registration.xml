@@ -132,10 +132,10 @@
         android:text="@string/reg_create_acc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup_identity" />
 
     <RadioGroup
-        android:id="@+id/radioGroup"
+        android:id="@+id/radioGroup_identity"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:checkedButton="@id/radio_reg_std"
@@ -148,6 +148,7 @@
             android:id="@+id/radio_reg_std"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="@string/reg_btn_std" />
 
         <RadioButton

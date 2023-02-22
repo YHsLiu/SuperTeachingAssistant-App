@@ -26,8 +26,6 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -50,12 +48,12 @@ import okhttp3.Response;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    private ActivityRegistrationBinding bindingR;
+    private ActivityRegistrationBinding binding;
     ExecutorService executor;
-    Intent IntentR;      //註冊後跳轉頁面
+    Intent Intent;      //註冊後跳轉頁面
     String url=null;
-    SharedPreferences preferences, preferences2;
-    SharedPreferences.Editor contextEditor;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
     public static final int CAMERA_PERM_CODE = 101;
     public static final int CAMERA_REQUEST_CODE = 102;
     public static final int GALLERY_REQUEST_CODE = 103;
@@ -68,57 +66,38 @@ public class RegistrationActivity extends AppCompatActivity {
             Bundle bundle = msg.getData();
             if( bundle.getInt("status")== 11) {
                 Toast.makeText(RegistrationActivity.this, "註冊成功", Toast.LENGTH_SHORT).show();
-                //判斷是老師or學生 決定跳轉頁
-                IntentR = new Intent(RegistrationActivity.this, LoginActivity.class);
-                startActivity(IntentR);
-
-
-                //*****需要寫sharepreference 後再判斷身分跳轉*****
-                /*if(bindingR.radioRegStd.isChecked()){
-                    IntentR = new Intent(RegistrationActivity.this, StudentActivity.class);
-                    startActivity(IntentR);
-                }
-                if(bindingR.radioRegTch.isChecked()){
-                    IntentR = new Intent(RegistrationActivity.this,TeacherActivity.class);
-                    startActivity(IntentR);
-                }*/
-
-
-
+                Intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+                startActivity(Intent);
             } else {
                 Toast.makeText(RegistrationActivity.this, bundle.getString("mesg"), Toast.LENGTH_LONG).show();
             }
         }
     };
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bindingR = ActivityRegistrationBinding.inflate(getLayoutInflater());
-        setContentView(bindingR.getRoot());
+        binding = ActivityRegistrationBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         preferences = this.getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        // = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        //contextEditor = preferences2.edit();
+        editor = preferences.edit();
         executor = Executors.newSingleThreadExecutor();
         resolver = this.getContentResolver();
 
         // spinner 設定
-        SQLiteDatabase db = openOrCreateDatabase("UniversityInfo2",MODE_PRIVATE,null);
-        Spinner spinner = bindingR.spinnerRegSchool;
+        SQLiteDatabase db = openOrCreateDatabase("UniversitySpinner",MODE_PRIVATE,null);
+        Spinner spinner = binding.spinnerRegSchool;
         UniversityArray ua = new UniversityArray();
 
         ArrayList< String > universityArray;
-        Cursor mycursor = ua.SpinnerFromDB(db);
+        Cursor UniversityCursor = ua.SpinnerFromDB(db);
         universityArray = ua.SpinnerArrayFromDB(db);
         String[] univName = new String[]{"univ_name"};
         int[] adapterRowViews = new int[]{android.R.id.text1};
-        SimpleCursorAdapter adapter1 = new SimpleCursorAdapter(this,android.R.layout.simple_spinner_item
-                ,mycursor,univName,adapterRowViews,0);
-        adapter1.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
-        spinner.setAdapter(adapter1);
+        SimpleCursorAdapter SpinnerAdapter = new SimpleCursorAdapter(this,android.R.layout.simple_spinner_item
+                ,UniversityCursor,univName,adapterRowViews,0);
+        SpinnerAdapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
+        spinner.setAdapter(SpinnerAdapter);
         db.close();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -128,25 +107,11 @@ public class RegistrationActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
-        // RadioGroup 的事件處理
-        bindingR.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            int identity = 0;
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton StdOrTch = (RadioButton)  findViewById(checkedId);
-                //Toast.makeText(RegistrationActivity.this, "你選取的身分是: " + StdOrTch.getText() , Toast.LENGTH_SHORT).show();
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) {  }
         });
 
         //處理註冊帳號按鈕
-        bindingR.btnCreateAcc.setOnClickListener(new View.OnClickListener() {
+        binding.btnCreateAcc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 JSONObject packet = new JSONObject();
@@ -157,21 +122,19 @@ public class RegistrationActivity extends AppCompatActivity {
                     packet.put("mesg", "註冊資料 測試封包");
                     JSONObject data = new JSONObject();
                     data.put("univ",univer);
-                    data.put("acc", bindingR.txtRegAcc.getText().toString());
-                    data.put("name", bindingR.txtRegName.getText().toString());
-                    data.put("pwd", bindingR.txtRegPwd.getText().toString());
-                    data.put("email", bindingR.txtRegMail.getText().toString());
-                    if(bindingR.radioRegStd.isChecked()){
-                        data.put("department", bindingR.txtRegDepart.getText().toString());
+                    data.put("acc", binding.txtRegAcc.getText().toString());
+                    data.put("name", binding.txtRegName.getText().toString());
+                    data.put("pwd", binding.txtRegPwd.getText().toString());
+                    data.put("email", binding.txtRegMail.getText().toString());
+                    if(binding.radioGroupIdentity.getCheckedRadioButtonId() == R.id.radio_reg_std){
+                        data.put("department", binding.txtRegDepart.getText().toString());
                         url = "http://20.2.232.79:8864/api/project/registration/student";
-                    }
-                    if(bindingR.radioRegTch.isChecked()){
-                        url = "http://20.2.232.79/api/project/registration/teacher";
+                    } else {
+                        url = "http://20.2.232.79:8864/api/project/registration/teacher";
                     }
                     packet.put("data", data);
-                    Log.w("API格式", packet.toString(4));
                 } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                    Log.w("JSON", "The JSON file is packaged incorrectly, packet:"+packet);
                 }
                 //使用網路通訊 Header+Body
                 MediaType mytp = MediaType.parse("application/json");
@@ -180,15 +143,13 @@ public class RegistrationActivity extends AppCompatActivity {
                         .url(url)
                         .post(rb)
                         .build();
-
-                SimpaleAPIWorker apiCaller = new SimpaleAPIWorker(request);
+                RegisterAPIWorker apiCaller = new RegisterAPIWorker(request);
                 executor.execute(apiCaller);
-
             }
         });
 
         //處理頭象
-        bindingR.imgReg.setOnClickListener(new View.OnClickListener() {
+        binding.imgReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(RegistrationActivity.this);
@@ -216,8 +177,6 @@ public class RegistrationActivity extends AppCompatActivity {
     private void askCameraPermissions() {
         //檢查有沒有跟使用者要權限
         //如果使用者「同意權限」PERMISSION_GRANTED、「拒絕權限」PERMISSION_DENIED
-        //
-
         if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
             //要求使用者給予權限
             ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.CAMERA},CAMERA_PERM_CODE);
@@ -228,7 +187,6 @@ public class RegistrationActivity extends AppCompatActivity {
         else {
             openCamera();
         }
-
     }
 
     @Override
@@ -256,7 +214,6 @@ public class RegistrationActivity extends AppCompatActivity {
     private void openCamera() {
         Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(camera, CAMERA_REQUEST_CODE);
-
     }
 
     @Override
@@ -269,10 +226,9 @@ public class RegistrationActivity extends AppCompatActivity {
         switch(requestCode){
 
             case CAMERA_REQUEST_CODE : //102
-
                 if(resultCode == RESULT_OK){
                     Bitmap image = (Bitmap) data.getExtras().get("data");
-                    bindingR.imgReg.setImageBitmap(image);
+                    binding.imgReg.setImageBitmap(image);
                 }
                 else if(resultCode == RESULT_CANCELED){
                     Toast.makeText(RegistrationActivity.this, "您取消了照相機", Toast.LENGTH_SHORT).show();
@@ -282,28 +238,23 @@ public class RegistrationActivity extends AppCompatActivity {
             case GALLERY_REQUEST_CODE: //103
                 if(resultCode == RESULT_OK){
                     Uri uri = data.getData();  //取得相片路徑
-                    try {
-                        //將該路徑的圖片轉成bitmap
-                        Bitmap imageFromG = BitmapFactory.decodeStream(resolver.openInputStream(uri));
-                        bindingR.imgReg.setImageBitmap(imageFromG);
-
+                    try { //將該路徑的圖片轉成bitmap
+                          Bitmap imageFromG = BitmapFactory.decodeStream(resolver.openInputStream(uri));
+                          binding.imgReg.setImageBitmap(imageFromG);
                     } catch (FileNotFoundException e) {
                         throw new RuntimeException(e);
                     }
-
                 }
-
                 break;
         }
-
     }
 
 
-    class SimpaleAPIWorker implements  Runnable {
+    class RegisterAPIWorker implements  Runnable {
         OkHttpClient client;
         Request request ;
 
-        public SimpaleAPIWorker(Request request) {
+        public RegisterAPIWorker(Request request) {
             client = new OkHttpClient();
             this.request = request;
         }
